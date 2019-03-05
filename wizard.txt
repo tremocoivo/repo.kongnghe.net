@@ -1,0 +1,17 @@
+name="KODI Giao Dien Eminence 2"
+url="https://dl.dropboxusercontent.com/s/jhb9tiwvlfhj1pd/hieuit.wizard.zip"
+img="http://repo.kongnghe.net/HieuITMC/plugin.program.hieuitwizard/eminence.jpg"
+fanart="http://repo.kongnghe.net/HieuITMC/plugin.program.hieuitwizard/eminence.jpg"
+description="Giao diện Eminence có Movies Library dành cho máy mạnh"
+
+name="KODI Giao Dien Eminence 2 No Library"
+url="https://dl.dropboxusercontent.com/s/hemp637b2xu5mn5/hieuit.eminence.nolibrary.zip"
+img="http://repo.kongnghe.net/HieuITMC/plugin.program.hieuitwizard/eminence.jpg"
+fanart="http://repo.kongnghe.net/HieuITMC/plugin.program.hieuitwizard/eminence.jpg"
+description="Giao diện Eminence có Movies Library dành cho máy mạnh"
+
+name="KODI Giao Dien 16 Sieu Nhe"
+url="https://dl.dropboxusercontent.com/s/2b53591m9mjg5nk/hieuit.wizard.16skin2.zip"
+img="http://repo.kongnghe.net/HieuITMC/plugin.program.hieuitwizard/kodi16.jpg"
+fanart="http://repo.kongnghe.net/HieuITMC/plugin.program.hieuitwizard/kodi16.jpg"
+description="Giao diện Confluence siêu nhẹ có Movies Library"
