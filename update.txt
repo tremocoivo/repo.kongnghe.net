@@ -1,5 +1,5 @@
 name="Fix hien thi ICON Eminence Kodi 18"
 url="https://dl.dropboxusercontent.com/s/31bikuki73pgeam/fix-icon-eminence-kodi18.zip"
-img="http://repo.kongnghe.net/HieuITMC/plugin.program.hieuitwizard/eminence.jpg"
-fanart="http://repo.kongnghe.net/HieuITMC/plugin.program.hieuitwizard/eminence.jpg"
+img="https://i.imgur.com/LuiPwSN.jpg"
+fanart="https://i.imgur.com/LuiPwSN.jpg"
 description="Sửa lỗi hiển thị ICON VMF, VNOpen, GG Drive skin Emimence khi Update lên Kodi 18"
