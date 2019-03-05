@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.program.hieuitwizard" name="[B][COLOR red]HieuIT[/COLOR] [COLOR yellow]Media Center[/COLOR][/B]" version="1.3.4" provider-name="Hieuit.net">
+<addon id="plugin.program.hieuitwizard" name="[B][COLOR red]HieuIT[/COLOR] [COLOR yellow]Media Center[/COLOR][/B]" version="1.4.0" provider-name="Hieuit.net">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
