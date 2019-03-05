@@ -21,7 +21,7 @@ USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/
 base       ='https://hieuit.net'
 ADDON      =xbmcaddon.Addon(id='plugin.program.hieuitwizard')
 dialog     = xbmcgui.Dialog()    
-VERSION    = "1.3.4"
+VERSION    = "1.4.0"
 PATH       = "Hieuit Media Center"            
 
 thumbnailPath = xbmc.translatePath('special://thumbnails');
@@ -93,7 +93,7 @@ def MAIN():
 
 def INSTALLKODI():
     analytics.sendPageView("HieuIT Media Center","Installkodi","HieuIT Wizard")
-    link = OPEN_URL('http://repo.kongnghe.net/HieuITMC/wizard.txt').replace('\n','').replace('\r','')
+    link = OPEN_URL('https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/wizard.txt').replace('\n','').replace('\r','')
     match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
     for name,url,iconimage,fanart,description in match:
         addDir(name,url,1,iconimage,fanart,description)
@@ -386,7 +386,7 @@ def restoredata():
 	
 def Tweak():
     analytics.sendPageView("HieuIT Media Center","Tweak","Tang Toc Cache")
-    link = OPEN_URL('http://repo.kongnghe.net/Tweak/tweak.txt').replace('\n','').replace('\r','')
+    link = OPEN_URL('https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/Tweak/tweak.txt').replace('\n','').replace('\r','')
     match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
     for name,url,iconimage,fanart,description in match:
         addDir(name,url,2,iconimage,fanart,description)
@@ -394,7 +394,7 @@ def Tweak():
 
 def UPDATE():
     analytics.sendPageView("HieuIT Media Center","Update","Update Addon")
-    link = OPEN_URL('http://repo.kongnghe.net/HieuITMC/update.txt').replace('\n','').replace('\r','')
+    link = OPEN_URL('https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/update.txt').replace('\n','').replace('\r','')
     match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
     for name,url,iconimage,fanart,description in match:
         addDir(name,url,2,iconimage,fanart,description)
