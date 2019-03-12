@@ -1,4 +1,4 @@
-name="Fix hien thi ICON Eminence Kodi 18"
+name="Fix Lỗi Hiển Thị Icon Skin Eminence Kodi 18"
 url="https://dl.dropboxusercontent.com/s/31bikuki73pgeam/fix-icon-eminence-kodi18.zip"
 img="https://i.imgur.com/LuiPwSN.jpg"
 fanart="https://i.imgur.com/LuiPwSN.jpg"
