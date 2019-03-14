@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
 	<category label="Like - Donate">
-		<setting id="thanks" type="text" label="Tác giả [COLOR red]'không giữ bản quyền'[/COLOR] addon. Chỉ có nguồn phim được mình cập nhật thường xuyên"></setting>
-		<setting id="thanks" type="text" label="Nếu bạn yêu thích có thể ủng hộ để mình có thêm động lực"></setting>
+		<setting id="thanks" type="text" label="Tác giả [COLOR red]'không giữ bản quyền'[/COLOR] addon."></setting>
+		<setting id="thanks2" type="text" label="Chỉ có nguồn phim được mình cập nhật thường xuyên"></setting>
+		<setting id="thanks3" type="text" label="Nếu bạn yêu thích có thể ủng hộ để mình có thêm động lực"></setting>
 		<setting id="timo" type="text" label="[B]Tài khoản Timo:[/B] Lê Trung Hiếu, TK: [COLOR yellow]127227535[/COLOR], VPBank - HCM, SWIFT Code: [COLOR yellow]VPBKVNVX[/COLOR]" />
 		<setting id="momo" type="text" label="Momo: [COLOR yellow]0984.930.085[/COLOR]"/>
 		
 	</category>	
 	<category label="Zip Folder">
-        <setting id="zip" type="folder"    label="Chọn ổ USB/SDCARD hoặc thư mục"      default=""/>
+        <setting id="zipdir" type="folder"    label="Chọn thư mục lưu file Backup:"      default=""/>
     </category>
     <category label="Auto-View">
 		<setting id="auto-view" type="bool" label="Enable Auto View" default="true"/>

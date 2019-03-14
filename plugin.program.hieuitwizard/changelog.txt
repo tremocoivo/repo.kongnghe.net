@@ -1,3 +1,6 @@
+v2.0.0
+- Nâng cấp một số chức năng
+- Sửa lỗi không đọc được file zip trên Kodi 18 platform Android 7
 v1.3.2
 - Sửa lỗi full Backup trên Windows
 v1.3.1 
