@@ -359,7 +359,8 @@ def backUpOptions(type, name=""):
 						elif file.endswith('.db') and 'Database' in base:
 							temp = file.replace('.db', '')
 							temp = ''.join([i for i in temp if not i.isdigit()])
-							if temp in ['Addons', 'ADSP', 'Epg', 'MyMusic', 'MyVideos', 'Textures', 'TV', 'ViewModes']:
+							#if temp in ['Addons', 'ADSP', 'Epg', 'MyMusic', 'MyVideos', 'Textures', 'TV', 'ViewModes']:
+							if temp in ['Textures']:
 								if not file == latestDB(temp):  log("[Back Up] Type = '%s': Ignore %s" % (type, file), xbmc.LOGNOTICE); continue
 						try:
 							zipf.write(fn, fn[len(HOME):], zipfile.ZIP_DEFLATED)
@@ -560,7 +561,7 @@ def restoreLocal(type):
 	#if INSTALLMETHOD == 1: todo = 1
 	#elif INSTALLMETHOD == 2: todo = 0
 	else: todo = DIALOG.yesno(ADDONTITLE, "[COLOR red][B]KHÔNG DÙNG[/B][/COLOR] chức năng [B]Quit/Exit[/B] trong Kodi. Nếu cửa sổ KODI không tắt hãy khởi động lại thiết bị", nolabel='No, Cancel', yeslabel='Yes, Close')
-	if todo == 1: pass
+	if todo == 0: pass
 	else: killxbmc(True)
 
 ##########################
