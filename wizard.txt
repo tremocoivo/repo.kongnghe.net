@@ -1,4 +1,4 @@
-﻿name="===== [COLOR red]HieuIT [COLOR yellow]Build[/COLOR] Dành Cho Kodi 17 =================="
+﻿name="===== [COLOR red]HieuIT[/COLOR] [COLOR yellow]Build[/COLOR]: Dành Cho Kodi 17 =================="
 url="http://hieuit.net"
 img="https://i.imgur.com/LuiPwSN.jpg"
 fanart="https://i.imgur.com/LuiPwSN.jpg"
