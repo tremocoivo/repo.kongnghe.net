@@ -1,4 +1,10 @@
-﻿name="KODI 17 Skin Eminence 2"
+﻿name="===== [COLOR red]HieuIT [COLOR yellow]Build[/COLOR] Dành Cho Kodi 17 =================="
+url=""
+img="https://i.imgur.com/LuiPwSN.jpg"
+fanart="https://i.imgur.com/LuiPwSN.jpg"
+description="Giao diện Eminence có Movies Library dành cho máy mạnh"
+
+name="KODI 17 Skin Eminence 2"
 url="https://dl.dropboxusercontent.com/s/jhb9tiwvlfhj1pd/hieuit.wizard.zip"
 img="https://i.imgur.com/LuiPwSN.jpg"
 fanart="https://i.imgur.com/LuiPwSN.jpg"
