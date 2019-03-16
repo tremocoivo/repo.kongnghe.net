@@ -21,3 +21,15 @@ url="https://dl.dropboxusercontent.com/s/2b53591m9mjg5nk/hieuit.wizard.16skin2.z
 img="https://i.imgur.com/NfFrKb1.jpg"
 fanart="https://i.imgur.com/NfFrKb1.jpg"
 description="Giao diện Confluence siêu nhẹ có Movies Library"
+
+name="KODI 17 Skin Confluence Siêu Nhẹ Ful Library"
+url="https://dl.dropboxusercontent.com/s/2b53591m9mjg5nk/hieuit.wizard.16skin2.zip"
+img="https://i.imgur.com/NfFrKb1.jpg"
+fanart="https://i.imgur.com/NfFrKb1.jpg"
+description="Giao diện Confluence siêu nhẹ có Movies Library"
+
+name="KODI 17 Skin Confluence Siêu Nhẹ Ful Library"
+url="https://dl.dropboxusercontent.com/s/2b53591m9mjg5nk/hieuit.wizard.16skin2.zip"
+img="https://i.imgur.com/NfFrKb1.jpg"
+fanart="https://i.imgur.com/NfFrKb1.jpg"
+description="Giao diện Confluence siêu nhẹ có Movies Library"
