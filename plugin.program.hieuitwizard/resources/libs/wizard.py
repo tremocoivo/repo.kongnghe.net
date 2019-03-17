@@ -319,7 +319,7 @@ def backUpOptions(type, name=""):
 			#if not DIALOG.yesno(ADDONTITLE, "[COLOR %s]Do you want to include your addon_data folder?" % COLOR2, 'This contains [COLOR %s]ALL[/COLOR] addon settings including passwords but may also contain important information such as skin shortcuts. We recommend [COLOR %s]MANUALLY[/COLOR] removing the addon_data folders that aren\'t required.' % (COLOR1, COLOR1), '[COLOR %s]%s[/COLOR] addon_data is ignored[/COLOR]' % (COLOR1, ADDON_ID), yeslabel='[B][COLOR green]Include data[/COLOR][/B]',nolabel='[B][COLOR red]Don\'t Include[/COLOR][/B]'):
 				#exclude_dirs.append('addon_data')
 			#convertSpecial(HOME, True)
-			asciiCheck(HOME, True)
+			#asciiCheck(HOME, True)
 			#clearS('zip')
 			try:
 				zipf = zipfile.ZipFile(xbmc.translatePath(zipname), mode='w')
