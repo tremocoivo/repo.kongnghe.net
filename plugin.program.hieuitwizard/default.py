@@ -231,7 +231,33 @@ def DeletePackages():
     else:
         text13 = os.path.join(databasePath,"Textures13.db")
         os.unlink(text13)
-    
+
+def systemInfo():
+	infoLabel = ['System.FriendlyName', 
+				 'System.BuildVersion', 
+				 'System.CpuUsage',
+				 'System.ScreenMode',
+				 'Network.IPAddress',
+				 'Network.MacAddress',
+				 'System.Uptime',
+				 'System.TotalUptime',
+				 'System.FreeSpace',
+				 'System.UsedSpace',
+				 'System.TotalSpace',
+				 'System.Memory(free)',
+				 'System.Memory(used)',
+				 'System.Memory(total)']
+	data      = []; x = 0
+	for info in infoLabel:
+		temp = wiz.getInfo(info)
+		y = 0
+		while temp == "Busy" and y < 10:
+			temp = wiz.getInfo(info); y += 1; wiz.log("%s sleep %s" % (info, str(y))); xbmc.sleep(200)
+		data.append(temp)
+		x += 1
+	
+	ram_free      = wiz.convertSize(int(float(data[11][:-2]))*1024*1024)
+	addItem('[COLOR white]Ram còn trống:[/COLOR] [COLOR yellow]%s[/COLOR]' % (ram_free),'url', 9999, '')		
 
 def restoredata():
     #analytics.sendPageView("HieuIT Media Center","restoredata","Data Addon")
@@ -243,6 +269,7 @@ def restoredata():
 def Tweak():
     setView('videos', 'MAIN')
     #analytics.sendPageView("HieuIT Media Center","Tweak","Tang Toc Cache")
+    systemInfo()
     link = OPEN_URL('https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/Tweak/tweak.txt').replace('\n','').replace('\r','')
     match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
     for name,url,iconimage,fanart,description in match:
