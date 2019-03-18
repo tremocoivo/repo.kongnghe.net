@@ -97,7 +97,9 @@ def getS(name):
 def openS(name=""):
 	ADDON.openSettings()
 
-
+def getInfo(label):
+	try: return xbmc.getInfoLabel(label)
+	except: return False
 
 ###########################
 ###### Display Items ######
