@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.program.hieuitwizard" name="[B][COLOR red]HieuIT[/COLOR] [COLOR yellow]Media Center[/COLOR][/B]" version="2.0.4" provider-name="Hieuit.net">
+<addon id="plugin.program.hieuitwizard" name="[B][COLOR red]HieuIT[/COLOR] [COLOR yellow]Media Center[/COLOR][/B]" version="2.0.9" provider-name="Hieuit.net">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video program executable</provides>
   </extension>
+  <extension point="xbmc.service" library="startup.py" start="startup" />
   <extension point="xbmc.addon.metadata">
     <summary lang="en">HieuIT Media Center</summary>
     <description lang="en">

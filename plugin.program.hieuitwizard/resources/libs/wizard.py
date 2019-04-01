@@ -27,6 +27,7 @@ import urllib2,urllib
 import re
 import downloader
 import extract
+import skinSwitch
 import time
 from datetime import date, datetime, timedelta
 try:    from sqlite3 import dbapi2 as database
@@ -46,6 +47,7 @@ DP             = xbmcgui.DialogProgress()
 HOME           = xbmc.translatePath('special://home/')
 XBMC           = xbmc.translatePath('special://xbmc/')
 LOG            = xbmc.translatePath('special://logpath/')
+LOGFILES       = ['log', 'xbmc.old.log', 'kodi.log', 'kodi.old.log', 'spmc.log', 'spmc.old.log', 'tvmc.log', 'tvmc.old.log']
 PROFILE        = xbmc.translatePath('special://profile/')
 SOURCE         = xbmc.translatePath('source://')
 ADDONS         = os.path.join(HOME,      'addons')
@@ -64,6 +66,14 @@ DATABASE       = os.path.join(USERDATA,  'Database')
 FANART         = os.path.join(PLUGIN,    'fanart.jpg')
 ICON           = os.path.join(PLUGIN,    'icon.png')
 WIZLOG         = os.path.join(ADDONDATA, 'wizard.log')
+WIZDEBUGGING   = ADDON.getSetting('addon_debug')
+DEBUGLEVEL     = ADDON.getSetting('debuglevel')
+ENABLEWIZLOG   = ADDON.getSetting('wizardlog')
+CLEANWIZLOG    = ADDON.getSetting('autocleanwiz')
+CLEANWIZLOGBY  = ADDON.getSetting('wizlogcleanby')
+CLEANDAYS      = ADDON.getSetting('wizlogcleandays')
+CLEANSIZE      = ADDON.getSetting('wizlogcleansize')
+CLEANLINES     = ADDON.getSetting('wizlogcleanlines')
 SKIN           = xbmc.getSkinDir()
 TODAY          = date.today()
 TOMORROW       = TODAY + timedelta(days=1)
@@ -76,6 +86,7 @@ if KODIV > 17:
 else:
 	import zipfile
 
+EXCLUDES       = [ADDON_ID, 'repository.hieuitmediacenter']
 BUILDFILE      = 'https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/wizard.txt'
 COLOR1         = 'white'
 COLOR2         = 'white'
@@ -83,7 +94,10 @@ BACKUPLOCATION = ADDON.getSetting('zipdir') if not ADDON.getSetting('zipdir') ==
 MYBUILDS       = os.path.join(BACKUPLOCATION, '', '')
 LOGFILES       = ['log', 'xbmc.old.log', 'kodi.log', 'kodi.old.log', 'spmc.log', 'spmc.old.log', 'tvmc.log', 'tvmc.old.log']
 DEFAULTPLUGINS = ['metadata.album.universal', 'metadata.artists.universal', 'metadata.common.fanart.tv', 'metadata.common.imdb.com', 'metadata.common.musicbrainz.org', 'metadata.themoviedb.org', 'metadata.tvdb.com', 'service.xbmc.versioncheck']
-
+MAXWIZSIZE     = [100, 200, 300, 400, 500, 1000]
+MAXWIZLINES    = [100, 200, 300, 400, 500]
+MAXWIZDATES    = [1, 2, 3, 7]
+INSTALLMETHOD  = ADDON.getSetting('installmethod')
 
 ###########################
 ###### Settings Items #####
@@ -93,18 +107,403 @@ def getS(name):
 	try: return ADDON.getSetting(name)
 	except: return False
 
-
+def setS(name, value):
+	try: ADDON.setSetting(name, value)
+	except: return False
+	
 def openS(name=""):
 	ADDON.openSettings()
+	
+def clearS(type):
+	build    = {'buildname':'', 'buildversion':'', 'buildtheme':'', 'latestversion':'', 'lastbuildcheck':'2016-01-01'}
+	install  = {'installed':'false', 'extract':'', 'errors':''}
+	default  = {'defaultskinignore':'false', 'defaultskin':'', 'defaultskinname':''}
+	lookfeel = ['default.enablerssfeeds', 'default.font', 'default.rssedit', 'default.skincolors', 'default.skintheme', 'default.skinzoom', 'default.soundskin', 'default.startupwindow', 'default.stereostrength']
+	if type == 'build':
+		for set in build:
+			setS(set, build[set])
+		for set in install:
+			setS(set, install[set])
+		for set in default:
+			setS(set, default[set])
+		for set in lookfeel:
+			setS(set, '')
+	elif type == 'default':
+		for set in default:
+			setS(set, default[set])
+		for set in lookfeel:
+			setS(set, '')
+	elif type == 'install':
+		for set in install:
+			setS(set, install[set])
+	elif type == 'lookfeel':
+		for set in lookfeel:
+			setS(set, '')
 
 def getInfo(label):
 	try: return xbmc.getInfoLabel(label)
 	except: return False
 
+def addonInfo(add, info):
+	addon = addonId(add)
+	if addon: return addon.getAddonInfo(info)
+	else: return False
+	
+def mediaCenter():
+	if str(HOME).lower().find('kodi'):
+		return 'Kodi'
+	elif str(HOME).lower().find('spmc'):
+		return 'SPMC'
+	elif str(HOME).lower().find('ftmc'):
+		return 'FTMC'
+	elif str(HOME).lower().find('wbmc'):
+		return 'WBMC'
+	else: 
+		return 'Unknown Fork'
+		
+def latestDB(DB):
+	if DB in ['Addons', 'ADSP', 'Epg', 'MyMusic', 'MyVideos', 'Textures', 'TV', 'ViewModes']:
+		match = glob.glob(os.path.join(DATABASE,'%s*.db' % DB))
+		comp = '%s(.+?).db' % DB[1:]
+		highest = 0
+		for file in match :
+			try: check = int(re.compile(comp).findall(file)[0])
+			except: check = 0
+			if highest < check :
+				highest = check
+		return '%s%s.db' % (DB, highest)
+	else: return False
+
+
+	
+##########################
+### PURGE DATABASE #######
+##########################
+def purgeDb(name):
+	#dbfile = name.replace('.db','').translate(None, digits)
+	#if dbfile not in ['Addons', 'ADSP', 'Epg', 'MyMusic', 'MyVideos', 'Textures', 'TV', 'ViewModes']: return False
+	#textfile = os.path.join(DATABASE, name)
+	log('Purging DB %s.' % name, xbmc.LOGNOTICE)
+	if os.path.exists(name):
+		try:
+			textdb = database.connect(name)
+			textexe = textdb.cursor()
+		except Exception, e:
+			log("DB Connection Error: %s" % str(e), xbmc.LOGERROR)
+			return False
+	else: log('%s not found.' % name, xbmc.LOGERROR); return False
+	textexe.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
+	for table in textexe.fetchall():
+		if table[0] == 'version': 
+			log('Data from table `%s` skipped.' % table[0], xbmc.LOGDEBUG)
+		else:
+			try:
+				textexe.execute("DELETE FROM %s" % table[0])
+				textdb.commit()
+				log('Data from table `%s` cleared.' % table[0], xbmc.LOGDEBUG)
+			except Exception, e: log("DB Remove Table `%s` Error: %s" % (table[0], str(e)), xbmc.LOGERROR)
+	textexe.close()
+	log('%s DB Purging Complete.' % name, xbmc.LOGNOTICE)
+	show = name.replace('\\', '/').split('/')
+	LogNotify("[COLOR %s]Purge Database[/COLOR]" % COLOR1, "[COLOR %s]%s Complete[/COLOR]" % (COLOR2, show[len(show)-1]))
+###################################################
+
+def skinToDefault():
+	if not currSkin() in ['skin.confluence', 'skin.estuary']:
+		skin = 'skin.confluence' if KODIV < 17 else 'skin.estuary'
+	swapSkins(skin)
+
+def swapSkins(goto):
+	skinSwitch.swapSkins(goto)
+	x = 0
+	xbmc.sleep(1000)
+	while not xbmc.getCondVisibility("Window.isVisible(yesnodialog)") and x < 150:
+		x += 1
+		xbmc.sleep(100)
+		ebi('SendAction(Select)')
+	
+	if xbmc.getCondVisibility("Window.isVisible(yesnodialog)"):
+		ebi('SendClick(11)')
+	else: LogNotify("[COLOR %s]%s[/COLOR]" % (COLOR1, ADDONTITLE), '[COLOR %s]Fresh Install: Skin Swap Timed Out![/COLOR]' % COLOR2); return False
+	xbmc.sleep(500)
+	
+def refresh():
+	ebi('Container.Refresh()')
+
+def forceUpdate(silent=False):
+	ebi('UpdateAddonRepos()')
+	ebi('UpdateLocalAddons()')
+	if silent == False: LogNotify("[COLOR %s]%s[/COLOR]" % (COLOR1, ADDONTITLE), '[COLOR %s]Forcing Addon Updates[/COLOR]' % COLOR2)
+	
+def lookandFeelData(do='save'):
+	scan = ['lookandfeel.enablerssfeeds', 'lookandfeel.font', 'lookandfeel.rssedit', 'lookandfeel.skincolors', 'lookandfeel.skintheme', 'lookandfeel.skinzoom', 'lookandfeel.soundskin', 'lookandfeel.startupwindow', 'lookandfeel.stereostrength']
+	if do == 'save':
+		for item in scan:
+			query = '{"jsonrpc":"2.0", "method":"Settings.GetSettingValue","params":{"setting":"%s"}, "id":1}' % (item)
+			response = xbmc.executeJSONRPC(query)
+			if not 'error' in response:
+				match = re.compile('{"value":(.+?)}').findall(str(response))
+				setS(item.replace('lookandfeel', 'default'), match[0])
+				log("%s saved to %s" % (item, match[0]), xbmc.LOGNOTICE)
+	else:
+		for item in scan:
+			value = getS(item.replace('lookandfeel', 'default'))
+			query = '{"jsonrpc":"2.0", "method":"Settings.SetSettingValue","params":{"setting":"%s","value":%s}, "id":1}' % (item, value)
+			response = xbmc.executeJSONRPC(query)
+			log("%s restored to %s" % (item, value), xbmc.LOGNOTICE)
+
+def redoThumbs():
+	if not os.path.exists(THUMBS): os.makedirs(THUMBS)
+	thumbfolders = '0123456789abcdef'
+	videos = os.path.join(THUMBS, 'Video', 'Bookmarks')
+	for item in thumbfolders:
+		foldname = os.path.join(THUMBS, item)
+		if not os.path.exists(foldname): os.makedirs(foldname)
+	if not os.path.exists(videos): os.makedirs(videos)			
+
+def reloadProfile(profile=None):
+	if profile == None: 
+		#if os.path.exists(PROFILES):
+		#	profile = getInfo('System.ProfileName')
+		#	log("Profile: %s" % profile)
+		#	ebi('LoadProfile(%s)' % profile)
+		#else:
+		#ebi('Mastermode')
+		ebi('LoadProfile(Master user)')
+	else: ebi('LoadProfile(%s)' % profile)
+
+def kodi17Fix():
+	addonlist = glob.glob(os.path.join(ADDONS, '*/'))
+	disabledAddons = []
+	for folder in sorted(addonlist, key = lambda x: x):
+		addonxml = os.path.join(folder, 'addon.xml')
+		if os.path.exists(addonxml):
+			fold   = folder.replace(ADDONS, '')[1:-1]
+			f      = open(addonxml)
+			a      = f.read()
+			aid    = parseDOM(a, 'addon', ret='id')
+			f.close()
+			try:
+				add    = xbmcaddon.Addon(id=aid[0])
+			except:
+				try:
+					log("%s was disabled" % aid[0], xbmc.LOGDEBUG)
+					disabledAddons.append(aid[0])
+				except:
+					try:
+						log("%s was disabled" % fold, xbmc.LOGDEBUG)
+						disabledAddons.append(fold)
+					except:
+						if len(aid) == 0: log("Unabled to enable: %s(Cannot Determine Addon ID)" % fold, xbmc.LOGERROR)
+						else: log("Unabled to enable: %s" % folder, xbmc.LOGERROR)
+	if len(disabledAddons) > 0:
+		x = 0
+		DP.create(ADDONTITLE,'[COLOR %s]Enabling disabled Addons' % COLOR2,'', 'Please Wait[/COLOR]')
+		for item in disabledAddons:
+			x += 1
+			prog = int(percentage(x, len(disabledAddons)))
+			DP.update(prog, "", "Enabling: [COLOR %s]%s[/COLOR]" % (COLOR1, item))
+			addonDatabase(item, 1)
+			if DP.iscanceled(): break
+		if DP.iscanceled(): 
+			DP.close()
+			LogNotify("[COLOR %s]%s[/COLOR]" % (COLOR1, ADDONTITLE), "[COLOR %s]Enabling Addons Cancelled![/COLOR]" % COLOR2)
+			sys.exit()
+		DP.close()
+	forceUpdate()
+	ebi("ReloadSkin()")	
+	
+def reloadFix(default=None):
+	DIALOG.ok(ADDONTITLE, "[COLOR %s]WARNING: Sometimes Reloading the Profile causes Kodi to crash.  While Kodi is Reloading the Profile Please Do Not Press Any Buttons![/COLOR]" % COLOR2)
+	if not os.path.exists(PACKAGES): os.makedirs(PACKAGES)
+	if default == None:
+		lookandFeelData('save')
+	redoThumbs()
+	ebi('ActivateWindow(Home)')
+	reloadProfile()
+	xbmc.sleep(10000)
+	if KODIV >= 17: kodi17Fix()
+	if default == None:
+		log("Switching to: %s" % getS('defaultskin'))
+		gotoskin = getS('defaultskin')
+		skinSwitch.swapSkins(gotoskin)
+		x = 0
+		while not xbmc.getCondVisibility("Window.isVisible(yesnodialog)") and x < 150:
+			x += 1
+			xbmc.sleep(200)
+		if xbmc.getCondVisibility("Window.isVisible(yesnodialog)"):
+			ebi('SendClick(11)')
+		lookandFeelData('restore')
+	addonUpdates('reset')
+	forceUpdate()
+	ebi("ReloadSkin()")
+
+def workingURL(url):
+	if url in ['http://', 'https://', '']: return False
+	check = 0; status = ''
+	while check < 3:
+		check += 1
+		try:
+			req = urllib2.Request(url)
+			req.add_header('User-Agent', USER_AGENT)
+			response = urllib2.urlopen(req)
+			response.close()
+			status = True
+			break
+		except Exception, e:
+			status = str(e)
+			log("Working Url Error: %s [%s]" % (e, url))
+			xbmc.sleep(500)
+	return status	
+
+def openURL(url):
+	req = urllib2.Request(url)
+	req.add_header('User-Agent', USER_AGENT)
+	response = urllib2.urlopen(req)
+	link=response.read()
+	response.close()
+	return link
+
+def parseDOM(html, name=u"", attrs={}, ret=False):
+    # Copyright (C) 2010-2011 Tobias Ussing And Henrik Mosgaard Jensen
+
+    if isinstance(html, str):
+        try:
+            html = [html.decode("utf-8")]
+        except:
+            html = [html]
+    elif isinstance(html, unicode):
+        html = [html]
+    elif not isinstance(html, list):
+        return u""
+
+    if not name.strip():
+        return u""
+
+    ret_lst = []
+    for item in html:
+        temp_item = re.compile('(<[^>]*?\n[^>]*?>)').findall(item)
+        for match in temp_item:
+            item = item.replace(match, match.replace("\n", " "))
+
+        lst = []
+        for key in attrs:
+            lst2 = re.compile('(<' + name + '[^>]*?(?:' + key + '=[\'"]' + attrs[key] + '[\'"].*?>))', re.M | re.S).findall(item)
+            if len(lst2) == 0 and attrs[key].find(" ") == -1:
+                lst2 = re.compile('(<' + name + '[^>]*?(?:' + key + '=' + attrs[key] + '.*?>))', re.M | re.S).findall(item)
+
+            if len(lst) == 0:
+                lst = lst2
+                lst2 = []
+            else:
+                test = range(len(lst))
+                test.reverse()
+                for i in test:
+                    if not lst[i] in lst2:
+                        del(lst[i])
+
+        if len(lst) == 0 and attrs == {}:
+            lst = re.compile('(<' + name + '>)', re.M | re.S).findall(item)
+            if len(lst) == 0:
+                lst = re.compile('(<' + name + ' .*?>)', re.M | re.S).findall(item)
+
+        if isinstance(ret, str):
+            lst2 = []
+            for match in lst:
+                attr_lst = re.compile('<' + name + '.*?' + ret + '=([\'"].[^>]*?[\'"])>', re.M | re.S).findall(match)
+                if len(attr_lst) == 0:
+                    attr_lst = re.compile('<' + name + '.*?' + ret + '=(.[^>]*?)>', re.M | re.S).findall(match)
+                for tmp in attr_lst:
+                    cont_char = tmp[0]
+                    if cont_char in "'\"":
+                        if tmp.find('=' + cont_char, tmp.find(cont_char, 1)) > -1:
+                            tmp = tmp[:tmp.find('=' + cont_char, tmp.find(cont_char, 1))]
+
+                        if tmp.rfind(cont_char, 1) > -1:
+                            tmp = tmp[1:tmp.rfind(cont_char)]
+                    else:
+                        if tmp.find(" ") > 0:
+                            tmp = tmp[:tmp.find(" ")]
+                        elif tmp.find("/") > 0:
+                            tmp = tmp[:tmp.find("/")]
+                        elif tmp.find(">") > 0:
+                            tmp = tmp[:tmp.find(">")]
+
+                    lst2.append(tmp.strip())
+            lst = lst2
+        else:
+            lst2 = []
+            for match in lst:
+                endstr = u"</" + name
+
+                start = item.find(match)
+                end = item.find(endstr, start)
+                pos = item.find("<" + name, start + 1 )
+
+                while pos < end and pos != -1:
+                    tend = item.find(endstr, end + len(endstr))
+                    if tend != -1:
+                        end = tend
+                    pos = item.find("<" + name, pos + 1)
+
+                if start == -1 and end == -1:
+                    temp = u""
+                elif start > -1 and end > -1:
+                    temp = item[start + len(match):end]
+                elif end > -1:
+                    temp = item[:end]
+                elif start > -1:
+                    temp = item[start + len(match):]
+
+                if ret:
+                    endstr = item[end:item.find(">", item.find(endstr)) + 1]
+                    temp = match + temp + endstr
+
+                item = item[item.find(temp, item.find(match)) + len(temp):]
+                lst2.append(temp)
+            lst = lst2
+        ret_lst += lst
+
+    return ret_lst
+	
+def checkBuild(name, ret):
+	if not workingURL(BUILDFILE) == True: return False
+	link = openURL(BUILDFILE).replace('\n','').replace('\r','').replace('\t','').replace('gui=""', 'gui="http://"').replace('theme=""', 'theme="http://"')
+	match = re.compile('name="%s".+?ersion="(.+?)".+?rl="(.+?)".+?ui="(.+?)".+?odi="(.+?)".+?heme="(.+?)".+?con="(.+?)".+?anart="(.+?)".+?review="(.+?)".+?dult="(.+?)".+?escription="(.+?)"' % name).findall(link)
+	if len(match) > 0:
+		for version, url, gui, kodi, theme, icon, fanart, preview, adult, description in match:
+			if ret   == 'version':       return version
+			elif ret == 'url':           return url
+			elif ret == 'gui':           return gui
+			elif ret == 'kodi':          return kodi
+			elif ret == 'theme':         return theme
+			elif ret == 'icon':          return icon
+			elif ret == 'fanart':        return fanart
+			elif ret == 'preview':       return preview
+			elif ret == 'adult':         return adult
+			elif ret == 'description':   return description
+			elif ret == 'all':           return name, version, url, gui, kodi, theme, icon, fanart, preview, adult, description
+	else: return False
+	
+def buildCount(ver=None):
+	link  = openURL(BUILDFILE).replace('\n','').replace('\r','').replace('\t','')
+	match = re.compile('name="(.+?)".+?odi="(.+?)".+?dult="(.+?)"').findall(link)
+	total = 0; count15 = 0; count16 = 0; count17 = 0; count18 = 0; hidden = 0; adultcount = 0
+	if len(match) > 0:
+		for name, kodi, adult in match:
+			if not SHOWADULT == 'true' and adult.lower() == 'yes': hidden += 1; adultcount +=1; continue
+			if not DEVELOPER == 'true' and strTest(name): hidden += 1; continue
+			kodi = int(float(kodi))
+			total += 1
+			if kodi == 18: count18 += 1
+			elif kodi == 17: count17 += 1
+			elif kodi == 16: count16 += 1
+			elif kodi <= 15: count15 += 1
+	return total, count15, count16, count17, count18, adultcount, hidden
+	
 ###########################
 ###### Display Items ######
 ###########################
-
 
 def TextBox(title, msg):
 	class TextBoxes(xbmcgui.WindowXMLDialog):
@@ -144,6 +543,9 @@ def percentage(part, whole):
 ###### Misc Functions #####
 ###########################
 
+def currSkin():
+	return xbmc.getSkinDir()
+
 def getKeyboard( default="", heading="", hidden=False ):
 	keyboard = xbmc.Keyboard( default, heading, hidden )
 	keyboard.doModal()
@@ -161,7 +563,10 @@ def convertSize(num, suffix='B'):
 def log(msg, level=xbmc.LOGDEBUG):
 	if not os.path.exists(ADDONDATA): os.makedirs(ADDONDATA)
 	if not os.path.exists(WIZLOG): f = open(WIZLOG, 'w'); f.close()
-	
+	if WIZDEBUGGING == 'false': return False
+	if DEBUGLEVEL == '0': return False
+	if DEBUGLEVEL == '1' and not level in [xbmc.LOGNOTICE, xbmc.LOGERROR, xbmc.LOGSEVERE, xbmc.LOGFATAL]: return False
+	if DEBUGLEVEL == '2': level = xbmc.LOGNOTICE
 	try:
 		if isinstance(msg, unicode):
 			msg = '%s' % (msg.encode('utf-8'))
@@ -169,6 +574,44 @@ def log(msg, level=xbmc.LOGDEBUG):
 	except Exception as e:
 		try: xbmc.log('Logging Failure: %s' % (e), level)
 		except: pass
+	if ENABLEWIZLOG == 'true':
+		lastcheck = getS('nextcleandate') if not getS('nextcleandate') == '' else str(TODAY)
+		if CLEANWIZLOG == 'true' and lastcheck <= str(TODAY): checkLog()
+		with open(WIZLOG, 'a') as f:
+			line = "[%s %s] %s" % (datetime.now().date(), str(datetime.now().time())[:8], msg)
+			f.write(line.rstrip('\r\n')+'\n')
+
+def checkLog():
+	nextclean = getS('nextcleandate')
+	next = TOMORROW
+	if CLEANWIZLOGBY == '0':
+		keep = TODAY - timedelta(days=MAXWIZDATES[int(float(CLEANDAYS))])
+		x    = 0
+		f    = open(WIZLOG); a = f.read(); f.close(); lines = a.split('\n')
+		for line in lines:
+			if str(line[1:11]) >= str(keep):
+				break
+			x += 1
+		newfile = lines[x:]
+		writing = '\n'.join(newfile)
+		f = open(WIZLOG, 'w'); f.write(writing); f.close()
+	elif CLEANWIZLOGBY == '1':
+		maxsize = MAXWIZSIZE[int(float(CLEANSIZE))]*1024
+		f    = open(WIZLOG); a = f.read(); f.close(); lines = a.split('\n')
+		if os.path.getsize(WIZLOG) >= maxsize:
+			start = len(lines)/2
+			newfile = lines[start:]
+			writing = '\n'.join(newfile)
+			f = open(WIZLOG, 'w'); f.write(writing); f.close()
+	elif CLEANWIZLOGBY == '2':
+		f      = open(WIZLOG); a = f.read(); f.close(); lines = a.split('\n')
+		maxlines = MAXWIZLINES[int(float(CLEANLINES))]
+		if len(lines) > maxlines:
+			start = len(lines) - int(maxlines/2)
+			newfile = lines[start:]
+			writing = '\n'.join(newfile)
+			f = open(WIZLOG, 'w'); f.write(writing); f.close()
+	setS('nextcleandate', str(next))
 
 def addonId(add):
 	try: 
@@ -176,6 +619,26 @@ def addonId(add):
 	except:
 		return False
 
+def addonUpdates(do=None):
+	setting = '"general.addonupdates"'
+	if do == 'set':
+		query = '{"jsonrpc":"2.0", "method":"Settings.GetSettingValue","params":{"setting":%s}, "id":1}' % (setting)
+		response = xbmc.executeJSONRPC(query)
+		match = re.compile('{"value":(.+?)}').findall(response)
+		if len(match) > 0: default = match[0]
+		else: default = 0
+		setS('default.addonupdate', str(default))
+		query = '{"jsonrpc":"2.0", "method":"Settings.SetSettingValue","params":{"setting":%s,"value":%s}, "id":1}' % (setting, '2')
+		response = xbmc.executeJSONRPC(query)
+	elif do == 'reset':
+		try:
+			value = int(float(getS('default.addonupdate')))
+		except:
+			value = 0
+		if not value in [0, 1, 2]: value = 0
+		query = '{"jsonrpc":"2.0", "method":"Settings.SetSettingValue","params":{"setting":%s,"value":%s}, "id":1}' % (setting, value)
+		response = xbmc.executeJSONRPC(query)
+		
 def ebi(proc):
 	xbmc.executebuiltin(proc)
 
@@ -279,11 +742,46 @@ def fileCount(home, excludes=True):
 			item.append(file)
 	return len(item)
 
+def addonDatabase(addon=None, state=1):
+	dbfile = latestDB('Addons')
+	dbfile = os.path.join(DATABASE, dbfile)
+	installedtime = str(datetime.now())[:-7]
+	if os.path.exists(dbfile):
+		try:
+			textdb = database.connect(dbfile)
+			textexe = textdb.cursor()
+		except Exception, e:
+			log("DB Connection Error: %s" % str(e), xbmc.LOGERROR)
+			return False
+	else: return False
+	if state == 2:
+		try:
+			textexe.execute("DELETE FROM installed WHERE addonID = ?", (addon,))
+			textdb.commit()
+			textexe.close()
+		except Exception, e:
+			log("Error Removing %s from DB" % addon)
+		return True
+	try:
+		textexe.execute("SELECT id, addonID, enabled FROM installed WHERE addonID = ?", (addon,))
+		found = textexe.fetchone()
+		if found == None:
+			textexe.execute('INSERT INTO installed (addonID , enabled, installDate) VALUES (?,?,?)', (addon, state, installedtime,))
+			log("Insert %s into db" % addon)
+		else:
+			tid, taddonid, tenabled = found
+			textexe.execute('UPDATE installed SET enabled = ? WHERE id = ? ', (state, tid,))
+			log("Updated %s in db" % addon)
+		textdb.commit()
+		textexe.close()
+	except Exception, e:
+		log("Erroring enabling addon: %s" % addon)
+		
 ##########################
 ###BACK UP/RESTORE #######
 ##########################
 def backUpOptions(type, name=""):
-	exclude_dirs  = ['cache', 'system', 'Thumbnails', 'peripheral_data', 'temp', 'library', 'keymaps', '.smb']
+	exclude_dirs  = [ADDON_ID, 'cache', 'system', 'Thumbnails', 'peripheral_data', 'temp', 'library', 'keymaps', '.smb', 'My_Builds', '.cache']
 	exclude_files = ['Textures13.db', '.DS_Store', 'Thumbs.db', '.gitignore']
 	bad_files     = [os.path.join(DATABASE, 'cache.db'),
 					 os.path.join(DATABASE, 'DEATHScache.db'), 
@@ -544,7 +1042,7 @@ def restoreLocal(type):
 		zipfile.ZipFile(file, 'r')
 	percent, errors, error = extract.all(file,loc,DP)
 	#fixmetas()
-	#clearS('build')
+	clearS('build')
 	DP.close()
 	#defaultSkin()
 	#lookandFeelData('save')
@@ -557,14 +1055,16 @@ def restoreLocal(type):
 			if isinstance(errors, unicode):
 				error = error.encode('utf-8')
 			TextBox(ADDONTITLE, error.replace('\t',''))
-	#setS('installed', 'true')
-	#setS('extract', str(percent))
-	#setS('errors', str(errors))
-	#if INSTALLMETHOD == 1: todo = 1
-	#elif INSTALLMETHOD == 2: todo = 0
-	else: todo = DIALOG.yesno(ADDONTITLE, "[COLOR red][B]KHÔNG DÙNG[/B][/COLOR] chức năng [B]Quit/Exit[/B] trong Kodi. Nếu cửa sổ KODI không tắt hãy khởi động lại thiết bị", nolabel='No, Cancel', yeslabel='Yes, Close')
-	if todo == 0: pass
-	else: killxbmc(True)
+	setS('installed', 'true')
+	setS('extract', str(percent))
+	setS('errors', str(errors))
+	# if INSTALLMETHOD == 1: todo = 1
+	# elif INSTALLMETHOD == 2: todo = 0
+	if 'addondata' in type:
+		DIALOG.ok(ADDONTITLE, '[COLOR yellow]Đã cài đặt thành công![/COLOR]')
+	else:
+		DIALOG.ok(ADDONTITLE, '[COLOR yellow]Đã cài đặt thành công![/COLOR]', 'Nhấn [B]OK[/B] để thoát Kodi')
+		killxbmc(True)
 
 ##########################
 ###DETERMINE PLATFORM#####
@@ -591,3 +1091,69 @@ def killxbmc(over=None):
 	if choice == 1:
 		log("Force Closing Kodi: Platform[%s]" % str(platform()), xbmc.LOGNOTICE)
 		os._exit(1)
+		
+def cleanHouse(folder, ignore=False):
+	log(folder)
+	total_files = 0; total_folds = 0
+	for root, dirs, files in os.walk(folder):
+		if ignore == False: dirs[:] = [d for d in dirs if d not in EXCLUDES]
+		file_count = 0
+		file_count += len(files)
+		if file_count >= 0:
+			for f in files:
+				try: 
+					os.unlink(os.path.join(root, f))
+					total_files += 1
+				except: 
+					try:
+						shutil.rmtree(os.path.join(root, f))
+					except:
+						log("Error Deleting %s" % f, xbmc.LOGERROR)
+			for d in dirs:
+				total_folds += 1
+				try: 
+					shutil.rmtree(os.path.join(root, d))
+					total_folds += 1
+				except: 
+					log("Error Deleting %s" % d, xbmc.LOGERROR)
+	return total_files, total_folds
+	
+def removeFolder(path):
+	log("Deleting Folder: %s" % path, xbmc.LOGNOTICE)
+	try: shutil.rmtree(path,ignore_errors=True, onerror=None)
+	except: return False
+	
+import os
+from shutil import *
+def copytree(src, dst, symlinks=False, ignore=None):
+	names = os.listdir(src)
+	if ignore is not None:
+		ignored_names = ignore(src, names)
+	else:
+		ignored_names = set()
+	if not os.path.isdir(dst):
+		os.makedirs(dst)
+	errors = []
+	for name in names:
+		if name in ignored_names:
+			continue
+		srcname = os.path.join(src, name)
+		dstname = os.path.join(dst, name)
+		try:
+			if symlinks and os.path.islink(srcname):
+				linkto = os.readlink(srcname)
+				os.symlink(linkto, dstname)
+			elif os.path.isdir(srcname):
+				copytree(srcname, dstname, symlinks, ignore)
+			else:
+				copy2(srcname, dstname)
+		except Error, err:
+			errors.extend(err.args[0])
+		except EnvironmentError, why:
+			errors.append((srcname, dstname, str(why)))
+	try:
+		copystat(src, dst)
+	except OSError, why:
+		errors.extend((src, dst, str(why)))
+	if errors:
+		raise Error, errors

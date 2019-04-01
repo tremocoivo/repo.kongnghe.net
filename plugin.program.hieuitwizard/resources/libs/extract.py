@@ -25,8 +25,8 @@ if KODIV > 17:
 else:
 	import zipfile
 
-ADDON_ID       = wiz.ADDON_ID
-ADDONTITLE     = wiz.ADDONTITLE
+ADDON_ID       = xbmcaddon.Addon().getAddonInfo('id')
+ADDONTITLE     = '[COLOR red][B]HieuIT[/B][/COLOR] [COLOR yellow][B]Media Center[/B][/COLOR]'
 COLOR1         = wiz.COLOR1
 COLOR2         = wiz.COLOR2
 ADDON          = wiz.addonId(ADDON_ID)
