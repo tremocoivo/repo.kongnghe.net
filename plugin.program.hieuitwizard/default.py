@@ -58,9 +58,12 @@ PACKAGES         = os.path.join(ADDONS,    'packages')
 ADDOND           = os.path.join(USERDATA,  'addon_data')
 ADDONDATA        = os.path.join(USERDATA,  'addon_data', ADDON_ID)
 FANART           = os.path.join(ADDONPATH, 'fanart.jpg')
-BACKUPLOCATION    = wiz.BACKUPLOCATION
-MYBUILDS          = wiz.MYBUILDS
+BACKUPLOCATION   = wiz.BACKUPLOCATION
+MYBUILDS         = wiz.MYBUILDS
 BUILDFILE        = 'https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/wizard.txt'
+UPDATEFILE       = 'https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/update.txt'
+TWEAKFILE        = 'https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/Tweak/tweak.txt'
+DATAFILE         = 'https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/datafile.txt'
 KODIV            = float(xbmc.getInfoLabel("System.BuildVersion")[:4])
 if KODIV > 17:
 	from resources.libs import zfile as zipfile #FTG mod for Kodi 18
@@ -110,6 +113,14 @@ def INSTALLKODI():
     addItem('===== [COLOR red][B]CHỌN BẢN BUILD MUỐN SỬ DỤNG[/B][/COLOR] =====', 'url', 999, '')
     for name,url,iconimage,fanart,description in match:
           addDir(name,url,1,iconimage,fanart,description)
+		  
+def RESTOREDATAFILE():
+    setView('videos', 'MAIN')
+    # analytics.sendPageView("HieuIT Media Center","Installkodi","HieuIT Wizard")
+    link = OPEN_URL(DATAFILE).replace('\n','').replace('\r','')
+    match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
+    for name,url,iconimage,fanart,description in match:
+          addDir(name,url,25,iconimage,fanart,description)
 	
 def BACKUP_RESTORE():
   setView('videos', 'MAIN')
@@ -267,18 +278,18 @@ def systemInfo():
 	ram_free      = wiz.convertSize(int(float(data[11][:-2]))*1024*1024)
 	addItem('[COLOR white]Ram còn trống:[/COLOR] [COLOR yellow]%s[/COLOR]' % (ram_free),'url', 9999, '')		
 
-def restoredata():
-    #analytics.sendPageView("HieuIT Media Center","restoredata","Data Addon")
-    setView('videos', 'MAIN')
-    addItem('Data Addon Gdrive 0.8.66 - Dành cho Kodi 16/SPMC', 'url', 122,os.path.join(mediaPath, "gdrive.png"))
-    addItem('Data  Addon Google Drive', 'url', 13,os.path.join(mediaPath, "ggdrive.png"))
+# def restoredata():
+    # #analytics.sendPageView("HieuIT Media Center","restoredata","Data Addon")
+    # setView('videos', 'MAIN')
+    # addItem('Data Addon Gdrive 0.8.66 - Dành cho Kodi 16/SPMC', 'url', 122,os.path.join(mediaPath, "gdrive.png"))
+    # addItem('Data  Addon Google Drive', 'url', 13,os.path.join(mediaPath, "ggdrive.png"))
     
 	
 def Tweak():
     setView('videos', 'MAIN')
     #analytics.sendPageView("HieuIT Media Center","Tweak","Tang Toc Cache")
     systemInfo()
-    link = OPEN_URL('https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/Tweak/tweak.txt').replace('\n','').replace('\r','')
+    link = OPEN_URL(TWEAKFILE).replace('\n','').replace('\r','')
     match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
     for name,url,iconimage,fanart,description in match:
         addDir(name,url,2,iconimage,fanart,description)
@@ -287,7 +298,7 @@ def Tweak():
 def UPDATE():
     setView('videos', 'MAIN')
     #analytics.sendPageView("HieuIT Media Center","Update","Update Addon")
-    link = OPEN_URL('https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/update.txt').replace('\n','').replace('\r','')
+    link = OPEN_URL(UPDATEFILE).replace('\n','').replace('\r','')
     match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
     for name,url,iconimage,fanart,description in match:
         addDir(name,url,2,iconimage,fanart,description)
@@ -303,6 +314,7 @@ def utilities():
     addItem('Purge Packages - Xóa Các Gói Cài Đặt Cũ', 'url', 7,os.path.join(mediaPath, "packages.png"))
     addItem('[COLOR red][B]Delete All - Xóa Tất Cả[/B][/COLOR]', 'url', 8,os.path.join(mediaPath, "clearcache.png"))	
     addItem('[COLOR yellow][B]Speedtest[/B][/COLOR] - Kiểm Tra Tốc Độ Mạng','url', 23,os.path.join(mediaPath, "speedtest.png"))
+    addItem('[COLOR red][B]Refresh KODI[/B][/COLOR] - Khôi phục Kodi về mặc định (giữ nguyên Repository)','url', 24,os.path.join(mediaPath, "speedtest.png"))
 
     
 def OPEN_URL(url):
@@ -479,15 +491,17 @@ def restoreit(type):
 		wiz.skinToDefault()
 	wiz.restoreLocal(type)
 	
-# def restoreWizard():
-	# choice = dialog.yesno(ADDONTITLE, 'Lựa chọn cách bạn sẽ cài đặt bản build này:' , '[COLOR yellow][B]Fresh Install:[/B][/COLOR] Xóa toàn bộ và thay bằng bản build mới', '[COLOR green][B]Override Install:[/B][/COLOR] Cập nhật bản build vào bản Kodi hiện tại', nolabel='[B][COLOR yellow]Fresh Install[/COLOR][/B]',yeslabel='[B][COLOR green]Override Install[/COLOR][/B]')
-	# if choice == 0:
-		# freshStart(name)
-	# else: 
-		# wizard(name,url,description)
-		# if KODIV >= 17: wiz.addonDatabase(ADDON_ID, 1)
-		# dialog.ok(ADDONTITLE, '[COLOR yellow]Đã cài đặt thành công![/COLOR]', 'Nhấn [B]OK[/B] để thoát Kodi')
-		# wiz.killxbmc(True)
+def datafile():
+	wizard(name,url,description)
+	if 'googlegdrive' in url:
+		dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK và thưởng thức ^^")
+		xbmc.executebuiltin('RunAddon(plugin.googledrive)')	
+	if 'gdrive' in url:
+		dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK và thưởng thức ^^")
+		xbmc.executebuiltin('RunAddon(plugin.video.gdrive)')
+	else:
+		dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK và thưởng thức ^^")
+
 			
 def wizard(name,url,description):
     ################## New code ###################################
@@ -885,7 +899,8 @@ elif mode==9:
     xbmcaddon.Addon(id='plugin.program.hieuitwizard').openSettings()
     	
 elif mode==10:
-        restoredata()
+        #restoredata()
+		RESTOREDATAFILE()
         	
 
 elif mode==11:
@@ -938,6 +953,12 @@ elif mode==22:
 
 elif mode==23:
        speedMenu()
+	  
+elif mode==24:
+       freshStart()
+	   
+elif mode ==25:
+		datafile()
 	   
        		
 		

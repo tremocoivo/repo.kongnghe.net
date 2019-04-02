@@ -1,3 +1,5 @@
+v2.1.0
+- Thêm file startup
 v2.0.0
 - Nâng cấp một số chức năng
 - Sửa lỗi không đọc được file zip trên Kodi 18 platform Android 7
