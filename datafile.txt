@@ -5,7 +5,7 @@ fanart="https://i.imgur.com/NfFrKb1.jpg"
 description="Bản build dành cho Kodi 17 với giao diện Confluence siêu nhẹ, đơn giản, không có Movies Library"
 
 name="Data Addon Google Drive"
-url="https://dl.dropboxusercontent.com/s/nofqcb6rd9l7v6i/data_ggdrive.zip"
+url="https://dl.dropboxusercontent.com/s/nofqcb6rd9l7v6i/data_googledrive.zip"
 img="https://i.imgur.com/NfFrKb1.jpg"
 fanart="https://i.imgur.com/NfFrKb1.jpg"
 description="Bản build dành cho Kodi 17 với giao diện Confluence siêu nhẹ, đơn giản, có Movies Library"
