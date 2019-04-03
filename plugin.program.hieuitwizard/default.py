@@ -493,7 +493,11 @@ def restoreit(type):
 	wiz.restoreLocal(type)
 	
 def datafile():
-	wizard(name,url,description)
+	yes = dialog.yesno(ADDONTITLE, 'Tất cả data addon đã lưu trước đó sẽ bị ghi đè', 'Bạn có muốn tiếp tục không?', nolabel='[B][COLOR red]Không[/COLOR][/B]',yeslabel='[B][COLOR green]OK, làm ngay[/COLOR][/B]')
+	if yes == 0:
+		return
+	else:
+		wizard(name,url,description)
 	if 'googlegdrive' in url:
 		dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK và thưởng thức ^^")
 		xbmc.executebuiltin('RunAddon(plugin.googledrive)')	

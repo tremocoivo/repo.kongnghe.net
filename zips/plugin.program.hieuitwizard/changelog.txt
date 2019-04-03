@@ -1,3 +1,5 @@
+v2.1.2
+- Chỉnh sửa vài lỗi nhỏ
 v2.1.1
 - Thêm chức năng Restore Data từ file.
 v2.1.0
