@@ -3,3 +3,10 @@ url="https://dl.dropboxusercontent.com/s/31bikuki73pgeam/fix-icon-eminence-kodi1
 img="https://i.imgur.com/LuiPwSN.jpg"
 fanart="https://i.imgur.com/LuiPwSN.jpg"
 description="Sửa lỗi hiển thị ICON VMF, VNOpen, GG Drive skin Emimence khi Update lên Kodi 18"
+
+name="Fix Lỗi Addon Google Drive"
+url="https://dl.dropboxusercontent.com/s/qrd5bt9h58400ot/fix_clouddrive_module.zip"
+img="https://i.imgur.com/LuiPwSN.jpg"
+fanart="https://i.imgur.com/LuiPwSN.jpg"
+description="Sửa lỗi không mở được Addon Google Drive do xung đột module cloudDrive"
+
