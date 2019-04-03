@@ -6,7 +6,7 @@ description="Sửa lỗi hiển thị ICON VMF, VNOpen, GG Drive skin Emimence k
 
 name="Fix Lỗi Addon Google Drive"
 url="https://dl.dropboxusercontent.com/s/qrd5bt9h58400ot/fix_clouddrive_module.zip"
-img="https://i.imgur.com/LuiPwSN.jpg"
-fanart="https://i.imgur.com/LuiPwSN.jpg"
+img="https://i.imgur.com/2N3N0Jv.png"
+fanart="https://i.imgur.com/2N3N0Jv.png"
 description="Sửa lỗi không mở được Addon Google Drive do xung đột module cloudDrive"
 
