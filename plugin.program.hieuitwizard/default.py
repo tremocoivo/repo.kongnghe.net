@@ -344,8 +344,8 @@ def freshStart(install=None, over=False):
 	elif install: yes_pressed=dialog.yesno(ADDONTITLE, "Bạn có chắc muốn xóa toàn bộ Kodi về mặc định", "Trước khi cài đặt bản build [COLOR %s]%s[/COLOR]?" % (COLOR1, install), nolabel='[B][COLOR red]Hủy[/COLOR][/B]', yeslabel='[B][COLOR green]Tiếp tục[/COLOR][/B]')
 	else: yes_pressed=dialog.yesno(ADDONTITLE, "[COLOR %s]Bạn có muốn khôi phục" % COLOR2, "Các thiết lập của Kodi về mặc định?[/COLOR]", nolabel='[B][COLOR red]Hủy[/COLOR][/B]', yeslabel='[B][COLOR green]Tiếp tục[/COLOR][/B]')
 	if yes_pressed:
-		if not wiz.currSkin() in ['skin.confluence', 'skin.estuary']:
-			skin = 'skin.confluence' if KODIV < 17 else 'skin.estuary'
+		if not wiz.currSkin() in 'skin.estuary':
+			skin = 'skin.estuary'
 			skinSwitch.swapSkins(skin)
 			x = 0
 			xbmc.sleep(1000)
