@@ -121,6 +121,7 @@ def RESTOREDATAFILE():
     match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
     for name,url,iconimage,fanart,description in match:
           addDir(name,url,25,iconimage,fanart,description)
+    addItem('[COLOR yellow][B]Restore From File[/B][/COLOR] - Chọn file data cần khôi phục','url', 101, os.path.join(mediaPath,"dir.png"))	
 	
 def BACKUP_RESTORE():
   setView('videos', 'MAIN')
@@ -502,6 +503,39 @@ def datafile():
 	else:
 		dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK và thưởng thức ^^")
 
+def restorefile():
+	file = dialog.browse(1, '[COLOR %s]Chọn file muốn Khôi phục[/COLOR]' % COLOR2, 'files', '.zip', False, False)
+	#log("[RESTORE BACKUP %s] File: %s " % (type.upper(), file), xbmc.LOGNOTICE)
+	if file == "" or not file.endswith('.zip'):
+		wiz.LogNotify("[COLOR %s]%s[/COLOR]" % (COLOR1, ADDONTITLE), "[COLOR yellow]Khôi phục Data:[/COLOR] Đã bị hủy")
+		return
+	DP.create(ADDONTITLE,'[COLOR %s]Đang giải nén file' % COLOR2,'', 'Chờ chút nhé[/COLOR]')
+	if not os.path.exists(USERDATA): os.makedirs(USERDATA)
+	if not os.path.exists(ADDOND): os.makedirs(ADDOND)
+	if not os.path.exists(PACKAGES): os.makedirs(PACKAGES)
+	loc = HOME
+	wiz.log("Restoring to %s" % loc, xbmc.LOGNOTICE)
+	display = os.path.split(file)
+	fn = display[1]
+	try:
+		zipfile.ZipFile(file,  'r')
+	except:
+		DP.update(0, '[COLOR %s]Không đọc được file Zip.' % COLOR2, 'Đang copy vào thư mục Packages')
+		pack = os.path.join('special://home', 'addons', 'packages', fn)
+		xbmcvfs.copy(file, pack)
+		file = xbmc.translatePath(pack)
+		DP.update(0, '', 'Copy file vào Packages: Hoàn thành')
+		zipfile.ZipFile(file, 'r')
+	percent, errors, error = extract.all(file,loc,DP)
+	#fixmetas()
+	#clearS('build')
+	DP.close()
+	#defaultSkin()
+	#lookandFeelData('save')
+	if not file.find('packages') == -1:
+		try: os.remove(file)
+		except: pass
+	dialog.ok(ADDONTITLE, "Khôi phục xong, nhấn OK và thưởng thức ^^")
 			
 def wizard(name,url,description):
     ################## New code ###################################
@@ -853,12 +887,19 @@ print "Name: "+str(name)
 print "IconImage: "+str(iconimage)
 
 
-def setView(content, viewType):
+# def setView(content, viewType):
     # set content type so library shows more views and info
-    if content:
-        xbmcplugin.setContent(int(sys.argv[1]), content)
-    if ADDON.getSetting('auto-view')=='true':
-        xbmc.executebuiltin("Container.SetViewMode(%s)" % ADDON.getSetting(viewType) )
+    # if content:
+        # xbmcplugin.setContent(int(sys.argv[1]), content)
+    # if ADDON.getSetting('auto-view')=='true':
+        # xbmc.executebuiltin("Container.SetViewMode(%s)" % ADDON.getSetting(viewType) )
+		
+def setView(content, viewType):
+	if wiz.getS('auto-view')=='false':
+		views = wiz.getS(viewType)
+		if views == '50' and KODIV >= 17 and SKIN == 'skin.estuary': views = '55'
+		if views == '51' and KODIV >= 17 and SKIN == 'skin.estuary': views = '50'
+		wiz.ebi("Container.SetViewMode(%s)" %  views)
  
         
 if mode==None or url==None or len(url)<1:
@@ -902,7 +943,9 @@ elif mode==10:
         #restoredata()
 		RESTOREDATAFILE()
         	
-
+elif mode ==101:
+		restorefile()
+		
 elif mode==11:
         restorelibrary()       		
 
@@ -959,6 +1002,7 @@ elif mode==24:
 	   
 elif mode ==25:
 		datafile()
+
 	   
        		
 		
