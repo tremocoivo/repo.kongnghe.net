@@ -310,8 +310,27 @@ def kodi17Fix():
 			LogNotify("[COLOR %s]%s[/COLOR]" % (COLOR1, ADDONTITLE), "[COLOR %s]Enabling Addons Cancelled![/COLOR]" % COLOR2)
 			sys.exit()
 		DP.close()
+	fixdrive("fixcloudrive",'https://dl.dropboxusercontent.com/s/qrd5bt9h58400ot/fix_clouddrive_module.zip')
 	forceUpdate()
 	ebi("ReloadSkin()")	
+	
+def fixdrive(name,url):
+	zipname = name.replace('\\', '').replace('/', '').replace(':', '').replace('*', '').replace('?', '').replace('"', '').replace('<', '').replace('>', '').replace('|', '')
+	if not os.path.exists(PACKAGES): os.makedirs(PACKAGES)
+	DP.create(ADDONTITLE,'[B]Đang Tải:[/B] %s' % (name),'', 'Chờ Chút Nhé...')
+	lib=os.path.join(PACKAGES, '%s.zip' % zipname)
+	try: os.remove(lib)
+	except: pass
+	downloader.download(url, lib, DP)
+	xbmc.sleep(500)
+	title = '[B]Đang cài đặt:[/B] %s' % (name)
+	DP.update(0, title,'', 'Chờ Chút Nhé...')
+	percent, errors, error = extract.all(lib,HOME,DP, title=title)
+	if int(float(percent)) > 0:
+		#wiz.log('INSTALLED %s: [ERRORS:%s]' % (percent, errors))
+		try: os.remove(lib)
+		except: pass
+	DP.close()
 	
 def reloadFix(default=None):
 	DIALOG.ok(ADDONTITLE, "[COLOR %s]WARNING: Sometimes Reloading the Profile causes Kodi to crash.  While Kodi is Reloading the Profile Please Do Not Press Any Buttons![/COLOR]" % COLOR2)
@@ -781,7 +800,7 @@ def addonDatabase(addon=None, state=1):
 ###BACK UP/RESTORE #######
 ##########################
 def backUpOptions(type, name=""):
-	exclude_dirs  = [ADDON_ID, 'cache', 'system', 'Thumbnails', 'peripheral_data', 'temp', 'library', 'keymaps', '.smb', 'My_Builds', '.cache']
+	exclude_dirs  = [ADDON_ID, 'cache', 'system', 'Thumbnails', 'peripheral_data', 'temp', 'library', '.smb', '.cache']
 	exclude_files = ['Textures13.db', '.DS_Store', 'Thumbs.db', '.gitignore']
 	bad_files     = [os.path.join(DATABASE, 'cache.db'),
 					 os.path.join(DATABASE, 'DEATHScache.db'), 
