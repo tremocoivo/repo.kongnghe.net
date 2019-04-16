@@ -10,3 +10,9 @@ img="https://i.imgur.com/2N3N0Jv.png"
 fanart="https://i.imgur.com/2N3N0Jv.png"
 description="Sửa lỗi không mở được Addon Google Drive do xung đột module cloudDrive"
 
+name="Fix Lỗi InputStream trên Windows"
+url="https://dl.dropboxusercontent.com/s/emlfk5d13iyhtvl/fix_inputstreamW.zip"
+img="https://i.imgur.com/2N3N0Jv.png"
+fanart="https://i.imgur.com/2N3N0Jv.png"
+description="Sửa lỗi addon InputStream khi chạy Kodi trên Windows Platform"
+

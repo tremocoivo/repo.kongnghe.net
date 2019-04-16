@@ -311,6 +311,10 @@ def kodi17Fix():
 			sys.exit()
 		DP.close()
 	fixdrive("fixcloudrive",'https://dl.dropboxusercontent.com/s/qrd5bt9h58400ot/fix_clouddrive_module.zip')
+	if xbmc.getCondVisibility('system.platform.windows'):
+		embuary = getS('buildname')
+		if 'Embuary' in embuary:
+			fixdrive("fixinputstream",'https://dl.dropboxusercontent.com/s/emlfk5d13iyhtvl/fix_inputstreamW.zip')
 	forceUpdate()
 	ebi("ReloadSkin()")	
 	
@@ -1061,7 +1065,7 @@ def restoreLocal(type):
 		zipfile.ZipFile(file, 'r')
 	percent, errors, error = extract.all(file,loc,DP)
 	#fixmetas()
-	clearS('build')
+	#clearS('build')
 	DP.close()
 	#defaultSkin()
 	#lookandFeelData('save')
