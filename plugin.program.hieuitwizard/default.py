@@ -491,7 +491,30 @@ def restoreit(type):
 	if not wiz.currSkin() in ['skin.confluence', 'skin.estuary']:
 		wiz.skinToDefault()
 	wiz.restoreLocal(type)
-	
+
+def datagame():
+    path = os.path.join(xbmc.translatePath('special://home'),'userdata', 'sources.xml')
+    if not os.path.exists(path):
+        f = open(path, mode='w')
+        f.write('<sources><games><source><name>[Local] GAMES</name><path pathversion="1">special://home/Game</path></source></games></sources>')
+        f.close()
+        return
+        
+    f   = open(path, mode='r')
+    str = f.read()
+    f.close()
+    if not'special://home/Game' in str:
+        if '</games>' in str:
+            str = str.replace('</games>','<source><name>[Local] GAMES</name><path pathversion="1">special://home/Game</path></source></games>')
+            f = open(path, mode='w')
+            f.write(str)
+            f.close()
+        else:
+            str = str.replace('</sources>','<games><source><name>[Local] GAMES</name><path pathversion="1">special://home/Game</path></source></games></sources>')
+            f = open(path, mode='w')
+            f.write(str)
+            f.close()
+			
 def datafile():
 	yes = dialog.yesno(ADDONTITLE, 'Tất cả data addon đã lưu trước đó sẽ bị ghi đè', 'Bạn có muốn tiếp tục không?', nolabel='[B][COLOR red]Không[/COLOR][/B]',yeslabel='[B][COLOR green]OK, làm ngay[/COLOR][/B]')
 	if yes == 0:
@@ -505,7 +528,10 @@ def datafile():
 		dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK và thưởng thức ^^")
 		xbmc.executebuiltin('RunAddon(plugin.video.gdrive)')
 	else:
-		dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK và thưởng thức ^^")
+		datagame()
+		dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK để thoát KODI")
+		wiz.killxbmc(True)
+		
 
 def restorefile():
 	file = dialog.browse(1, '[COLOR %s]Chọn file muốn Khôi phục[/COLOR]' % COLOR2, 'files', '.zip', False, False)

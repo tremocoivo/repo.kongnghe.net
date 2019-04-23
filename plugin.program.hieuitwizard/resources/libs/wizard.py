@@ -335,31 +335,6 @@ def fixdrive(name,url):
 		try: os.remove(lib)
 		except: pass
 	DP.close()
-	
-def reloadFix(default=None):
-	DIALOG.ok(ADDONTITLE, "[COLOR %s]WARNING: Sometimes Reloading the Profile causes Kodi to crash.  While Kodi is Reloading the Profile Please Do Not Press Any Buttons![/COLOR]" % COLOR2)
-	if not os.path.exists(PACKAGES): os.makedirs(PACKAGES)
-	if default == None:
-		lookandFeelData('save')
-	redoThumbs()
-	ebi('ActivateWindow(Home)')
-	reloadProfile()
-	xbmc.sleep(10000)
-	if KODIV >= 17: kodi17Fix()
-	if default == None:
-		log("Switching to: %s" % getS('defaultskin'))
-		gotoskin = getS('defaultskin')
-		skinSwitch.swapSkins(gotoskin)
-		x = 0
-		while not xbmc.getCondVisibility("Window.isVisible(yesnodialog)") and x < 150:
-			x += 1
-			xbmc.sleep(200)
-		if xbmc.getCondVisibility("Window.isVisible(yesnodialog)"):
-			ebi('SendClick(11)')
-		lookandFeelData('restore')
-	addonUpdates('reset')
-	forceUpdate()
-	ebi("ReloadSkin()")
 
 def workingURL(url):
 	if url in ['http://', 'https://', '']: return False
