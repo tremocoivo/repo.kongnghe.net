@@ -521,16 +521,20 @@ def datafile():
 		return
 	else:
 		wizard(name,url,description)
-	if 'googlegdrive' in url:
-		dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK và thưởng thức ^^")
-		xbmc.executebuiltin('RunAddon(plugin.googledrive)')	
-	if 'gdrive' in url:
-		dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK và thưởng thức ^^")
-		xbmc.executebuiltin('RunAddon(plugin.video.gdrive)')
-	else:
-		datagame()
-		dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK để thoát KODI")
-		wiz.killxbmc(True)
+		if 'googledrive' in url:
+			dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK và thưởng thức ^^")
+			wiz.clearS('build')
+			xbmc.executebuiltin('RunAddon(plugin.googledrive)')	
+		if 'gdrive' in url:
+			dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK và thưởng thức ^^")
+			wiz.clearS('build')
+			xbmc.executebuiltin('RunAddon(plugin.video.gdrive)')
+		if 'Game' in url:
+			datagame()
+			dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK để thoát KODI")
+			wiz.clearS('build')
+			wiz.killxbmc(True)
+		
 		
 
 def restorefile():

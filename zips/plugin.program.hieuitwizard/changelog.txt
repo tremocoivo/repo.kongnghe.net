@@ -1,3 +1,5 @@
+v2.1.7
+- fix lỗi nhỏ chức năng restore data
 v2.1.6
 - Thêm chức năng add đường dẫn Game sau khi restore
 v2.1.5
