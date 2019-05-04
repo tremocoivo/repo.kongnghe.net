@@ -60,6 +60,7 @@ ADDONDATA        = os.path.join(USERDATA,  'addon_data', ADDON_ID)
 FANART           = os.path.join(ADDONPATH, 'fanart.jpg')
 BACKUPLOCATION   = wiz.BACKUPLOCATION
 MYBUILDS         = wiz.MYBUILDS
+BUILDLINK        = wiz.getS('buildlink')
 BUILDFILE        = 'https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/wizard.txt'
 UPDATEFILE       = 'https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/update.txt'
 TWEAKFILE        = 'https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/Tweak/tweak.txt'
@@ -107,12 +108,21 @@ def MAIN():
 def INSTALLKODI():
     setView('videos', 'MAIN')
     # analytics.sendPageView("HieuIT Media Center","Installkodi","HieuIT Wizard")
-    link = OPEN_URL(BUILDFILE).replace('\n','').replace('\r','')
-    match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
-    addItem('Bạn đang dùng [COLOR yellow][B]%s[/B][/COLOR] Version: [COLOR green]%s[/COLOR]' % (MCNAME, KODIV), 'url', 999, '') 
-    addItem('===== [COLOR red][B]CHỌN BẢN BUILD MUỐN SỬ DỤNG[/B][/COLOR] =====', 'url', 999, '')
-    for name,url,iconimage,fanart,description in match:
-          addDir(name,url,1,iconimage,fanart,description)
+    if not BUILDLINK == '':
+         link = OPEN_URL(BUILDLINK).replace('\n','').replace('\r','')
+         match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
+         addItem('Custom Build URL: [COLOR yellow]%s[/COLOR]' %(BUILDLINK),'url',998,'')
+         addItem('Bạn đang dùng [COLOR yellow][B]%s[/B][/COLOR] Version: [COLOR green]%s[/COLOR]' % (MCNAME, KODIV), 'url', 9999, '') 
+         addItem('===== [COLOR red][B]BẢN BUILD CỦA BẠN[/B][/COLOR] =====', 'url', 9999, '')
+         for name,url,iconimage,fanart,description in match:
+             addDir(name,url,1,iconimage,fanart,description)
+    else:
+         link = OPEN_URL(BUILDFILE).replace('\n','').replace('\r','')
+         match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
+         addItem('Bạn đang dùng [COLOR yellow][B]%s[/B][/COLOR] Version: [COLOR green]%s[/COLOR]' % (MCNAME, KODIV), 'url', 999, '') 
+         addItem('===== [COLOR red][B]CHỌN BẢN BUILD MUỐN SỬ DỤNG[/B][/COLOR] =====', 'url', 999, '')
+         for name,url,iconimage,fanart,description in match:
+              addDir(name,url,1,iconimage,fanart,description)
 		  
 def RESTOREDATAFILE():
     setView('videos', 'MAIN')
@@ -1038,12 +1048,14 @@ elif mode ==25:
 		datafile()
 
 	   
-       		
+elif mode==998:
+        dialog.ok(ADDONTITLE, 'Thay đổi Build URL trong tab [COLOR yellow]Build Link[/COLOR]', 'Nhấn [B]OK[/B] để bắt đầu')
+        wiz.openS("Build Link")      		
 		
 elif mode==999:
-        # dialog.ok(ADDONTITLE, 'Thay đổi thư mục Backup mặc định trong tab [COLOR yellow]Zip Folder[/COLOR]', 'Nhấn [B]OK[/B] để bắt đầu')
-        #ADDON.openSettings()
-		viewBuild(name)
+        dialog.ok(ADDONTITLE, 'Thay đổi thư mục Backup mặc định trong tab [COLOR yellow]Zip Folder[/COLOR]', 'Nhấn [B]OK[/B] để bắt đầu')
+        ADDON.openSettings()
+		#viewBuild(name)
 		
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
