@@ -1,3 +1,10 @@
+name="Thiết lập xem Youtube 4K/1080p"
+url="https://dl.dropboxusercontent.com/s/10urp5vj7acbzwp/fix_youtube4k.zip"
+img="https://i.imgur.com/2N3N0Jv.png"
+fanart="https://i.imgur.com/2N3N0Jv.png"
+description="Tùy chỉnh chức năng xem Youtube Max resolution trên mọi thiết bị"
+
+
 name="Fix Lỗi Hiển Thị Icon Skin Eminence Kodi 18"
 url="https://dl.dropboxusercontent.com/s/31bikuki73pgeam/fix-icon-eminence-kodi18.zip"
 img="https://i.imgur.com/LuiPwSN.jpg"
