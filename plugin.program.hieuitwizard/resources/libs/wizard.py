@@ -115,7 +115,7 @@ def openS(name=""):
 	ADDON.openSettings()
 	
 def clearS(type):
-	build    = {'buildname':'', 'buildversion':'', 'buildtheme':'', 'latestversion':'', 'lastbuildcheck':'2016-01-01'}
+	build    = {'buildname':'', 'buildversion':'', 'buildtheme':'', 'latestversion':'', 'lastbuildcheck':'2016-01-01', 'buildlink':''}
 	install  = {'installed':'false', 'extract':'', 'errors':''}
 	default  = {'defaultskinignore':'false', 'defaultskin':'', 'defaultskinname':''}
 	lookfeel = ['default.enablerssfeeds', 'default.font', 'default.rssedit', 'default.skincolors', 'default.skintheme', 'default.skinzoom', 'default.soundskin', 'default.startupwindow', 'default.stereostrength']
@@ -160,7 +160,25 @@ def mediaCenter():
 		return 'WBMC'
 	else: 
 		return 'Unknown Fork'
-		
+
+def workingURL(url):
+	if url in ['http://', 'https://', '']: return False
+	check = 0; status = ''
+	while check < 3:
+		check += 1
+		try:
+			req = urllib2.Request(url)
+			req.add_header('User-Agent', USER_AGENT)
+			response = urllib2.urlopen(req)
+			response.close()
+			status = True
+			break
+		except Exception, e:
+			status = str(e)
+			log("Working Url Error: %s [%s]" % (e, url))
+			xbmc.sleep(500)
+	return status
+	
 def latestDB(DB):
 	if DB in ['Addons', 'ADSP', 'Epg', 'MyMusic', 'MyVideos', 'Textures', 'TV', 'ViewModes']:
 		match = glob.glob(os.path.join(DATABASE,'%s*.db' % DB))

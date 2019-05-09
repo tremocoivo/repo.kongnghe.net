@@ -49,6 +49,7 @@ RSS           =  xbmc.translatePath(os.path.join(USERDATA,'RssFeeds.xml'))
 KEYMAPS       =  xbmc.translatePath(os.path.join(USERDATA,'keymaps','keyboard.xml'))
 USB           =  xbmc.translatePath(os.path.join(zip))
 skin          =  xbmc.getSkinDir()
+CHANGELOG     =  xbmc.translatePath(os.path.join(ADDONPATH,'changelog.txt'))
 
 ################## New Update ####################################
 ADDON_ID         = wiz.ADDON_ID
@@ -103,6 +104,7 @@ def MAIN():
     addDir1('[COLOR yellow][B]TWEAK[/B][/COLOR] - Thiết Lập File [COLOR red][B]AdvancedSetting.xml[/B][/COLOR]','url', 3,os.path.join(mediaPath, "tweak.png"),FANART,'Tăng memcache khi xem phim không bị giật lag')
     addDir1('[COLOR yellow][B]Utilities Tool[/B][/COLOR] - Công Cụ Tiện Ích','url', 4,os.path.join(mediaPath, "utilities.png"),FANART,'Các công cụ cần thiết trong quá trình sử dụng Kodi')
     addDir1('[COLOR yellow][B]UPDATE[/B][/COLOR] - Sửa Lỗi Addon','url', 22,os.path.join(mediaPath, "update.png"),FANART,'Bản cập nhật sửa lỗi các addon khi dùng bản Build của HieuIT Wizard')
+    addItem('[COLOR yellow][B]ChangeLog[/B][/COLOR] - Có gì mới?','url', 29,os.path.join(mediaPath, "movieslibrary.png"))	
     addDir1('[B][COLOR yellow]Like[/COLOR] and [COLOR pink]Donate[/COLOR][/B]: Ủng Hộ Tác Giả','url', 9,os.path.join(mediaPath, "donate.png"),FANART,'Lets share to be shared')
 	
 def INSTALLKODI():
@@ -112,6 +114,7 @@ def INSTALLKODI():
          link = OPEN_URL(BUILDLINK).replace('\n','').replace('\r','')
          match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
          addItem('Custom Build URL: [COLOR yellow]%s[/COLOR]' %(BUILDLINK),'url',998,'')
+         addItem('[COLOR yellow][B]Reset:[/B][/COLOR] Xóa link trả về mặc định','url',28,'')		 
          addItem('Bạn đang dùng [COLOR yellow][B]%s[/B][/COLOR] Version: [COLOR green]%s[/COLOR]' % (MCNAME, KODIV), 'url', 9999, '') 
          addItem('===== [COLOR red][B]BẢN BUILD CỦA BẠN[/B][/COLOR] =====', 'url', 9999, '')
          for name,url,iconimage,fanart,description in match:
@@ -119,7 +122,8 @@ def INSTALLKODI():
     else:
          link = OPEN_URL(BUILDFILE).replace('\n','').replace('\r','')
          match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
-         addItem('Bạn đang dùng [COLOR yellow][B]%s[/B][/COLOR] Version: [COLOR green]%s[/COLOR]' % (MCNAME, KODIV), 'url', 999, '') 
+         addItem('[COLOR yellow][B]Custom Build URL:[/B][/COLOR] Nhập list của bạn','url',27,'')		 
+         addItem('Bạn đang dùng [COLOR yellow][B]%s (%s)[/B][/COLOR] Version: [COLOR green]%s[/COLOR]' % (MCNAME,platform(), KODIV), 'url', 999, '') 
          addItem('===== [COLOR red][B]CHỌN BẢN BUILD MUỐN SỬ DỤNG[/B][/COLOR] =====', 'url', 999, '')
          for name,url,iconimage,fanart,description in match:
               addDir(name,url,1,iconimage,fanart,description)
@@ -138,7 +142,10 @@ def BACKUP_RESTORE():
   #analytics.sendPageView("HieuIT Media Center","backup_restore","backup_restore")
   if zip=='':
    if dialog.ok(ADDONTITLE,'Bạn chưa thiết lập đường dẫn lưu file Backup cho Kodi','Mở Addon Setting và Chọn tab [COLOR green][B]Zip Folder[/B][/COLOR].','Nhấn [B]OK[/B] để bắt đầu thiết lập'):
-    ADDON.openSettings()
+         backupdir = dialog.browse(0, '[COLOR %s]Chọn đường dẫn lưu file Backup[/COLOR]' % COLOR2, '', '', False, False)
+         wiz.setS('zipdir',backupdir)
+   wiz.refresh()
+    #ADDON.openSettings()
   else:
      #setView('files', 'MAIN')
      addDir2('[COLOR green][B]BACKUP:[/B][/COLOR] Sao lưu Kodi','url',16,os.path.join(mediaPath,"backup.png"),'Tạo bản Build Kodi cá nhân hóa')
@@ -294,7 +301,76 @@ def systemInfo():
     # setView('videos', 'MAIN')
     # addItem('Data Addon Gdrive 0.8.66 - Dành cho Kodi 16/SPMC', 'url', 122,os.path.join(mediaPath, "gdrive.png"))
     # addItem('Data  Addon Google Drive', 'url', 13,os.path.join(mediaPath, "ggdrive.png"))
-    
+
+def enableAddon(id):
+	ADDONID2 = id
+	query = xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"Addons.GetAddonDetails","id":1,"params":{"addonid":"%s", "properties": ["enabled"]}' % ADDONID2)
+	if '"enabled":false' in query:
+		#xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"Addons.SetAddonEnabled","id":1,"params":{"addonid":"%s","enabled":false}}' % ADDONID2)
+		dialog.ok(ADDONTITLE, "Addon này hiện đã được [COLOR yellow]Enable[/COLOR] rồi")
+	else:
+		xbmc.executeJSONRPC('{"jsonrpc":"2.0","method":"Addons.SetAddonEnabled","id":1,"params":{"addonid":"%s", "enabled":true}}' % ADDONID2)
+		dialog.ok(ADDONTITLE, "Đã Enable[COLOR yellow] %s[/COLOR] thành công" %(ADDONID2))
+
+def fixyoutube():
+	y = dialog.yesno("[COLOR red][B]CẢNH BÁO !!![/COLOR][/B]", "Tất cả [COLOR yellow]thiết lập của Youtube & InputStream[/COLOR] đã lưu trước đó sẽ bị ghi đè.", "Bạn có muốn tiếp tục?") 
+	if y == 0:   
+		pass
+	else:
+		resolution=dialog.yesno(ADDONTITLE, 'Chọn thiết lập mặc định cho Youtube:' , '[COLOR yellow][B]Xem 4K:[/B][/COLOR] Dành cho máy cấu hình mạnh', '[COLOR green][B]1080p:[/B][/COLOR] Tối ưu nhất', nolabel='[B][COLOR green]Chọn 1080p[/COLOR][/B]',yeslabel='[B][COLOR yellow]Chọn 4K[/COLOR][/B]')
+		if resolution == 1:
+			wizard("fixyoutube4k",'https://dl.dropboxusercontent.com/s/10urp5vj7acbzwp/fix_youtube4k.zip',description)
+			wiz.clearS('build')
+			wiz.refresh()
+		else:
+			wizard("fixyoutube1080p",'https://dl.dropboxusercontent.com/s/vkr6rmchwuuppca/fix_youtube1080.zip',description)
+			wiz.clearS('build')
+			wiz.refresh()
+	dialog.ok(ADDONTITLE, 'Cài đặt xong, khởi động lại KODI để có hiệu lực','Nhấn OK để thoát')
+	wiz.killxbmc(True)	
+			
+def inputvideo():
+	myplatform = platform()
+	if myplatform == 'android':
+		enableAddon('inputstream.adaptive')
+		fixyoutube()
+	elif myplatform == 'linux':
+		INPUTSTREAM = os.path.join(ADDONS,'inputstream.adaptive')
+		if not os.path.exists(INPUTSTREAM):
+			wizard("inputstream",'https://dl.dropboxusercontent.com/s/06kufgcxs2sgrjz/fix_inputstreamL.zip',description)
+			wiz.clearS('build')
+		else:pass
+		wiz.forceUpdate()
+		xbmc.sleep(500)
+		enableAddon('inputstream.adaptive')
+		fixyoutube()
+	elif myplatform == 'windows':
+		INPUTSTREAM = os.path.join(ADDONS,'inputstream.adaptive')
+		if not os.path.exists(INPUTSTREAM):
+			wizard("inputstream",'https://dl.dropboxusercontent.com/s/emlfk5d13iyhtvl/fix_inputstreamW.zip',description)
+			wiz.clearS('build')
+		else:pass
+		wiz.forceUpdate()
+		xbmc.sleep(500)
+		enableAddon('inputstream.adaptive')
+		fixyoutube()
+
+
+def inputurl():
+	#urltemp = wiz.getS('buildlink')
+	keyboardHandle = xbmc.Keyboard(wiz.getS('buildlink'),'[COLOR yellow]Nhập link chứa list Build của bạn:[/COLOR]\n(Xem cách tạo list tại https://hieuit.net/hieuitwizard)')
+	keyboardHandle.doModal()
+	if (keyboardHandle.isConfirmed()):
+		queryText = keyboardHandle.getText()
+		if len(queryText) == 0:
+			sys.exit()	
+		else:
+			working = wiz.workingURL(queryText)
+			if not working == True:
+				dialog.ok(ADDONTITLE,'Sai URL','Vui lòng nhập lại')
+				inputurl()
+			else:	
+				wiz.setS('buildlink',queryText)
 	
 def Tweak():
     setView('videos', 'MAIN')
@@ -320,11 +396,12 @@ def utilities():
     #analytics.sendPageView("HieuIT Media Center","menucache","Xoa cache")
     #analytics.sendPageView("RawMaintenenance","maintenance","maint")
     setView('videos', 'MAIN')
+    addItem('Thiết lập xem Youtube 4K/1080p', 'url', 26,os.path.join(mediaPath, "youtube4k.png"))
+    addItem('[COLOR yellow][B]Speedtest[/B][/COLOR] - Kiểm Tra Tốc Độ Mạng','url', 23,os.path.join(mediaPath, "speedtest.png"))
     addItem('Clear Cache - Xóa Cache','url', 5,os.path.join(mediaPath, "deletecache.png"))
     addItem('Delete Thumbnails - Xóa Ảnh Xem Trước Của Video/Addon', 'url', 6,os.path.join(mediaPath, "thumbnail.png"))
     addItem('Purge Packages - Xóa Các Gói Cài Đặt Cũ', 'url', 7,os.path.join(mediaPath, "packages.png"))
     addItem('[COLOR red][B]Delete All - Xóa Tất Cả[/B][/COLOR]', 'url', 8,os.path.join(mediaPath, "clearcache.png"))	
-    addItem('[COLOR yellow][B]Speedtest[/B][/COLOR] - Kiểm Tra Tốc Độ Mạng','url', 23,os.path.join(mediaPath, "speedtest.png"))
     addItem('[COLOR red][B]Refresh KODI[/B][/COLOR] - Khôi phục Kodi về mặc định (giữ nguyên Repository)','url', 24,os.path.join(mediaPath, "speedtest.png"))
 
     
@@ -534,10 +611,12 @@ def datafile():
 		if 'googledrive' in url:
 			dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK và thưởng thức ^^")
 			wiz.clearS('build')
+			wiz.refresh()
 			xbmc.executebuiltin('RunAddon(plugin.googledrive)')	
 		if 'gdrive' in url:
 			dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK và thưởng thức ^^")
 			wiz.clearS('build')
+			wiz.refresh()
 			xbmc.executebuiltin('RunAddon(plugin.video.gdrive)')
 		if 'Game' in url:
 			datagame()
@@ -853,6 +932,8 @@ def restoreggdrive():
         pass
     else:
         wizard("dataggdrive",'https://dl.dropboxusercontent.com/s/nofqcb6rd9l7v6i/data_ggdrive.zip',description)
+        wiz.clearS('build')
+        wiz.refresh()
         dialog.ok("Done!", "Khôi phục xong, nhấn OK và thưởng thức ^^")
         xbmc.executebuiltin('RunAddon(plugin.googledrive)')		
 
@@ -864,6 +945,8 @@ def restoregdrive():
         pass
     else:
         wizard("dataggdrive",'https://dl.dropboxusercontent.com/s/82w2elvg2t2kood/data_gdrive.zip',description)
+        wiz.clearS('build')
+        wiz.refresh()
         dialog.ok("Done!", "Khôi phục xong, nhấn OK và thưởng thức ^^")
         xbmc.executebuiltin('RunAddon(plugin.video.gdrive)')
 
@@ -896,7 +979,6 @@ mode=None
 iconimage=None
 fanart=None
 description=None
-
 
 try:
         url=urllib.unquote_plus(params["url"])
@@ -980,8 +1062,9 @@ elif mode==8:
         deleteThumbnails()
         	
 
-elif mode==9:		
-    xbmcaddon.Addon(id='plugin.program.hieuitwizard').openSettings()
+elif mode==9:
+	xbmcaddon.Addon(id='plugin.program.hieuitwizard').openSettings()
+	MAIN()
     	
 elif mode==10:
         #restoredata()
@@ -1047,14 +1130,32 @@ elif mode==24:
 elif mode ==25:
 		datafile()
 
+elif mode ==26:
+		inputvideo()
+		
+elif mode ==27:
+		inputurl()
+		wiz.refresh()
+		
+elif mode ==28:
+		wiz.clearS('build')
+		wiz.refresh()
+
+elif mode ==29:
+		f = open(CHANGELOG,mode='r'); msg = f.read(); f.close()
+		wiz.TextBox(ADDONTITLE, msg)
 	   
 elif mode==998:
         dialog.ok(ADDONTITLE, 'Thay đổi Build URL trong tab [COLOR yellow]Build Link[/COLOR]', 'Nhấn [B]OK[/B] để bắt đầu')
-        wiz.openS("Build Link")      		
+        #wiz.openS('Build Link')
+        inputurl()
+        wiz.refresh()
 		
 elif mode==999:
         dialog.ok(ADDONTITLE, 'Thay đổi thư mục Backup mặc định trong tab [COLOR yellow]Zip Folder[/COLOR]', 'Nhấn [B]OK[/B] để bắt đầu')
-        ADDON.openSettings()
+        backupdir = dialog.browse(0, '[COLOR %s]Chọn đường dẫn lưu file Backup[/COLOR]' % COLOR2, '', '', False, False)
+        wiz.setS('zipdir',backupdir)
+        wiz.refresh()
 		#viewBuild(name)
 		
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

@@ -1,47 +1,62 @@
-v2.1.8
+[COLOR yellow][B]v2.2.0[/B][/COLOR]
+- Nâng cấp chức năng gắn URL bản Build cá nhân. Xem hướng dẫn tạo list Custom Build tại [COLOR yellow]https://hieuit.net/hieuitwizard[/COLOR]
+- Thêm chức năng tự động thiết lập xem Youtube 1080p/4K cho tất cả platform: Android, Windows, LibreELEC/CoreELEC.
+
+[COLOR yellow][B]v2.1.8[/B][/COLOR]
 - Thêm chức năng gắn URL bản build cá nhân
-v2.1.7
+
+[COLOR yellow][B]v2.1.7[/B][/COLOR]
 - fix lỗi nhỏ chức năng restore data
-v2.1.6
+
+[COLOR yellow][B]v2.1.6[/B][/COLOR]
 - Thêm chức năng add đường dẫn Game sau khi restore
-v2.1.5
+
+[COLOR yellow][B]v2.1.5[/B][/COLOR]
 - Sửa lỗi InputStream chạy trên Windows với bản build Embuary
-v2.1.3
+
+[COLOR yellow][B]v2.1.3[/B][/COLOR]
 - Sửa lỗi swapskin khi dùng skin confluence
-v2.1.2
+
+[COLOR yellow][B]v2.1.2[/B][/COLOR]
 - Chỉnh sửa vài lỗi nhỏ
-v2.1.1
+
+[COLOR yellow][B]v2.1.1[/B][/COLOR]
 - Thêm chức năng Restore Data từ file.
-v2.1.0
-- Thêm file startup
-v2.0.0
+
+[COLOR yellow][B]v2.1.0[/B][/COLOR]
+- Thêm file startup, tự động làm 1 số tác vụ sửa lỗi Addon khi khởi động Kodi.
+
+[COLOR yellow][B]v2.0.0[/B][/COLOR]
 - Nâng cấp một số chức năng
-- Sửa lỗi không đọc được file zip trên Kodi 18 platform Android 7
-v1.3.2
+- Sửa lỗi không đọc được file zip trên Kodi 18 platform Android 7 trở lên
+
+[COLOR yellow][B]v1.3.2[/B][/COLOR]
 - Sửa lỗi full Backup trên Windows
-v1.3.1 
+
+[COLOR yellow][B]v1.3.1[/B][/COLOR]
 - Sửa lỗi backup luôn cả thumbnail
-v1.3.0
+
+[COLOR yellow][B]v1.3.0[/B][/COLOR]
 - Thêm chức năng Backup/Restore bản Kodi cá nhân.
 	
-V1.2.2
+[COLOR yellow][B]v1.2.2[/B][/COLOR]
 - Thêm tùy chọn cài đặt Kodi với Skin Confluence của v16 siêu nhẹ.
 
-v1.2.1
-- Sua loi khong giai nen duoc movies library
+[COLOR yellow][B]v1.2.1[/B][/COLOR]
+- Sửa lỗi không giải nén được Movies Library Data
 
-v1.2.0
-- Them Movies Library lay nguon tu Google Drive
-- Them Menu Restore Data
-- Them Menu Donate
+[COLOR yellow][B]v1.2.0[/B][/COLOR]
+- Thêm Movies Library lấy nguồn từ Google Drive
+- Thêm Menu Restore Data
+- Thêm Menu Donate
 
-v1.1.2
-Sua mot vai chuc nang
-- Thay Addon Gdrive bang Google Drive: sua duoc loi xem phu de
-- Tao thu vien phim tu addon Google Drive voi poster, Fanart
-- Them Farourites vao menu home
-- Them chuc nang don rac
-- Them chuc nang set cache cho file Advanced Setting
+[COLOR yellow][B]v1.1.2[/B][/COLOR]
+Sửa một vài chức năng
+- Thay Addon Gdrive bằng Google Drive: sửa lỗi xem phim kèm phụ đề
+- Tạo thư viện phim (Movies Library) từ addon Google Drive hiển thị poster, fanart, pilot....
+- Thêm chức năng dọn rác
+- Thêm Favourites vào menu home
+- Thêm chức năng set memcache cho file AdvancedSetting
 
-v1.1.1
+[COLOR yellow][B]v1.1.1[/B][/COLOR]
 Initial Release
