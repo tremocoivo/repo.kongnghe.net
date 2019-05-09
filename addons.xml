@@ -2,7 +2,7 @@
 <addons>
 <addon
   id="inputstream.adaptive"
-  version="2.3.16"
+  version="2.3.17"
   name="InputStream Adaptive"
   provider-name="peak3d">
   <requires>
@@ -23,6 +23,10 @@
     <description lang="en">InputStream client for adaptive streams</description>
     <platform>windows-x86_64</platform>
 	<news>
+
+v2.3.17 (2019-04-16)
+- Fix KID's with 0 char inside
+
 v2.3.16 (2019-03-25)
 - TTML parser fix
 - [HLS] Add HEVC streams / Fix extra_data_size in ts parser
