@@ -1,0 +1,992 @@
+<includes>
+
+	<include file="Defaults.xml" />
+	<include file="Include_Home_OSMC.xml" />
+	<include file="Includes_Widgets.xml" />
+	<include condition="System.HasAddon(script.skinshortcuts)" file="script-skinshortcuts-includes.xml" />
+	<include condition="!System.HasAddon(script.skinshortcuts)" file="script-skinshortcuts-static.xml" />
+	<include file="Include_DialogSettings.xml" />
+	<include file="Viewtype50.xml" />
+	<include file="Viewtype51.xml" />
+	<include file="Viewtype511.xml" />
+	<include file="Viewtype52.xml" />
+	<include file="Viewtype521.xml" />
+	<include file="Viewtype53.xml" />
+	<include file="Viewtype531.xml" />
+	<include file="Viewtype532.xml" />
+	<include file="Viewtype533.xml" />
+	<include file="Viewtype54.xml" />
+	<include file="Viewtype55.xml" />
+	<include file="Variables.xml" />
+
+	<!-- Fullscreen dimensions -->
+	<include name="FullscreenDimensions">
+		<left>0</left>
+		<top>0</top>
+		<width>1920</width>
+		<height>1080</height>
+	</include>
+
+	<!-- Window background image -->
+	<include name="WindowBackgroundImage">
+		<param name="isHomeWindow">False</param>
+		<param name="animate">False</param>
+		<definition>
+			<control type="videowindow">
+				<include>FullscreenDimensions</include>
+				<visible>Player.HasVideo + Skin.HasSetting(BackgroundVideo)</visible>
+				<visible>!$PARAM[animate]</visible>
+			</control>
+
+			<!-- Water Image -->
+			<control type="image">
+				<include>FullscreenDimensions</include>
+				<texture background="true">$VAR[OSMCBackgroundImage]</texture>
+				<visible>![Player.HasVideo + Skin.HasSetting(BackgroundVideo)]</visible>
+				<visible>!$PARAM[animate]</visible>
+			</control>
+
+			<!-- Background Image -->
+			<control type="image" id="10000">
+				<include>FullscreenDimensions</include>
+				<texture background="true" fallback="transparent.png">$VAR[widgetBackground]</texture>
+				<fadetime>400</fadetime>
+				<visible>![Player.HasVideo + Skin.HasSetting(BackgroundVideo)]</visible>
+				<visible>!Skin.HasSetting(HideFanart)</visible>
+				<animation effect="fade" start="0" end="100" time="200" delay="70" condition="$PARAM[animate]">WindowOpen</animation>
+				<animation effect="fade" start="100" end="0" time="200" condition="$PARAM[animate]">WindowClose</animation>
+			</control>
+
+			<!-- Artists Slideshow -->
+			<control type="multiimage">
+				<include>FullscreenDimensions</include>
+				<imagepath background="true">$INFO[Window(Visualisation).Property(ArtistSlideshow)]</imagepath>
+				<aspectratio>keep</aspectratio>
+				<timeperimage>10000</timeperimage>
+				<fadetime>2000</fadetime>
+				<randomize>true</randomize>
+				<visible>Player.HasAudio + System.HasAddon(script.artistslideshow) + Skin.HasSetting(EnableArtistFanart)</visible>
+			</control>
+
+			<!-- Visualisation -->
+			<control type="visualisation">
+				<include>FullscreenDimensions</include>
+				<visible>Player.HasAudio + Skin.HasSetting(BackgroundVisualisation) + !String.Contains(Window(Videos).Property(TvTunesIsAlive),True)</visible>
+			</control>
+
+			<!-- Overlay -->
+			<control type="image">
+				<include>FullscreenDimensions</include>
+				<texture background="true">$INFO[Skin.String(OSMCBackgroundOverlay),overlays/,.png]</texture>
+				<colordiffuse>$VAR[BackgroundColor]</colordiffuse>
+				<animation effect="fade" start="0" end="100" time="200" condition="$PARAM[animate]">WindowOpen</animation>
+				<animation effect="fade" start="100" end="0" time="200" delay="70" condition="$PARAM[animate]">WindowClose</animation>
+				<include>VisibleFadeAnimation</include>
+				<visible>!Window.Is(visualisation) | [Window.Is(visualisation) + [Player.ShowInfo | Window.IsActive(musicosd)]]</visible>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Window background image with fade animation -->
+	<include name="WindowFadeBackgroundImage">
+		<control type="group">
+			<include content="WindowBackgroundImage">
+				<param name="animate">True</param>
+			</include>
+			<control type="image">
+				<include>FullscreenDimensions</include>
+				<include>WindowFadeAnimation</include>
+				<texture colordiffuse="$VAR[DarkenColor]">dialogs/DialogTextBackground.png</texture>
+			</control>
+		</control>
+	</include>
+
+	<!-- Dialog fade background image -->
+	<include name="DialogFadeBackgroundImage">
+		<control type="image">
+			<include>FullscreenDimensions</include>
+			<texture colordiffuse="$VAR[DarkenColor]">dialogs/DialogTextBackground.png</texture>
+			<animation effect="fade" start="0" end="100" time="200">WindowOpen</animation>
+			<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+		</control>
+	</include>
+
+	<!-- Options background image -->
+	<include name="OptionsBackgroundImage">
+		<control type="image">
+			<include>FullscreenDimensions</include>
+			<texture border="20">dialogs/OptionsBackground.png</texture>
+		</control>
+	</include>
+
+	<!-- Time -->
+	<include name="Time">
+		<param name="heading">$VAR[HeadingLabel]</param>
+		<definition>
+			<!-- Window heading -->
+			<control type="label">
+				<left>120</left>
+				<top>127</top>
+				<width>1400</width>
+				<height>33</height>
+				<aligny>top</aligny>
+				<label>$PARAM[heading]</label>
+				<font>Font33</font>
+				<animation type="WindowOpen" condition="Window.Previous(startup)">
+					<effect type="fade" start="50" end="100" time="200" tween="cubic" easing="out"/>
+				</animation>
+			</control>
+
+			<control type="group">
+				<visible>!Window.IsVisible(notification) + !Window.IsVisible(extendedprogressdialog) + !Window.IsVisible(volumebar) + !String.IsEqual(Window(10000).Property(isCaching),True)</visible>
+
+				<animation type="WindowOpen" condition="Window.Previous(startup)">
+					<effect type="fade" start="50" end="100" time="200" tween="cubic" easing="out"/>
+				</animation>
+				<animation type="Visible">
+					<effect type="slide" start="120,0" end="0,0" time="200" />
+					<effect type="fade" start="0" end="100" time="200" />
+				</animation>
+				<animation type="Hidden">
+					<effect type="slide" end="120,0" time="200" />
+					<effect type="fade" start="100" end="0" time="200" />
+				</animation>
+
+				<!-- Time -->
+				<control type="label">
+					<right>120</right>
+					<top>127</top>
+					<width>1400</width>
+					<height>33</height>
+					<aligny>top</aligny>
+					<align>right</align>
+					<label>$INFO[System.Time]</label>
+					<font>Font33</font>
+					<textcolor>$VAR[TextColor1]</textcolor>
+					<visible>!Player.HasMedia</visible>
+				</control>
+				<control type="label">
+					<right>120</right>
+					<top>93</top>
+					<width>1400</width>
+					<height>66</height>
+					<aligny>top</aligny>
+					<align>right</align>
+					<label>$INFO[System.Date,[LIGHT],[/LIGHT]]</label>
+					<font>Font33</font>
+					<textcolor>$VAR[TextColor1]</textcolor>
+					<visible>Skin.HasSetting(Dateaboveclock) + !Player.HasMedia</visible>
+				</control>
+
+				<control type="group">
+					<visible>Player.HasMedia</visible>
+
+					<!-- Now Playing - Video -->
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.TVShowTitle]</label>
+						<label>$INFO[VideoPlayer.ChannelNumberLabel,[LIGHT](,)[/LIGHT] ]$INFO[VideoPlayer.ChannelName]</label>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<label>$INFO[VideoPlayer.EpisodeName]</label>
+						<label>$INFO[System.Time,[LIGHT]$LOCALIZE[142] [/LIGHT], / ]$INFO[Player.FinishTime,[LIGHT]$LOCALIZE[19081]: [/LIGHT]]</label>
+						<visible>!Player.HasGame + Player.HasVideo + !String.IsEmpty(VideoPlayer.EpisodeName) + !String.IsEmpty(VideoPlayer.TVShowTitle) + [!String.IsEmpty(VideoPlayer.ChannelNumberLabel) + !String.IsEmpty(VideoPlayer.ChannelName)] + Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.TVShowTitle]</label>
+						<label>$INFO[VideoPlayer.ChannelNumberLabel,[LIGHT](,)[/LIGHT] ]$INFO[VideoPlayer.ChannelName]</label>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<label>$INFO[System.Time,[LIGHT]$LOCALIZE[142] [/LIGHT], / ]$INFO[Player.FinishTime,[LIGHT]$LOCALIZE[19081]: [/LIGHT]]</label>
+						<visible>!Player.HasGame + Player.HasVideo + String.IsEmpty(VideoPlayer.EpisodeName) + !String.IsEmpty(VideoPlayer.TVShowTitle) + [!String.IsEmpty(VideoPlayer.ChannelNumberLabel) + !String.IsEmpty(VideoPlayer.ChannelName)] + Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.ChannelNumberLabel,[LIGHT](,)[/LIGHT] ]$INFO[VideoPlayer.ChannelName]</label>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<label>$INFO[System.Time,[LIGHT]$LOCALIZE[142] [/LIGHT], / ]$INFO[Player.FinishTime,[LIGHT]$LOCALIZE[19081]: [/LIGHT]]</label>
+						<visible>!Player.HasGame + Player.HasVideo + String.IsEmpty(VideoPlayer.EpisodeName) + String.IsEmpty(VideoPlayer.TVShowTitle) + [!String.IsEmpty(VideoPlayer.ChannelNumberLabel) + !String.IsEmpty(VideoPlayer.ChannelName)] + Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.ChannelNumberLabel,[LIGHT](,)[/LIGHT] ]$INFO[VideoPlayer.ChannelName]</label>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<label>$INFO[VideoPlayer.EpisodeName]</label>
+						<label>$INFO[System.Time,[LIGHT]$LOCALIZE[142] [/LIGHT], / ]$INFO[Player.FinishTime,[LIGHT]$LOCALIZE[19081]: [/LIGHT]]</label>
+						<visible>!Player.HasGame + Player.HasVideo + !String.IsEmpty(VideoPlayer.EpisodeName) + String.IsEmpty(VideoPlayer.TVShowTitle) + [!String.IsEmpty(VideoPlayer.ChannelNumberLabel) + !String.IsEmpty(VideoPlayer.ChannelName)] + Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<label>$INFO[VideoPlayer.EpisodeName]</label>
+						<label>$INFO[System.Time,[LIGHT]$LOCALIZE[142] [/LIGHT], / ]$INFO[Player.FinishTime,[LIGHT]$LOCALIZE[19081]: [/LIGHT]]</label>
+						<visible>!Player.HasGame + Player.HasVideo + !String.IsEmpty(VideoPlayer.EpisodeName) + String.IsEmpty(VideoPlayer.TVShowTitle) + [String.IsEmpty(VideoPlayer.ChannelNumberLabel) + String.IsEmpty(VideoPlayer.ChannelName)] + Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.TVShowTitle]</label>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<label>$INFO[VideoPlayer.EpisodeName]</label>
+						<label>$INFO[System.Time,[LIGHT]$LOCALIZE[142] [/LIGHT], / ]$INFO[Player.FinishTime,[LIGHT]$LOCALIZE[19081]: [/LIGHT]]</label>
+						<visible>!Player.HasGame + Player.HasVideo + !String.IsEmpty(VideoPlayer.EpisodeName) + !String.IsEmpty(VideoPlayer.TVShowTitle) + [String.IsEmpty(VideoPlayer.ChannelNumberLabel) + String.IsEmpty(VideoPlayer.ChannelName)] + Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.TVShowTitle]</label>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<label>$INFO[System.Time,[LIGHT]$LOCALIZE[142] [/LIGHT], / ]$INFO[Player.FinishTime,[LIGHT]$LOCALIZE[19081]: [/LIGHT]]</label>
+						<visible>!Player.HasGame + Player.HasVideo + String.IsEmpty(VideoPlayer.EpisodeName) + !String.IsEmpty(VideoPlayer.TVShowTitle) + [String.IsEmpty(VideoPlayer.ChannelNumberLabel) + String.IsEmpty(VideoPlayer.ChannelName)] + Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+										
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<label>$INFO[System.Time,[LIGHT]$LOCALIZE[142] [/LIGHT], / ]$INFO[Player.FinishTime,[LIGHT]$LOCALIZE[19081]: [/LIGHT]]</label>
+						<visible>!Player.HasGame + Player.HasVideo + String.IsEmpty(VideoPlayer.EpisodeName) + String.IsEmpty(VideoPlayer.TVShowTitle) + [String.IsEmpty(VideoPlayer.ChannelNumberLabel) + String.IsEmpty(VideoPlayer.ChannelName)] + Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.TVShowTitle]</label>
+						<label>$INFO[VideoPlayer.ChannelNumberLabel,[LIGHT](,)[/LIGHT] ]$INFO[VideoPlayer.ChannelName]</label>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<label>$INFO[VideoPlayer.EpisodeName]</label>
+						<visible>!Player.HasGame + Player.HasVideo + !String.IsEmpty(VideoPlayer.EpisodeName) + !String.IsEmpty(VideoPlayer.TVShowTitle) + [!String.IsEmpty(VideoPlayer.ChannelNumberLabel) + !String.IsEmpty(VideoPlayer.ChannelName)] + !Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.TVShowTitle]</label>
+						<label>$INFO[VideoPlayer.ChannelNumberLabel,[LIGHT](,)[/LIGHT] ]$INFO[VideoPlayer.ChannelName]</label>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<visible>!Player.HasGame + Player.HasVideo + String.IsEmpty(VideoPlayer.EpisodeName) + !String.IsEmpty(VideoPlayer.TVShowTitle) + [!String.IsEmpty(VideoPlayer.ChannelNumberLabel) + !String.IsEmpty(VideoPlayer.ChannelName)] + !Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.ChannelNumberLabel,[LIGHT](,)[/LIGHT] ]$INFO[VideoPlayer.ChannelName]</label>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<visible>!Player.HasGame + Player.HasVideo + String.IsEmpty(VideoPlayer.EpisodeName) + String.IsEmpty(VideoPlayer.TVShowTitle) + [!String.IsEmpty(VideoPlayer.ChannelNumberLabel) + !String.IsEmpty(VideoPlayer.ChannelName)] + !Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.ChannelNumberLabel,[LIGHT](,)[/LIGHT] ]$INFO[VideoPlayer.ChannelName]</label>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<label>$INFO[VideoPlayer.EpisodeName]</label>
+						<visible>!Player.HasGame + Player.HasVideo + !String.IsEmpty(VideoPlayer.EpisodeName) + String.IsEmpty(VideoPlayer.TVShowTitle) + [!String.IsEmpty(VideoPlayer.ChannelNumberLabel) + !String.IsEmpty(VideoPlayer.ChannelName)] + !Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<label>$INFO[VideoPlayer.EpisodeName]</label>
+						<visible>!Player.HasGame + Player.HasVideo + !String.IsEmpty(VideoPlayer.EpisodeName) + String.IsEmpty(VideoPlayer.TVShowTitle) + [String.IsEmpty(VideoPlayer.ChannelNumberLabel) + String.IsEmpty(VideoPlayer.ChannelName)] + !Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.TVShowTitle]</label>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<label>$INFO[VideoPlayer.EpisodeName]</label>
+						<visible>!Player.HasGame + Player.HasVideo + !String.IsEmpty(VideoPlayer.EpisodeName) + !String.IsEmpty(VideoPlayer.TVShowTitle) + [String.IsEmpty(VideoPlayer.ChannelNumberLabel) + String.IsEmpty(VideoPlayer.ChannelName)] + !Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$INFO[VideoPlayer.TVShowTitle]</label>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<visible>!Player.HasGame + Player.HasVideo + String.IsEmpty(VideoPlayer.EpisodeName) + !String.IsEmpty(VideoPlayer.TVShowTitle) + [String.IsEmpty(VideoPlayer.ChannelNumberLabel) + String.IsEmpty(VideoPlayer.ChannelName)] + !Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+										
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$VAR[SEplaying,[LIGHT],[/LIGHT] ]$INFO[Player.Title]</label>
+						<visible>!Player.HasGame + Player.HasVideo + String.IsEmpty(VideoPlayer.EpisodeName) + String.IsEmpty(VideoPlayer.TVShowTitle) + [String.IsEmpty(VideoPlayer.ChannelNumberLabel) + String.IsEmpty(VideoPlayer.ChannelName)] + !Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+
+					<!-- Now Playing - Audio -->					
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>[LIGHT]$INFO[MusicPlayer.TrackNumber,,. ][/LIGHT]$INFO[MusicPlayer.Title]</label>
+						<label>[LIGHT]$INFO[MusicPlayer.Artist,,:  ][/LIGHT]$INFO[MusicPlayer.Album]</label>
+						<label>$INFO[System.Time,[LIGHT]$LOCALIZE[142] [/LIGHT], / ]$INFO[Player.FinishTime,[LIGHT]$LOCALIZE[19081]: [/LIGHT]]</label>
+						<visible>!Player.HasGame + Player.HasAudio + String.IsEmpty(VideoPlayer.ChannelName) + [!String.IsEmpty(MusicPlayer.Artist) + !String.IsEmpty(MusicPlayer.Album)] + Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>[LIGHT]$INFO[MusicPlayer.TrackNumber,,. ][/LIGHT]$INFO[MusicPlayer.Title]</label>
+						<label>[LIGHT]$INFO[MusicPlayer.Artist][/LIGHT]</label>
+						<label>$INFO[System.Time,[LIGHT]$LOCALIZE[142] [/LIGHT], / ]$INFO[Player.FinishTime,[LIGHT]$LOCALIZE[19081]: [/LIGHT]]</label>
+						<visible>!Player.HasGame + Player.HasAudio + String.IsEmpty(VideoPlayer.ChannelName) + [!String.IsEmpty(MusicPlayer.Artist) + String.IsEmpty(MusicPlayer.Album)] + Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>[LIGHT]$INFO[MusicPlayer.TrackNumber,,. ][/LIGHT]$INFO[MusicPlayer.Title]</label>
+						<label>$INFO[MusicPlayer.Album]</label>
+						<label>$INFO[System.Time,[LIGHT]$LOCALIZE[142] [/LIGHT], / ]$INFO[Player.FinishTime,[LIGHT]$LOCALIZE[19081]: [/LIGHT]]</label>
+						<visible>!Player.HasGame + Player.HasAudio + String.IsEmpty(VideoPlayer.ChannelName) + [String.IsEmpty(MusicPlayer.Artist) + !String.IsEmpty(MusicPlayer.Album)] + Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>[LIGHT]$INFO[MusicPlayer.TrackNumber,,. ][/LIGHT]$INFO[MusicPlayer.Title]</label>
+						<label>$INFO[System.Time,[LIGHT]$LOCALIZE[142] [/LIGHT], / ]$INFO[Player.FinishTime,[LIGHT]$LOCALIZE[19081]: [/LIGHT]]</label>
+						<visible>!Player.HasGame + Player.HasAudio + String.IsEmpty(VideoPlayer.ChannelName) + [String.IsEmpty(MusicPlayer.Artist) + String.IsEmpty(MusicPlayer.Album)] + Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>[LIGHT]$INFO[MusicPlayer.TrackNumber,,. ][/LIGHT]$INFO[MusicPlayer.Title]</label>
+						<label>[LIGHT]$INFO[MusicPlayer.Artist,,:  ][/LIGHT]$INFO[MusicPlayer.Album]</label>
+						<visible>!Player.HasGame + Player.HasAudio + String.IsEmpty(VideoPlayer.ChannelName) + [!String.IsEmpty(MusicPlayer.Artist) + !String.IsEmpty(MusicPlayer.Album)] + !Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>[LIGHT]$INFO[MusicPlayer.TrackNumber,,. ][/LIGHT]$INFO[MusicPlayer.Title]</label>
+						<label>[LIGHT]$INFO[MusicPlayer.Artist][/LIGHT]</label>
+						<visible>!Player.HasGame + Player.HasAudio + String.IsEmpty(VideoPlayer.ChannelName) + [!String.IsEmpty(MusicPlayer.Artist) + String.IsEmpty(MusicPlayer.Album)] + !Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>[LIGHT]$INFO[MusicPlayer.TrackNumber,,. ][/LIGHT]$INFO[MusicPlayer.Title]</label>
+						<label>$INFO[MusicPlayer.Album]</label>
+						<visible>!Player.HasGame + Player.HasAudio + String.IsEmpty(VideoPlayer.ChannelName) + [String.IsEmpty(MusicPlayer.Artist) + !String.IsEmpty(MusicPlayer.Album)] + !Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>[LIGHT]$INFO[MusicPlayer.TrackNumber,,. ][/LIGHT]$INFO[MusicPlayer.Title]</label>
+						<visible>!Player.HasGame + Player.HasAudio + String.IsEmpty(VideoPlayer.ChannelName) + [String.IsEmpty(MusicPlayer.Artist) + String.IsEmpty(MusicPlayer.Album)] + !Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<!-- Now Playing - PVR Recording -->
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1400</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Title]</label>
+						<label>$INFO[VideoPlayer.ChannelNumber,[LIGHT](,)[/LIGHT] ]$INFO[VideoPlayer.ChannelName]</label>
+						<label>$INFO[System.Time,[LIGHT]$LOCALIZE[142] [/LIGHT], / ]$INFO[Player.FinishTime,[LIGHT]$LOCALIZE[19081]: [/LIGHT]]</label>
+						<visible>!Player.HasGame + Player.HasAudio + !String.IsEmpty(VideoPlayer.ChannelName) + Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<control type="fadelabel">
+						<right>240</right>
+						<top>93</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Title]</label>
+						<label>$INFO[VideoPlayer.ChannelNumber,[LIGHT](,)[/LIGHT] ]$INFO[VideoPlayer.ChannelName]</label>
+						<visible>!Player.HasGame + Player.HasAudio + !String.IsEmpty(VideoPlayer.ChannelName) + !Integer.IsGreater(Player.Duration,0)</visible>
+						<pauseatend>5000</pauseatend>
+					</control>
+					
+					<!-- Now Playing - Progress -->
+					<control type="label">
+						<right>240</right>
+						<top>127</top>
+						<width>1330</width>
+						<height>33</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<label>$INFO[Player.Time]$INFO[Player.Duration, / ,]</label>
+						<font>Font33</font>
+						<textcolor>$VAR[TextColor1]</textcolor>
+						<visible>!Player.HasGame</visible>
+					</control>
+					
+					<!-- Player Icon -->
+					<control type="image">
+						<right>170</right>
+						<top>100</top>
+						<width>60</width>
+						<height>60</height>
+						<aligny>top</aligny>
+						<align>right</align>
+						<texture background="true">$INFO[Player.Icon]</texture>
+						<aspectratio aligny="center">keep</aspectratio>
+					</control>
+
+					<!-- Play/Paused Image -->
+					<control type="image">
+						<right>110</right>
+						<top>100</top>
+						<width>60</width>
+						<height>60</height>
+						<texture colordiffuse="$VAR[DialogColor1]">osd/OSDPlayNF.png</texture>
+						<visible>!Player.Paused</visible>
+					</control>
+					<control type="image">
+						<right>110</right>
+						<top>100</top>
+						<width>60</width>
+						<height>60</height>
+						<texture colordiffuse="$VAR[DialogColor1]">osd/OSDPauseNF.png</texture>
+						<visible>Player.Paused</visible>
+					</control>
+
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<!-- Window animation -->
+	<include name="WindowFadeAnimation">
+		<animation effect="fade" start="0" end="100" time="200">WindowOpen</animation>
+		<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+	</include>
+
+	<!-- Visible animation -->
+	<include name="VisibleFadeAnimation">
+		<animation effect="fade" start="0" end="100" time="200">Visible</animation>
+		<animation effect="fade" start="100" end="0" time="200">Hidden</animation>
+	</include>
+
+	<!-- Dialog animation -->
+	<include name="DialogZoomAnimation">
+		<animation type="WindowOpen">
+			<effect type="zoom" start="70" end="100" center="auto" tween="back" easing="inout" time="300" />
+			<effect type="fade" start="0" end="100" time="300" />
+		</animation>
+		<animation type="WindowClose">
+			<effect type="zoom" start="100" end="70" center="auto" time="300" />
+			<effect type="fade" start="100" end="0" time="300" />
+		</animation>
+	</include>
+
+	<!-- Options animation -->
+	<include name="OptionsAnimation">
+		<animation type="Visible">
+			<effect type="zoom" start="70" end="100" center="auto" tween="back" easing="inout" time="300" />
+			<effect type="fade" start="0" end="100" time="300" />
+		</animation>
+		<animation type="Hidden">
+			<effect type="zoom" start="100" end="70" center="auto" time="100" />
+			<effect type="fade" start="100" end="0" time="100" />
+		</animation>
+	</include>
+
+	<!-- Keyboard buttons -->
+	<include name="KeyboardButtons">
+		<width>84</width>
+		<height>74</height>
+		<font>Font48</font>
+		<align>center</align>
+		<textoffsetx>10</textoffsetx>
+		<fadetime>200</fadetime>
+		<texturefocus colordiffuse="$VAR[TextColor1]" border="25,0,25,0">dialogs/KeyboardButton.png</texturefocus>
+	</include>
+
+	<!-- OSD Play buttons -->
+	<include name="OSDPlayStopButtons">
+		<control type="togglebutton" id="5">
+			<width>60</width>
+			<height>60</height>
+			<texturefocus colordiffuse="$VAR[DialogColor1]">osd/OSDPauseNF.png</texturefocus>
+			<texturenofocus colordiffuse="$VAR[DialogColor2]">osd/OSDPauseNF.png</texturenofocus>
+			<usealttexture>Player.Paused | Player.Forwarding | Player.Rewinding | Player.IsTempo</usealttexture>
+			<alttexturefocus colordiffuse="$VAR[DialogColor1]">osd/OSDPlayNF.png</alttexturefocus>
+			<alttexturenofocus colordiffuse="$VAR[DialogColor2]">osd/OSDPlayNF.png</alttexturenofocus>
+			<onclick>PlayerControl(Play)</onclick>
+		</control>
+		<control type="button" id="6">
+			<width>60</width>
+			<height>60</height>
+			<texturefocus colordiffuse="$VAR[DialogColor1]">osd/OSDStopNF.png</texturefocus>
+			<texturenofocus colordiffuse="$VAR[DialogColor2]">osd/OSDStopNF.png</texturenofocus>
+			<onclick>PlayerControl(Stop)</onclick>
+		</control>
+	</include>
+
+	<!-- OSD Stop buttons -->
+	<include name="OSDStopButton">
+		<control type="button" id="5">
+			<width>60</width>
+			<height>60</height>
+			<texturefocus colordiffuse="$VAR[DialogColor1]">osd/OSDStopNF.png</texturefocus>
+			<texturenofocus colordiffuse="$VAR[DialogColor2]">osd/OSDStopNF.png</texturenofocus>
+			<onclick>PlayerControl(Stop)</onclick>
+		</control>
+	</include>
+
+	<!-- Item count -->
+	<include name="ItemCount">
+		<control type="grouplist">
+			<right>120</right>
+			<bottom>110</bottom>
+			<width>800</width>
+			<height>44</height>
+			<itemgap>6</itemgap>
+			<align>right</align>
+			<orientation>horizontal</orientation>
+			<usecontrolcoords>true</usecontrolcoords>
+			<visible>Integer.IsGreater(Container.NumItems,0)</visible>
+			<control type="label">
+				<!-- <top>3</top> -->
+				<width>auto</width>
+				<height>44</height>
+				<align>right</align>
+				<label>$INFO[Container.NumItems]</label>
+				<font>Font33</font>
+				<textcolor>$VAR[TextColor2]</textcolor>
+			</control>
+			<control type="label">
+				<width>auto</width>
+				<height>44</height>
+				<align>right</align>
+				<label>$VAR[ContentType]</label>
+				<font>Font33</font>
+				<textcolor>$VAR[TextColor2]</textcolor>
+			</control>
+		</control>
+	</include>
+
+	<!-- Media Flags -->
+	<include name="MediaFlags">
+		<control type="grouplist">
+			<left>120</left>
+			<bottom>154</bottom>
+			<width>480</width>
+			<height>44</height>
+			<itemgap>0</itemgap>
+			<align>left</align>
+			<orientation>horizontal</orientation>
+			<usecontrolcoords>true</usecontrolcoords>
+			<visible>Integer.IsGreater(Container.NumItems,0)</visible>
+
+			<!-- Video flags -->
+			<control type="image">
+				<width>50</width>
+				<height>35</height>
+				<top>5</top>
+				<colordiffuse>$VAR[TextColor2]</colordiffuse>
+				<texture>Video.png</texture>
+				<aspectratio>keep</aspectratio>
+				<visible>!String.IsEmpty(ListItem.VideoCodec) + !String.IsEmpty(ListItem.VideoResolution)</visible>
+			</control>
+			<control type="label">
+				<width>auto</width>
+				<height>44</height>
+				<align>right</align>
+				<label>$VAR[VideoCodec,,]$VAR[VideoResolution, &#8226; ,]$INFO[ListItem.VideoAspect, ,:1]</label>
+				<font>Font29</font>
+				<textcolor>$VAR[TextColor2]</textcolor>
+				<visible>!String.IsEmpty(ListItem.VideoCodec) + !String.IsEmpty(ListItem.VideoResolution)</visible>
+			</control>
+		</control>
+
+		<control type="grouplist">
+			<left>120</left>
+			<bottom>120</bottom>
+			<width>480</width>
+			<height>44</height>
+			<itemgap>0</itemgap>
+			<align>left</align>
+			<orientation>horizontal</orientation>
+			<usecontrolcoords>true</usecontrolcoords>
+			<visible>Integer.IsGreater(Container.NumItems,0)</visible>
+
+			<!-- Audio flags -->
+			<control type="image">
+				<width>50</width>
+				<height>35</height>
+				<top>5</top>
+				<colordiffuse>$VAR[TextColor2]</colordiffuse>
+				<texture>AudioTrack.png</texture>
+				<aspectratio>keep</aspectratio>
+				<visible>!String.IsEmpty(ListItem.AudioCodec)</visible>
+			</control>
+			<control type="label">
+				<width>auto</width>
+				<height>44</height>
+				<align>right</align>
+				<label>$VAR[Audio]</label>
+				<font>Font29</font>
+				<textcolor>$VAR[TextColor2]</textcolor>
+				<visible>!String.IsEmpty(ListItem.AudioCodec)</visible>
+			</control>
+		</control>
+		
+		<control type="grouplist">
+			<left>120</left>
+			<bottom>66</bottom>
+			<width>800</width>
+			<height>44</height>
+			<itemgap>0</itemgap>
+			<align>left</align>
+			<orientation>horizontal</orientation>
+			<usecontrolcoords>true</usecontrolcoords>
+			<visible>Integer.IsGreater(Container.NumItems,0)</visible>
+			<animation effect="slide" time="0" start="0,0" end="0,-44" condition="String.IsEmpty(ListItem.VideoCodec) + String.IsEmpty(ListItem.VideoResolution) + String.IsEmpty(ListItem.AudioCodec)">Conditional</animation>
+
+			<!-- Duration -->
+			<control type="image">
+				<width>50</width>
+				<height>35</height>
+				<top>7</top>
+				<colordiffuse>$VAR[TextColor2]</colordiffuse>
+				<texture>Duration.png</texture>
+				<aspectratio>keep</aspectratio>
+				<visible>!String.IsEmpty(ListItem.Duration) + !Container.Content(tvshows) + !Container.Content(seasons)</visible>
+			</control>
+			<control type="label">
+				<width>auto</width>
+				<height>44</height>
+				<align>right</align>
+				<label>$VAR[Duration]</label>
+				<font>Font33</font>
+				<textcolor>$VAR[TextColor2]</textcolor>
+				<visible>!String.IsEmpty(ListItem.Duration) + !Container.Content(tvshows) + !Container.Content(seasons)</visible>
+			</control>
+			<control type="label">
+				<width>auto</width>
+				<height>44</height>
+				<align>right</align>
+				<label>  /  </label>
+				<font>Font33</font>
+				<textcolor>$VAR[TextColor2]</textcolor>
+				<visible>!String.IsEmpty(ListItem.Duration) + !Container.Content(tvshows) + !Container.Content(seasons) + !ListItem.IsFolder + ![String.IsEqual(ListItem.Size,0 B) | String.IsEqual(ListItem.Size,0.000000 B)]</visible>
+			</control>
+			<control type="label">
+				<width>auto</width>
+				<height>44</height>
+				<align>right</align>
+				<label>$INFO[ListItem.Size,$LOCALIZE[289]: ,]</label>
+				<font>Font33</font>
+				<textcolor>$VAR[TextColor2]</textcolor>
+				<visible>!ListItem.IsFolder + ![String.IsEqual(ListItem.Size,0 B) | String.IsEqual(ListItem.Size,0.000000 B)]</visible>
+			</control>
+		</control>
+	</include>
+
+	<!-- Side menu animation -->
+	<include name="SideMenuAnimation">
+		<animation effect="slide" end="0,26" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,19)">Conditional</animation>
+		<animation effect="slide" end="0,52" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,18)">Conditional</animation>
+		<animation effect="slide" end="0,78" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,17)">Conditional</animation>
+		<animation effect="slide" end="0,104" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,16)">Conditional</animation>
+		<animation effect="slide" end="0,130" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,15)">Conditional</animation>
+		<animation effect="slide" end="0,156" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,14)">Conditional</animation>
+		<animation effect="slide" end="0,182" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,13)">Conditional</animation>
+		<animation effect="slide" end="0,208" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,12)">Conditional</animation>
+		<animation effect="slide" end="0,234" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,11)">Conditional</animation>
+		<animation effect="slide" end="0,260" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,10)">Conditional</animation>
+		<animation effect="slide" end="0,286" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,9)">Conditional</animation>
+		<animation effect="slide" end="0,312" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,8)">Conditional</animation>
+		<animation effect="slide" end="0,338" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,7)">Conditional</animation>
+		<animation effect="slide" end="0,364" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,6)">Conditional</animation>
+		<animation effect="slide" end="0,390" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,5)">Conditional</animation>
+		<animation effect="slide" end="0,416" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,4)">Conditional</animation>
+		<animation effect="slide" end="0,442" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,3)">Conditional</animation>
+		<animation effect="slide" end="0,468" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,2)">Conditional</animation>
+		<animation effect="slide" end="0,494" time="0" condition="String.IsEqual(Container($PARAM[containerID]).NumItems,1)">Conditional</animation>
+
+	</include>
+
+	<include name="Indicators">
+		<definition>
+			<control type="group">
+				<left>$PARAM[left]</left>
+				<top>$PARAM[top]</top>
+				<width>30</width>
+				<height>$PARAM[height]</height>
+				<control type="image">
+					<left>0</left>
+					<top>0</top>
+					<width>30</width>
+					<height>16</height>
+					<colordiffuse>$VAR[TextColor2]</colordiffuse>
+					<texture colordiffuse="$VAR[DialogColor2]">up.png</texture>
+
+					<visible>Container($PARAM[container]).HasPrevious</visible>
+
+					<animation type="Visible">
+						<effect type="Fade" start="0" end="100" time="200"/>
+						<effect type="slide" start="0,10" end="0,0" time="200"/>
+					</animation>
+					<animation type="Hidden">
+						<effect type="Fade" start="100" end="0" time="200"/>
+						<effect type="slide" start="0,0" end="0,-10" time="200"/>
+					</animation>
+
+				</control>
+				<control type="image">
+					<left>0</left>
+					<bottom>0</bottom>
+					<width>30</width>
+					<height>16</height>
+					<texture colordiffuse="$VAR[DialogColor2]">down.png</texture>
+
+					<visible>Container($PARAM[container]).HasNext</visible>
+
+					<animation type="Visible">
+						<effect type="Fade" start="0" end="100" time="200"/>
+						<effect type="slide" start="0,-10" end="0,0" time="200"/>
+					</animation>
+					<animation type="Hidden">
+						<effect type="Fade" start="100" end="0" time="200"/>
+						<effect type="slide" start="0,0" end="0,10" time="200"/>
+					</animation>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+	<include name="dialogButtonBackground">
+		<definition>
+			<control type="image">
+				<left>-1000</left>
+				<bottom>90</bottom>
+				<width>3980</width>
+				<height>86</height>
+				<texture colordiffuse="$VAR[TextColor1]" border="2">common/Border.png</texture>
+				<visible>ControlGroup($PARAM[id]).HasFocus</visible>
+				<include>VisibleFadeAnimation</include>
+			</control>
+			<control type="image">
+				<left>-1000</left>
+				<bottom>90</bottom>
+				<width>3980</width>
+				<height>86</height>
+				<texture colordiffuse="$VAR[TextColor2]" border="2">common/Border.png</texture>
+				<visible>!ControlGroup($PARAM[id]).HasFocus</visible>
+				<include>VisibleFadeAnimation</include>
+			</control>
+			<control type="image">
+				<left>0</left>
+				<bottom>90</bottom>
+				<width>3980</width>
+				<height>86</height>
+				<visible>ControlGroup($PARAM[id]).HasFocus</visible>
+				<texture colordiffuse="$VAR[DarkenColor]">dialogs/DialogTextBackground.png</texture>
+				<include>VisibleFadeAnimation</include>
+			</control>
+		</definition>
+	</include>
+	
+	<include name="SubmenuIndicator">
+		<definition>
+			<control type="group">
+				<visible>!ControlGroup(9002).HasFocus + !Window.IsVisible(contextmenu) + !Skin.HasSetting(KioskMode) + [Control.IsVisible(50) | Control.IsVisible(51) | Control.IsVisible(511) | Control.IsVisible(53) | Control.IsVisible(531) | Control.IsVisible(532) | Control.IsVisible(533) | Control.IsVisible(54) | Control.IsVisible(55)]</visible>
+				<animation effect="fade" start="0" end="100" time="200">VisibleChange</animation>
+				<animation effect="slide" time="200" start="-200,0" end="0,0">WindowOpen</animation>
+				<animation effect="slide" time="200" start="0,0" end="-200,0">WindowClose</animation>
+				<control type="image">
+					<left>10</left>
+					<centertop>50%</centertop>
+					<width>30</width>
+					<height>30</height>
+					<texture colordiffuse="$VAR[DialogColor2]">sub-menu-left.png</texture>
+				</control>
+			</control>
+			<control type="group">
+				<visible>!ControlGroup(9002).HasFocus + !Window.IsVisible(contextmenu) + !Skin.HasSetting(KioskMode) + [Control.IsVisible(52) | Control.IsVisible(521)]</visible>
+				<animation effect="fade" start="0" end="100" time="200">VisibleChange</animation>
+				<animation effect="slide" time="200" start="0,200" end="0,0">WindowOpen</animation>
+				<animation effect="slide" time="200" start="0,0" end="0,200">WindowClose</animation>
+				<control type="image">
+					<bottom>10</bottom>
+					<centerleft>50%</centerleft>
+					<width>30</width>
+					<height>30</height>
+					<texture colordiffuse="$VAR[DialogColor2]">sub-menu-down.png</texture>
+				</control>
+			</control>
+		</definition>
+	</include>
+	
+	<include name="dialogButtonIndicator">
+		<definition>
+			<control type="group">
+				<visible>$PARAM[visibility]</visible>
+				<animation effect="fade" start="0" end="100" time="200">VisibleChange</animation>
+				<animation effect="slide" time="200" start="-200,0" end="0,0" delay="300">WindowOpen</animation>
+				<animation effect="slide" time="200" start="0,0" end="-200,0" delay="300">WindowClose</animation>
+				<control type="image">
+					<left>10</left>
+					<centertop>50%</centertop>
+					<width>30</width>
+					<height>30</height>
+					<texture colordiffuse="$VAR[DialogColor2]">sub-menu-left.png</texture>
+				</control>
+			</control>
+			
+			<control type="group">
+				<visible>$PARAM[visibility]</visible>
+				<animation effect="fade" start="0" end="100" time="200">VisibleChange</animation>
+				<animation effect="slide" time="200" start="200,0" end="0,0" delay="300">WindowOpen</animation>
+				<animation effect="slide" time="200" start="0,0" end="200,0" delay="300">WindowClose</animation>
+				<control type="image">
+					<right>10</right>
+					<centertop>50%</centertop>
+					<width>30</width>
+					<height>30</height>
+					<texture colordiffuse="$VAR[DialogColor2]">sub-menu-right.png</texture>
+				</control>
+			</control>
+		</definition>
+	</include>
+
+			
+</includes>
