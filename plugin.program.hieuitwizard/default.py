@@ -1036,7 +1036,9 @@ elif mode==1:
         
 elif mode==2:
         wizard(name,url,description)
-        dialog.ok("DONE!", 'Đã cài đặt xong. Khởi động lại Kodi để kiểm tra.')		
+        dialog.ok("DONE!", 'Đã cài đặt xong. Khởi động lại Kodi để kiểm tra.')	
+        wiz.clearS('build')
+        wiz.killxbmc(True)		
         
 		
 elif mode==3:

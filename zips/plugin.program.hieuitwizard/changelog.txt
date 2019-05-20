@@ -1,3 +1,6 @@
+[COLOR yellow][B]v2.2.1[/B][/COLOR]
+- Sửa vài lỗi nhỏ
+
 [COLOR yellow][B]v2.2.0[/B][/COLOR]
 - Nâng cấp chức năng gắn URL bản Build cá nhân. Xem hướng dẫn tạo list Custom Build tại [COLOR yellow]https://hieuit.net/hieuitwizard[/COLOR]
 - Thêm chức năng tự động thiết lập xem Youtube 1080p/4K cho tất cả platform: Android, Windows, LibreELEC/CoreELEC.
