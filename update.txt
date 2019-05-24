@@ -10,9 +10,3 @@ img="https://i.imgur.com/2N3N0Jv.png"
 fanart="https://i.imgur.com/2N3N0Jv.png"
 description="Sửa lỗi không mở được Addon Google Drive do xung đột module cloudDrive"
 
-name="Fix Hiển Thị List PHIM MỚI CẬP NHẬT"
-url="https://dl.dropboxusercontent.com/s/bfn0pnkp3n7j5bv/fix_vno_widget.zip"
-img="https://i.imgur.com/2N3N0Jv.png"
-fanart="https://i.imgur.com/2N3N0Jv.png"
-description="Sửa lỗi không hiển thị list phim mới cập nhật trên Skin Eminence, Embuary"
-
