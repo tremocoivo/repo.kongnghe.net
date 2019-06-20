@@ -116,6 +116,7 @@ def openS(name=""):
 	
 def clearS(type):
 	build    = {'buildname':'', 'buildversion':'', 'buildtheme':'', 'latestversion':'', 'lastbuildcheck':'2016-01-01', 'buildlink':''}
+	data     = {'customlink':''}
 	install  = {'installed':'false', 'extract':'', 'errors':''}
 	default  = {'defaultskinignore':'false', 'defaultskin':'', 'defaultskinname':''}
 	lookfeel = ['default.enablerssfeeds', 'default.font', 'default.rssedit', 'default.skincolors', 'default.skintheme', 'default.skinzoom', 'default.soundskin', 'default.startupwindow', 'default.stereostrength']
@@ -138,6 +139,9 @@ def clearS(type):
 			setS(set, install[set])
 	elif type == 'lookfeel':
 		for set in lookfeel:
+			setS(set, '')
+	elif type == 'data':
+		for set in data:
 			setS(set, '')
 
 def getInfo(label):

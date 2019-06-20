@@ -62,6 +62,7 @@ FANART           = os.path.join(ADDONPATH, 'fanart.jpg')
 BACKUPLOCATION   = wiz.BACKUPLOCATION
 MYBUILDS         = wiz.MYBUILDS
 BUILDLINK        = wiz.getS('buildlink')
+CUSTOMLINK       = wiz.getS('customlink')
 BUILDFILE        = 'https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/wizard.txt'
 UPDATEFILE       = 'https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/update.txt'
 TWEAKFILE        = 'https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/Tweak/tweak.txt'
@@ -135,7 +136,18 @@ def RESTOREDATAFILE():
     match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
     for name,url,iconimage,fanart,description in match:
           addDir(name,url,25,iconimage,fanart,description)
-    addItem('[COLOR yellow][B]Restore From File[/B][/COLOR] - Chọn file data cần khôi phục','url', 101, os.path.join(mediaPath,"dir.png"))	
+    addItem('[COLOR yellow][B]Restore From File[/B][/COLOR] - Chọn file data cần khôi phục','url', 101, os.path.join(mediaPath,"dir.png"))
+    if not CUSTOMLINK == '':
+         link = OPEN_URL(CUSTOMLINK).replace('\n','').replace('\r','')
+         match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
+         addItem('===== [COLOR red][B]LIST DATA CÁ NHÂN[/B][/COLOR] =====', 'url', 9999, '')
+         addItem('Custom Data URL: [COLOR yellow]%s[/COLOR]' %(CUSTOMLINK),'url',997,'')
+         addItem('[COLOR yellow][B]Reset:[/B][/COLOR] Xóa link trả về mặc định','url',281,'')		 
+         
+         for name,url,iconimage,fanart,description in match:
+             addDir(name,url,1,iconimage,fanart,description)
+    else:
+         addItem('[COLOR yellow][B]Restore From URL[/B][/COLOR] - Nhập URL list data cần khôi phục','url', 271, os.path.join(mediaPath,"dir.png"))
 	
 def BACKUP_RESTORE():
   setView('videos', 'MAIN')
@@ -358,7 +370,7 @@ def inputvideo():
 
 def inputurl():
 	#urltemp = wiz.getS('buildlink')
-	keyboardHandle = xbmc.Keyboard(wiz.getS('buildlink'),'[COLOR yellow]Nhập link chứa list Build của bạn:[/COLOR]\n(Xem cách tạo list tại https://hieuit.net/hieuitwizard)')
+	keyboardHandle = xbmc.Keyboard(wiz.getS('buildlink'),'[COLOR yellow]Nhập link chứa list Build của bạn: (hỗ trợ bit.ly, gg.gg)[/COLOR]\n[I](Xem cách tạo list tại https://hieuit.net/hieuitwizard)[/I]')
 	keyboardHandle.doModal()
 	if (keyboardHandle.isConfirmed()):
 		queryText = keyboardHandle.getText()
@@ -371,6 +383,23 @@ def inputurl():
 				inputurl()
 			else:	
 				wiz.setS('buildlink',queryText)
+
+def dataurl():
+	#urltemp = wiz.getS('buildlink')
+	keyboardHandle = xbmc.Keyboard(wiz.getS('customlink'),'[COLOR yellow]Nhập link chứa list Data của bạn: (hỗ trợ bit.ly, gg.gg)[/COLOR]\n[I](Xem cách tạo list tại https://hieuit.net/hieuitwizard)[/I]')
+	keyboardHandle.doModal()
+	if (keyboardHandle.isConfirmed()):
+		queryText = keyboardHandle.getText()
+		if len(queryText) == 0:
+			sys.exit()
+			
+		else:
+			working = wiz.workingURL(queryText)
+			if not working == True:
+				dialog.ok(ADDONTITLE,'Sai URL','Vui lòng nhập lại')
+				inputurl()
+			else:	
+				wiz.setS('customlink',queryText)
 	
 def Tweak():
     setView('videos', 'MAIN')
@@ -1138,14 +1167,28 @@ elif mode ==26:
 elif mode ==27:
 		inputurl()
 		wiz.refresh()
+
+elif mode ==271:
+		dataurl()
+		wiz.refresh()
 		
 elif mode ==28:
 		wiz.clearS('build')
 		wiz.refresh()
 
+elif mode ==281:
+		wiz.clearS('data')
+		wiz.refresh()
+
 elif mode ==29:
 		f = open(CHANGELOG,mode='r'); msg = f.read(); f.close()
 		wiz.TextBox(ADDONTITLE, msg)
+
+elif mode==997:
+        #dialog.ok(ADDONTITLE, 'Thay đổi Data URL trong tab [COLOR yellow]Custom Link[/COLOR]', 'Nhấn [B]OK[/B] để bắt đầu')
+        #wiz.openS('Build Link')
+        dataurl()
+        wiz.refresh()
 	   
 elif mode==998:
         dialog.ok(ADDONTITLE, 'Thay đổi Build URL trong tab [COLOR yellow]Build Link[/COLOR]', 'Nhấn [B]OK[/B] để bắt đầu')

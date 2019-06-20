@@ -1,3 +1,5 @@
+[COLOR yellow][B]v2.2.2[/B][/COLOR]
+- Thêm chức năng Restore Data URL - Tự nhập list chứa data addon cá nhân
 [COLOR yellow][B]v2.2.1[/B][/COLOR]
 - Sửa vài lỗi nhỏ
 

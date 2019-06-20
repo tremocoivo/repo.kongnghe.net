@@ -12,8 +12,9 @@
 	<category label="Zip Folder">
         <setting id="zipdir" type="folder"    label="Chọn thư mục lưu file Backup:"      default=""/>
     </category>
-	<category label="Build Link">
+	<category label="Custom Link">
         <setting id="buildlink" type="text"    label="Custom Build URL:"      default=""/>
+		<setting id="customlink" type="text"    label="Custom Data URL:"      default=""/>
     </category>
     <category label="Auto-View">
 		<setting id="auto-view" type="bool" label="Enable Auto View" default="true"/>
