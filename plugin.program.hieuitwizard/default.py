@@ -145,7 +145,7 @@ def RESTOREDATAFILE():
          addItem('[COLOR yellow][B]Reset:[/B][/COLOR] Xóa link trả về mặc định','url',281,'')		 
          
          for name,url,iconimage,fanart,description in match:
-             addDir(name,url,1,iconimage,fanart,description)
+             addDir(name,url,25,iconimage,fanart,description)
     else:
          addItem('[COLOR yellow][B]Restore From URL[/B][/COLOR] - Nhập URL list data cần khôi phục','url', 271, os.path.join(mediaPath,"dir.png"))
 	
