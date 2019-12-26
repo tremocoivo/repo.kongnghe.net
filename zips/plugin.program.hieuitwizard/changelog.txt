@@ -1,3 +1,6 @@
+[COLOR yellow][B]v2.2.5[/B][/COLOR]
+- Tối ưu code
+
 [COLOR yellow][B]v2.2.4[/B][/COLOR]
 - Thêm chức năng cho mục TWEAK
 

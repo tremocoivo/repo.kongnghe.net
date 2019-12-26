@@ -50,7 +50,6 @@ KEYMAPS       =  xbmc.translatePath(os.path.join(USERDATA,'keymaps','keyboard.xm
 USB           =  xbmc.translatePath(os.path.join(zip))
 skin          =  xbmc.getSkinDir()
 CHANGELOG     =  xbmc.translatePath(os.path.join(ADDONPATH,'changelog.txt'))
-ACTIVESETTINGSFILE = os.path.join(xbmc.translatePath('special://profile'), 'advancedsettings.xml')
 
 ################## New Update ####################################
 ADDON_ID         = wiz.ADDON_ID
@@ -369,7 +368,7 @@ def Tweak():
     setView('videos', 'MAIN')
     #analytics.sendPageView("HieuIT Media Center","Tweak","Tang Toc Cache")
     systemInfo()
-    if os.path.exists(ACTIVESETTINGSFILE):
+    if os.path.exists(ADVANCED):
         addItem('===== [COLOR red][B]ADVANCEDSETTING CONFIG[/B][/COLOR] =====', 'url', 9999, '')	
         addDir("Xem file [COLOR yellow]advancedsettings.xml[/COLOR]", 'url',301, '', '','Xem nội dung file Advancedsettings.xml')
         addDir("Xóa file [COLOR yellow]advancedsettings.xml[/COLOR]", 'url',302, '', '','Xóa file Advancedsettings.xml')
@@ -383,12 +382,12 @@ def Tweak():
     #xbmc.executebuiltin("Container.SetViewMode(50)")
 	
 def viewxml(name):
-    f = open(ACTIVESETTINGSFILE,mode='r'); msg = f.read(); f.close()	
+    f = open(ADVANCED,mode='r'); msg = f.read(); f.close()	
     wiz.TextBox("[B][COLOR lime]Your advancedsettings.xml file[/B][/COLOR]",msg)
 	
 def removexmlfile(name):
-    if os.path.exists(ACTIVESETTINGSFILE):
-        os.remove(ACTIVESETTINGSFILE)
+    if os.path.exists(ADVANCED):
+        os.remove(ADVANCED)
         #notification(ADDONTITLE, 'advancedsettings.xml removed', '4000', iconart)
         wiz.LogNotify("[COLOR %s]%s[/COLOR]" % (COLOR1, ADDONTITLE), '[COLOR %s]advancedsettings.xml removed[/COLOR]' % COLOR2)
         wiz.refresh()
