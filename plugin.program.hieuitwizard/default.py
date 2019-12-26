@@ -50,6 +50,7 @@ KEYMAPS       =  xbmc.translatePath(os.path.join(USERDATA,'keymaps','keyboard.xm
 USB           =  xbmc.translatePath(os.path.join(zip))
 skin          =  xbmc.getSkinDir()
 CHANGELOG     =  xbmc.translatePath(os.path.join(ADDONPATH,'changelog.txt'))
+ACTIVESETTINGSFILE = os.path.join(xbmc.translatePath('special://profile'), 'advancedsettings.xml')
 
 ################## New Update ####################################
 ADDON_ID         = wiz.ADDON_ID
@@ -244,43 +245,6 @@ def RESTORE_BACKUP_XML(name,url,description):
             f.close()  
     dialog.ok(ADDONTITLE, "", 'Đã xong!','')
 
-
-def DeletePackages():
-    
-    xbmc.log( '############################################################       DELETING PACKAGES             ###############################################################')
-    packages_cache_path = xbmc.translatePath(os.path.join('special://home/addons/packages', ''))
- 
-    for root, dirs, files in os.walk(packages_cache_path):
-        file_count = 0
-        file_count += len(files)
-        
-    # Count files and give option to delete
-        if file_count > 0:
-                        
-            for f in files:
-                os.unlink(os.path.join(root, f))
-            for d in dirs:
-                shutil.rmtree(os.path.join(root, d))
-    for root, dirs, files in os.walk(thumbnailPath):
-        file_count = 0
-        file_count += len(files)
-        
-    # Count files and give option to delete
-        if file_count > 0:
-                        
-            for f in files:
-                os.unlink(os.path.join(root, f))
-            for d in dirs:
-                shutil.rmtree(os.path.join(root, d))
-    clearCache()
-    myplatform = platform()
-    print "Platform: " + str(myplatform)
-    if myplatform == 'windows': # Windows
-        return
-    else:
-        text13 = os.path.join(databasePath,"Textures13.db")
-        os.unlink(text13)
-
 def systemInfo():
 	infoLabel = ['System.FriendlyName', 
 				 'System.BuildVersion', 
@@ -405,11 +369,29 @@ def Tweak():
     setView('videos', 'MAIN')
     #analytics.sendPageView("HieuIT Media Center","Tweak","Tang Toc Cache")
     systemInfo()
+    if os.path.exists(ACTIVESETTINGSFILE):
+        addItem('===== [COLOR red][B]ADVANCEDSETTING CONFIG[/B][/COLOR] =====', 'url', 9999, '')	
+        addDir("Xem file [COLOR yellow]advancedsettings.xml[/COLOR]", 'url',301, '', '','Xem nội dung file Advancedsettings.xml')
+        addDir("Xóa file [COLOR yellow]advancedsettings.xml[/COLOR]", 'url',302, '', '','Xóa file Advancedsettings.xml')
+    else: 
+        addItem('[COLOR red][B]NOTE:[/B][/COLOR] Bạn chưa thiết lập file [COLOR yellow]advancedsettings.xml[/COLOR]', 'url', 9999, '')
+    addItem('===== [COLOR red][B]AUTO SET RAMCACHE[/B][/COLOR] =====', 'url', 9999, '')		
     link = OPEN_URL(TWEAKFILE).replace('\n','').replace('\r','')
     match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
     for name,url,iconimage,fanart,description in match:
         addDir(name,url,2,iconimage,fanart,description)
-    xbmc.executebuiltin("Container.SetViewMode(50)")
+    #xbmc.executebuiltin("Container.SetViewMode(50)")
+	
+def viewxml(name):
+    f = open(ACTIVESETTINGSFILE,mode='r'); msg = f.read(); f.close()	
+    wiz.TextBox("[B][COLOR lime]Your advancedsettings.xml file[/B][/COLOR]",msg)
+	
+def removexmlfile(name):
+    if os.path.exists(ACTIVESETTINGSFILE):
+        os.remove(ACTIVESETTINGSFILE)
+        #notification(ADDONTITLE, 'advancedsettings.xml removed', '4000', iconart)
+        wiz.LogNotify("[COLOR %s]%s[/COLOR]" % (COLOR1, ADDONTITLE), '[COLOR %s]advancedsettings.xml removed[/COLOR]' % COLOR2)
+        wiz.refresh()
 
 def UPDATE():
     setView('videos', 'MAIN')
@@ -418,7 +400,7 @@ def UPDATE():
     match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
     for name,url,iconimage,fanart,description in match:
         addDir(name,url,2,iconimage,fanart,description)
-    xbmc.executebuiltin("Container.SetViewMode(50)")		
+    #xbmc.executebuiltin("Container.SetViewMode(50)")		
 
     
 def utilities():
@@ -1072,6 +1054,12 @@ elif mode==2:
 		
 elif mode==3:
         Tweak()
+		
+elif mode==301:
+        viewxml(name)
+		
+elif mode==302:
+        removexmlfile(name)
 		
 elif mode==4:
         utilities()
