@@ -1,3 +1,6 @@
+[COLOR yellow][B]v2.2.6[/B][/COLOR]
+- Thêm công cụ Google Analytics - Đánh giá nhu cầu người dùng.
+
 [COLOR yellow][B]v2.2.5[/B][/COLOR]
 - Tối ưu code
 

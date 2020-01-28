@@ -11,14 +11,14 @@ import ntpath
 ################### New Update #####################
 import xbmc, xbmcaddon, xbmcgui, xbmcplugin, os, sys, xbmcvfs, glob
 import shutil
-import urllib2,urllib
+import urllib2,urllib, uuid
 import re
 try:    from sqlite3 import dbapi2 as database
 except: from pysqlite2 import dbapi2 as database
 from datetime import date, datetime, timedelta
 from urlparse import urljoin
 
-from resources.libs import extract, downloader, skinSwitch, wizard as wiz
+from resources.libs import GATracker, extract, downloader, skinSwitch, wizard as wiz
 #####################################################
 reload(sys);
 sys.setdefaultencoding("utf8")
@@ -91,11 +91,31 @@ class cacheEntry:
     def __init__(self, namei, pathi):
         self.name = namei
         self.path = pathi
+
+#######################################################################
+#						Google Analytics
+#######################################################################
+global analytics
+
+def setupAnalytics():
+    global analytics
+
+    if(os.path.isfile(os.path.join(ADDONPATH, "uuid.txt")) != True):
+        userID = uuid.uuid1()
+        uuidFile = open(os.path.join(ADDONPATH,"uuid.txt"), "w")
+        uuidFile.write(str(userID))
+        uuidFile.close()
+
+    uuidFile = open(os.path.join(ADDONPATH, "uuid.txt"), "r")
+    userID = uuidFile.readline()
+    uuidFile.close()
+
+    analytics = GATracker.GAconnection("UA-127046996-1", userID)
 	
 def MAIN():
     setView('videos', 'MAIN')
-    #global analytics
-    #analytics.sendPageView("HieuIT Media Center","MAIN","main")
+    global analytics
+    analytics.sendPageView("HieuIT Media Center","MAIN","main")
     #xbmc.executebuiltin("Container.SetViewMode(50)")
     addItem('[COLOR red][B]HIEUIT[/B][/COLOR] [COLOR yellow][B]MOVIES PLAYLIST[/B][/COLOR]','url', 12,os.path.join(mediaPath, "movieslibrary.png"))
     addDir1('[COLOR red][B]INSTALL KODI:[/B][/COLOR] Cài Đặt Kodi Full Addon','url', 14,os.path.join(mediaPath, "hieuit.wizard.png"),FANART, '1-Click Cài Đặt Kodi Với Các Addon Thông Dụng')
@@ -110,7 +130,8 @@ def MAIN():
 	
 def INSTALLKODI():
     setView('videos', 'MAIN')
-    # analytics.sendPageView("HieuIT Media Center","Installkodi","HieuIT Wizard")
+    #global analytics 	
+    analytics.sendPageView("HieuIT Media Center","Installkodi","HieuIT Wizard")
     if not BUILDLINK == '':
          link = OPEN_URL(BUILDLINK).replace('\n','').replace('\r','')
          match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
@@ -131,7 +152,7 @@ def INSTALLKODI():
 		  
 def RESTOREDATAFILE():
     setView('videos', 'MAIN')
-    # analytics.sendPageView("HieuIT Media Center","Installkodi","HieuIT Wizard")
+    analytics.sendPageView("HieuIT Media Center","Installkodi","HieuIT Wizard")
     link = OPEN_URL(DATAFILE).replace('\n','').replace('\r','')
     match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
     for name,url,iconimage,fanart,description in match:
@@ -151,7 +172,7 @@ def RESTOREDATAFILE():
 	
 def BACKUP_RESTORE():
   setView('videos', 'MAIN')
-  #analytics.sendPageView("HieuIT Media Center","backup_restore","backup_restore")
+  analytics.sendPageView("HieuIT Media Center","backup_restore","backup_restore")
   if zip=='':
    if dialog.ok(ADDONTITLE,'Bạn chưa thiết lập đường dẫn lưu file Backup cho Kodi','Mở Addon Setting và Chọn tab [COLOR green][B]Zip Folder[/B][/COLOR].','Nhấn [B]OK[/B] để bắt đầu thiết lập'):
          backupdir = dialog.browse(0, '[COLOR %s]Chọn đường dẫn lưu file Backup[/COLOR]' % COLOR2, '', '', False, False)
@@ -164,7 +185,7 @@ def BACKUP_RESTORE():
      addDir2('[COLOR yellow][B]RESTORE:[/B][/COLOR] Khôi phục Kodi','url',17,os.path.join(mediaPath,"restore.png"),'Khôi phục lại bản build đã tạo trước đó hoặc tải trên interter')
 
 def BACKUP_OPTION():
-    #analytics.sendPageView("HieuIT Media Center","backup_option","backupmenu")
+    analytics.sendPageView("HieuIT Media Center","backup_option","backupmenu")
     setView('videos', 'MAIN')
     if not zip == '':
         addItem('Thư Mục Backup Mặc Định: [COLOR yellow]%s[/COLOR] <-- Nhấn để đổi thư mục' % (MYBUILDS),'url', 999, os.path.join(mediaPath,"dir.png"))	
@@ -183,7 +204,7 @@ def BACKUP_OPTION():
 
 def RESTORE_OPTION():
     setView('videos', 'MAIN')
-    #analytics.sendPageView("HieuIT Media Center","restore_option","restoremenu")
+    analytics.sendPageView("HieuIT Media Center","restore_option","restoremenu")
     #if os.path.exists(os.path.join(USB,'backup.zip')):	
     addDir2('[COLOR green][B]FULL RESTORE:[/B][/COLOR] Khôi Phục Toàn Bộ Từ File Đã Backup','url',21,os.path.join(mediaPath,"fullrestore.png"),'Restore all from backup file')   
     #if os.path.exists(os.path.join(USB,'addon_data.zip')):   
@@ -366,7 +387,7 @@ def dataurl():
 	
 def Tweak():
     setView('videos', 'MAIN')
-    #analytics.sendPageView("HieuIT Media Center","Tweak","Tang Toc Cache")
+    analytics.sendPageView("HieuIT Media Center","Tweak","Tang Toc Cache")
     systemInfo()
     if os.path.exists(ADVANCED):
         addItem('===== [COLOR red][B]ADVANCEDSETTING CONFIG[/B][/COLOR] =====', 'url', 9999, '')	
@@ -394,16 +415,16 @@ def removexmlfile(name):
 
 def UPDATE():
     setView('videos', 'MAIN')
-    #analytics.sendPageView("HieuIT Media Center","Update","Update Addon")
+    analytics.sendPageView("HieuIT Media Center","Update","Update Addon")
     link = OPEN_URL(UPDATEFILE).replace('\n','').replace('\r','')
     match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
     for name,url,iconimage,fanart,description in match:
-        addDir(name,url,2,iconimage,fanart,description)
+        addDir(name,url,201,iconimage,fanart,description)
     #xbmc.executebuiltin("Container.SetViewMode(50)")		
 
     
 def utilities():
-    #analytics.sendPageView("HieuIT Media Center","menucache","Xoa cache")
+    analytics.sendPageView("HieuIT Media Center","menucache","Xoa cache")
     #analytics.sendPageView("RawMaintenenance","maintenance","maint")
     setView('videos', 'MAIN')
     addItem('Thiết lập xem Youtube 4K/1080p', 'url', 26,os.path.join(mediaPath, "youtube4k.png"))
@@ -619,6 +640,8 @@ def datafile():
 	else:
 		wizard(name,url,description)
 		if 'googledrive' in url:
+			global analytics
+			analytics.sendEvent("HieuIT Wizard", "Restore ggdrive")
 			dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK và thưởng thức ^^")
 			wiz.clearS('build')
 			wiz.refresh()
@@ -629,6 +652,8 @@ def datafile():
 			wiz.refresh()
 			xbmc.executebuiltin('RunAddon(plugin.video.gdrive)')
 		if 'Game' in url:
+			global analytics
+			analytics.sendEvent("HieuIT Wizard", "Restore Game")
 			datagame()
 			dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK để thoát KODI")
 			wiz.clearS('build')
@@ -775,8 +800,8 @@ def setupCacheEntries():
 
 
 def clearCache():
-    # global analytics
-    # analytics.sendEvent("HieuIT Wizard", "Clear Cache")
+    global analytics
+    analytics.sendEvent("HieuIT Wizard", "Clear Cache")
     
     if os.path.exists(cachePath)==True:    
         for root, dirs, files in os.walk(cachePath):
@@ -886,8 +911,8 @@ def clearCache():
     
     
 def deleteThumbnails():
-    # global analytics
-    # analytics.sendEvent("HieuIT Wizard", "Delete thumb")
+    global analytics
+    analytics.sendEvent("HieuIT Wizard", "Delete thumb")
     
     if os.path.exists(thumbnailPath)==True:  
             dialog = xbmcgui.Dialog()
@@ -910,8 +935,8 @@ def deleteThumbnails():
     dialog.ok("Restart XBMC", "Please restart XBMC to rebuild thumbnail library")
         
 def purgePackages():
-    # global analytics
-    # analytics.sendEvent("HieuIT Wizard", "del package")
+    global analytics
+    analytics.sendEvent("HieuIT Wizard", "Del package")
     
     purgePath = xbmc.translatePath('special://home/addons/packages')
     dialog = xbmcgui.Dialog()
@@ -935,8 +960,8 @@ def purgePackages():
 				
 
 def restoreggdrive():
-    # global analytics
-    # analytics.sendEvent("HieuIT Wizard", "restore ggdrive")
+    global analytics
+    analytics.sendEvent("HieuIT Wizard", "restore ggdrive")
     y = dialog.yesno("[COLOR red][B]CẢNH BÁO !!![/COLOR][/B]", "Tất cả [COLOR yellow]Account đã thêm vào Google Drive[/COLOR] sẽ bị ghi đè.", "Bạn có muốn tiếp tục?") 
     if y == 0:   
         pass
@@ -948,8 +973,8 @@ def restoreggdrive():
         xbmc.executebuiltin('RunAddon(plugin.googledrive)')		
 
 def restoregdrive():
-    # global analytics
-    # analytics.sendEvent("HieuIT Wizard", "restore gdrive")
+    global analytics
+    analytics.sendEvent("HieuIT Wizard", "restore gdrive")
     y = dialog.yesno("[COLOR red][B]CẢNH BÁO !!![/COLOR][/B]", "Tất cả [COLOR yellow]Account đã thêm vào GDrive[/COLOR] sẽ bị ghi đè.", "Bạn có muốn tiếp tục?") 
     if y == 0:   
         pass
@@ -961,7 +986,9 @@ def restoregdrive():
         xbmc.executebuiltin('RunAddon(plugin.video.gdrive)')
 
 def speedMenu():
-	xbmc.executebuiltin('Runscript("special://home/addons/plugin.program.hieuitwizard/speedtest.py")')
+    global analytics
+    analytics.sendEvent("HieuIT Wizard", "Speedtest")
+    xbmc.executebuiltin('Runscript("special://home/addons/plugin.program.hieuitwizard/speedtest.py")')
 	
 def get_params():
         param=[]
@@ -980,7 +1007,7 @@ def get_params():
                                 param[splitparams[0]]=splitparams[1]
                                 
         return param
-#setupAnalytics()        
+setupAnalytics()        
                       
 params=get_params()
 url=None
@@ -1042,14 +1069,23 @@ if mode==None or url==None or len(url)<1:
         MAIN()
        
 elif mode==1:
+        global analytics
+        analytics.sendEvent("HieuIT Wizard", "BuildWizard")
         buildWizard()
         
 elif mode==2:
+        global analytics
+        analytics.sendEvent("HieuIT Wizard", "Set memcache")
         wizard(name,url,description)
         dialog.ok("DONE!", 'Đã cài đặt xong. Khởi động lại Kodi để kiểm tra.')	
         wiz.clearS('build')
         wiz.killxbmc(True)		
-        
+
+elif mode==201:
+        wizard(name,url,description)
+        dialog.ok("DONE!", 'Đã cài đặt xong. Khởi động lại Kodi để kiểm tra.')	
+        wiz.clearS('build')
+        wiz.killxbmc(True)        
 		
 elif mode==3:
         Tweak()
@@ -1096,6 +1132,8 @@ elif mode==11:
 
 elif mode==12:
         #restoregdrive()
+        global analytics
+        analytics.sendEvent("HieuIT Wizard", "HieuIT Playlist")		
         xbmc.executebuiltin('ActivateWindow(10025,plugin://plugin.video.thongld.vnplaylist/section/0@1l6TcaMsEINocqUPyLF0mhSBUW5y36tDwVDXpXImx4eY/%5BCOLOR+yellow%5DMovies+%28by+HieuIT%29%5B%2FCOLOR%5D,return)')
 
 elif mode==122:
@@ -1117,6 +1155,8 @@ elif mode==17:
         RESTORE_OPTION()	
 
 elif mode==18:
+		global analytics
+		analytics.sendEvent("HieuIT Wizard", "Full Backup")
 		wiz.backUpOptions('build')
 
 elif mode==19:
@@ -1149,7 +1189,9 @@ elif mode ==25:
 		datafile()
 
 elif mode ==26:
-		inputvideo()
+        #global analytics
+        analytics.sendEvent("HieuIT Wizard", "InputStream")
+        inputvideo()
 		
 elif mode ==27:
 		inputurl()
