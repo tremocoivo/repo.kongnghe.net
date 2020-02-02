@@ -10,12 +10,6 @@ img="https://i.imgur.com/HBGflaE.jpg"
 fanart="https://i.imgur.com/HBGflaE.jpg"
 description="Data account Google Drive gồm nhiều server cho người dùng lựa chọn, hạn chế được tình trạng limited access"
 
-name="Data Addon Google Drive by Nguyen VanT"
-url="https://dl.dropboxusercontent.com/s/ijowjr3lzn1ehdu/gk102_googledrive.zip"
-img="https://i.imgur.com/HBGflaE.jpg"
-fanart="https://i.imgur.com/HBGflaE.jpg"
-description="Data account Google Drive kho phim của Nguyễn VănT@Cộng Đồng KODII - Thanks for share"
-
 name="Data Game NES"
 url="https://dl.dropboxusercontent.com/s/sw5bb99o0qvrooq/Game-NES.zip"
 img="https://i.imgur.com/nj3SGz2.jpg"
