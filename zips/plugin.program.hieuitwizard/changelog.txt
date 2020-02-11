@@ -1,3 +1,7 @@
+[COLOR yellow][B]v2.3.0[/B][/COLOR]
+- Thêm playlist phim miễn phí
+- Sửa lỗi hiển thị icon
+
 [COLOR yellow][B]v2.2.6[/B][/COLOR]
 - Thêm công cụ Google Analytics - Đánh giá nhu cầu người dùng.
 

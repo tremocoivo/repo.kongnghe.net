@@ -117,7 +117,8 @@ def MAIN():
     global analytics
     analytics.sendPageView("HieuIT Media Center","MAIN","main")
     #xbmc.executebuiltin("Container.SetViewMode(50)")
-    addItem('[COLOR red][B]HIEUIT[/B][/COLOR] [COLOR yellow][B]MOVIES PLAYLIST[/B][/COLOR]','url', 12,os.path.join(mediaPath, "movieslibrary.png"))
+    addItem('[COLOR red][B]HIEUIT[/B][/COLOR] [COLOR yellow][B]MOVIES PLAYLIST[/B][/COLOR] [B]- VIP FSHARE[/B]','url', 12,os.path.join(mediaPath, "vip.png"))
+    addItem('[COLOR red][B]HIEUIT[/B][/COLOR] [COLOR yellow][B]MOVIES PLAYLIST[/B][/COLOR] [B]- ** FREE **[/B]','url', 121,os.path.join(mediaPath, "free.png"))
     addDir1('[COLOR red][B]INSTALL KODI:[/B][/COLOR] Cài Đặt Kodi Full Addon','url', 14,os.path.join(mediaPath, "hieuit.wizard.png"),FANART, '1-Click Cài Đặt Kodi Với Các Addon Thông Dụng')
     #addDir1('[COLOR red][B]INSTALL KODI:[/B][/COLOR] Cài Đặt Kodi Full Addon','url', 14,os.path.join(mediaPath, "hieuit.wizard.png"))
     addDir1('[B][COLOR green]BACKUP[/COLOR]/[COLOR yellow]RESTORE[/COLOR]:[/B] Sao Lưu/Khôi Phục Bản Kodi Cá Nhân','url', 15,os.path.join(mediaPath, "customkodi.png"),FANART,'Tạo Bản Kodi Để Khôi Phục Khi Cần')		
@@ -433,7 +434,7 @@ def utilities():
     addItem('Delete Thumbnails - Xóa Ảnh Xem Trước Của Video/Addon', 'url', 6,os.path.join(mediaPath, "thumbnail.png"))
     addItem('Purge Packages - Xóa Các Gói Cài Đặt Cũ', 'url', 7,os.path.join(mediaPath, "packages.png"))
     addItem('[COLOR red][B]Delete All - Xóa Tất Cả[/B][/COLOR]', 'url', 8,os.path.join(mediaPath, "clearcache.png"))	
-    addItem('[COLOR red][B]Refresh KODI[/B][/COLOR] - Khôi phục Kodi về mặc định (giữ nguyên Repository)','url', 24,os.path.join(mediaPath, "speedtest.png"))
+    addItem('[COLOR red][B]Refresh KODI[/B][/COLOR] - Khôi phục Kodi về mặc định (giữ nguyên Repository)','url', 24,os.path.join(mediaPath, "reset.png"))
 
     
 def OPEN_URL(url):
@@ -1136,6 +1137,12 @@ elif mode==12:
         analytics.sendEvent("HieuIT Wizard", "HieuIT Playlist")		
         xbmc.executebuiltin('ActivateWindow(10025,plugin://plugin.video.thongld.vnplaylist/section/0@1l6TcaMsEINocqUPyLF0mhSBUW5y36tDwVDXpXImx4eY/%5BCOLOR+yellow%5DMovies+%28by+HieuIT%29%5B%2FCOLOR%5D,return)')
 
+elif mode==121:
+        #restoregdrive()
+        global analytics
+        analytics.sendEvent("HieuIT Wizard", "HieuIT FREE")		
+        xbmc.executebuiltin('ActivateWindow(10025,plugin://plugin.video.thongld.vnplaylist/section/0@1dqRmuJgGP_6SE5v8nStJujeEW63xGUDRt3C_sQ5Pdg4/%5BCOLOR+yellow%5DMovies+%28by+HieuIT%29%5B%2FCOLOR%5D,return)')
+		
 elif mode==122:
         restoregdrive()		
 
