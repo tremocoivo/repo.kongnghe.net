@@ -24,18 +24,18 @@ reload(sys);
 sys.setdefaultencoding("utf8")
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36 SE 2.X MetaSr 1.0'
-base       ='https://hieuit.net'
-ADDON      =xbmcaddon.Addon(id='plugin.program.hieuitwizard')
+base       = 'https://hieuit.net'
+ADDON      = xbmcaddon.Addon(id='plugin.program.hieuitwizard')
 dialog     = xbmcgui.Dialog()    
 VERSION    = ADDON.getAddonInfo('version')
 PATH       = "Hieuit Media Center"            
 
-thumbnailPath = xbmc.translatePath('special://thumbnails');
-cachePath     = os.path.join(xbmc.translatePath('special://home'), 'cache')
-tempPath      = xbmc.translatePath('special://temp')
-ADDONPATH     = os.path.join(os.path.join(xbmc.translatePath('special://home'), 'addons'),'plugin.program.hieuitwizard')
-mediaPath     = os.path.join(ADDONPATH, 'media')
-databasePath  = xbmc.translatePath('special://database')
+thumbnailPath =  xbmc.translatePath('special://thumbnails');
+cachePath     =  os.path.join(xbmc.translatePath('special://home'), 'cache')
+tempPath      =  xbmc.translatePath('special://temp')
+ADDONPATH     =  os.path.join(os.path.join(xbmc.translatePath('special://home'), 'addons'),'plugin.program.hieuitwizard')
+mediaPath     =  os.path.join(ADDONPATH, 'media')
+databasePath  =  xbmc.translatePath('special://database')
 zip           =  ADDON.getSetting('zipdir')
 DP            =  xbmcgui.DialogProgress()
 USERDATA      =  xbmc.translatePath(os.path.join('special://home/userdata',''))
@@ -113,16 +113,18 @@ def setupAnalytics():
     analytics = GATracker.GAconnection("UA-127046996-1", userID)
 	
 def MAIN():
-    setView('videos', 'MAIN')
+    setView('files', 'MAIN')
     global analytics
     analytics.sendPageView("HieuIT Media Center","MAIN","main")
     #xbmc.executebuiltin("Container.SetViewMode(50)")
     addItem('[COLOR red][B]HIEUIT[/B][/COLOR] [COLOR yellow][B]MOVIES PLAYLIST[/B][/COLOR] [B]- VIP FSHARE[/B]','url', 12,os.path.join(mediaPath, "vip.png"))
     addItem('[COLOR red][B]HIEUIT[/B][/COLOR] [COLOR yellow][B]MOVIES PLAYLIST[/B][/COLOR] [B]- ** FREE **[/B]','url', 121,os.path.join(mediaPath, "free.png"))
+    addItem('-----------------------------------------------------','url', 9999,os.path.join(mediaPath, "hieuit.wizard.png"))
     addDir1('[COLOR red][B]INSTALL KODI:[/B][/COLOR] Cài Đặt Kodi Full Addon','url', 14,os.path.join(mediaPath, "hieuit.wizard.png"),FANART, '1-Click Cài Đặt Kodi Với Các Addon Thông Dụng')
     #addDir1('[COLOR red][B]INSTALL KODI:[/B][/COLOR] Cài Đặt Kodi Full Addon','url', 14,os.path.join(mediaPath, "hieuit.wizard.png"))
     addDir1('[B][COLOR green]BACKUP[/COLOR]/[COLOR yellow]RESTORE[/COLOR]:[/B] Sao Lưu/Khôi Phục Bản Kodi Cá Nhân','url', 15,os.path.join(mediaPath, "customkodi.png"),FANART,'Tạo Bản Kodi Để Khôi Phục Khi Cần')		
-    addDir1('[COLOR green][B]Restore Data[/B][/COLOR] - Cho Máy Không Dùng Source [COLOR red][B]HieuIT[/B][/COLOR] [COLOR yellow][B]Wizard[/B][/COLOR] ','url', 10,os.path.join(mediaPath, "restoredata.png"),FANART,'Chỉ khôi phục lại data addon mà không phải Restore bản Kodi của HieuITWizard')	
+    addDir1('[COLOR cyan][B]Restore Addon Data:[/B][/COLOR] Cho Máy Không Dùng Source [COLOR red][B]HieuIT[/B][/COLOR] [COLOR yellow][B]Wizard[/B][/COLOR] ','url', 10,os.path.join(mediaPath, "restoredata.png"),FANART,'Chỉ khôi phục lại data addon mà không phải Restore bản Kodi của HieuITWizard')	
+    addItem('-----------------------------------------------------','url', 9999,os.path.join(mediaPath, "hieuit.wizard.png"))
     addDir1('[COLOR yellow][B]TWEAK[/B][/COLOR] - Thiết Lập File [COLOR red][B]AdvancedSetting.xml[/B][/COLOR]','url', 3,os.path.join(mediaPath, "tweak.png"),FANART,'Tăng memcache khi xem phim không bị giật lag')
     addDir1('[COLOR yellow][B]Utilities Tool[/B][/COLOR] - Công Cụ Tiện Ích','url', 4,os.path.join(mediaPath, "utilities.png"),FANART,'Các công cụ cần thiết trong quá trình sử dụng Kodi')
     addDir1('[COLOR yellow][B]UPDATE[/B][/COLOR] - Sửa Lỗi Addon','url', 22,os.path.join(mediaPath, "update.png"),FANART,'Bản cập nhật sửa lỗi các addon khi dùng bản Build của HieuIT Wizard')
@@ -130,7 +132,7 @@ def MAIN():
     addDir1('[B][COLOR yellow]Like[/COLOR] and [COLOR pink]Donate[/COLOR][/B]: Ủng Hộ Tác Giả','url', 9,os.path.join(mediaPath, "donate.png"),FANART,'Lets share to be shared')
 	
 def INSTALLKODI():
-    setView('videos', 'MAIN')
+    setView('files', 'MAIN')
     #global analytics 	
     analytics.sendPageView("HieuIT Media Center","Installkodi","HieuIT Wizard")
     if not BUILDLINK == '':
@@ -152,7 +154,7 @@ def INSTALLKODI():
               addDir(name,url,1,iconimage,fanart,description)
 		  
 def RESTOREDATAFILE():
-    setView('videos', 'MAIN')
+    setView('files', 'MAIN')
     analytics.sendPageView("HieuIT Media Center","Installkodi","HieuIT Wizard")
     link = OPEN_URL(DATAFILE).replace('\n','').replace('\r','')
     match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
@@ -172,7 +174,7 @@ def RESTOREDATAFILE():
          addItem('[COLOR yellow][B]Restore From URL[/B][/COLOR] - Nhập URL list data cần khôi phục','url', 271, os.path.join(mediaPath,"dir.png"))
 	
 def BACKUP_RESTORE():
-  setView('videos', 'MAIN')
+  setView('files', 'MAIN')
   analytics.sendPageView("HieuIT Media Center","backup_restore","backup_restore")
   if zip=='':
    if dialog.ok(ADDONTITLE,'Bạn chưa thiết lập đường dẫn lưu file Backup cho Kodi','Mở Addon Setting và Chọn tab [COLOR green][B]Zip Folder[/B][/COLOR].','Nhấn [B]OK[/B] để bắt đầu thiết lập'):
@@ -187,13 +189,13 @@ def BACKUP_RESTORE():
 
 def BACKUP_OPTION():
     analytics.sendPageView("HieuIT Media Center","backup_option","backupmenu")
-    setView('videos', 'MAIN')
+    setView('files', 'MAIN')
     if not zip == '':
         addItem('Thư Mục Backup Mặc Định: [COLOR yellow]%s[/COLOR] <-- Nhấn để đổi thư mục' % (MYBUILDS),'url', 999, os.path.join(mediaPath,"dir.png"))	
         addDir2('[COLOR green][B]FULL BACKUP:[/B][/COLOR] Sao Lưu Toàn Bộ Hệ Thống','url',18,os.path.join(mediaPath,"fullbackup.png"),'Back Up Your Full System')
-        #addDir2('[COLOR yellow]Backup Addons:[/COLOR] Sao luu tat ca Addon','addons',19,'','Back Up Your Addons')
-        addDir2('[COLOR yellow]Backup UserData:[/COLOR] Sao Lưu Setting Tất Cả Addon','addon_data',19,os.path.join(mediaPath,"backupuserdata.png"),'Back Up Your Addon Userdata')  
-        addDir2('[COLOR yellow]Backup Guisettings.xml:[/COLOR] Sao Lưu Setting Của Kodi',GUI,191,os.path.join(mediaPath,"backupsetting.png"),'Back Up Your guisettings.xml')
+        addDir2('[COLOR yellow]Backup All UserData:[/COLOR] Sao Lưu Setting Tất Cả Addon','addon_data',19,os.path.join(mediaPath,"backupuserdata.png"),'Back Up Your Addon Userdata') 
+        addDir2('[COLOR yellow]Chose Backup:[/COLOR] Lựa Chọn Sao Lưu Setting Từng Addon','addon_data',191,os.path.join(mediaPath,"backupuserdata.png"),'Back Up Your Addon Userdata') 		
+        addDir2('[COLOR yellow]Backup Guisettings.xml:[/COLOR] Sao Lưu Setting Của Kodi',GUI,20,os.path.join(mediaPath,"backupsetting.png"),'Back Up Your guisettings.xml')
         if os.path.exists(FAVS):
             addDir2('[COLOR yellow]Backup Favourites:[/COLOR] Sao Lưu Mục Yêu Thích',FAVS,20,os.path.join(mediaPath,"backupFavourites.png"),'Back Up Your favourites.xml')
         if os.path.exists(SOURCE):
@@ -204,13 +206,13 @@ def BACKUP_OPTION():
             addDir2('[COLOR yellow]Backup keyboard:[/COLOR] Sao Lưu Phím Tắt Kodi',KEYMAPS,20,os.path.join(mediaPath,"backupkeymap.png"),'Back Up Your keyboard.xml')
 
 def RESTORE_OPTION():
-    setView('videos', 'MAIN')
+    setView('files', 'MAIN')
     analytics.sendPageView("HieuIT Media Center","restore_option","restoremenu")
     #if os.path.exists(os.path.join(USB,'backup.zip')):	
-    addDir2('[COLOR green][B]FULL RESTORE:[/B][/COLOR] Khôi Phục Toàn Bộ Từ File Đã Backup','url',21,os.path.join(mediaPath,"fullrestore.png"),'Restore all from backup file')   
+    addDir2('[COLOR green][B]FULL RESTORE:[/B][/COLOR] Khôi Phục Toàn Bộ Từ File Đã Backup','url',21,os.path.join(mediaPath,"fullrestore.png"),'Khôi phục bản Kodi từ file Backup')   
     #if os.path.exists(os.path.join(USB,'addon_data.zip')):   
-    addDir2('[COLOR yellow]Restore UserData:[/COLOR] Khôi Phục Setting Các Addon','addon_data',211,os.path.join(mediaPath,"restoreuserdata.png"),'Restore Your AddonData')
-
+    addDir2('[COLOR yellow]Restore All UserData:[/COLOR] Khôi Phục Setting Tất Cả Addon','addon_data',211,os.path.join(mediaPath,"restoreuserdata.png"),'Khôi phục toàn bộ UserData từ file đã backup.')
+    addDir2('[COLOR yellow]Restore Data Addon From File:[/COLOR] Khôi Phục Setting Addon Từ File Đã Backup','addon_data',212,os.path.join(mediaPath,"restoreuserdata.png"),'Lựa chọn khôi phục từng Data Addon riêng lẻ từ file đã backup trước đó.')
     if os.path.exists(os.path.join(USB,'guisettings.xml')):
         addDir2('[COLOR yellow]Restore Guisettings:[/COLOR] Khôi Phục Setting Của Kodi',GUI,20,os.path.join(mediaPath,"restoresetting.png"),'Restore Your guisettings.xml')
     
@@ -225,7 +227,153 @@ def RESTORE_OPTION():
 
     if os.path.exists(os.path.join(USB,'keyboard.xml')):
         addDir2('[COLOR yellow]Restore Keyboard:[/COLOR] Khôi Phục Phím Tắt Kodi',KEYMAPS,20,os.path.join(mediaPath,"restorekeymap.png"),'Restore Your keyboard.xml')
+
+def choseAddon():
+	fold = glob.glob(os.path.join(ADDONS, '*/'))
+	addonnames = []; addonids = []
+	for folder in sorted(fold, key = lambda x: x):
+		foldername = os.path.split(folder[:-1])[1]
+		ADDONEXIST = os.path.join(ADDOND, foldername)
+		if os.path.exists(ADDONEXIST):
+			if foldername in EXCLUDES: continue
+			elif foldername in DEFAULTPLUGINS: continue
+			elif foldername == 'packages': continue
+			xml = os.path.join(folder, 'addon.xml')
+			if os.path.exists(xml):
+				f      = open(xml)
+				a      = f.read()
+				match  = wiz.parseDOM(a, 'addon', ret='id')
+
+				addid  = foldername if len(match) == 0 else match[0]
+				try: 
+					add = xbmcaddon.Addon(id=addid)
+					addonnames.append(add.getAddonInfo('name'))
+					addonids.append(addid)
+				except:
+					pass
+	if len(addonnames) == 0:
+		wiz.LogNotify("[COLOR %s]%s[/COLOR]" % (COLOR1, ADDONTITLE), "[COLOR %s]Không tìm thấy Addon nào.[/COLOR]" % COLOR2)
+		return
+	if KODIV > 16:
+		selected = dialog.multiselect("%s: Chọn Addon cần Backup" % ADDONTITLE, addonnames)
+	else:
+		selected = []; choice = 0
+		tempaddonnames = ["-- Click here to Continue --"] + addonnames
+		while not choice == -1:
+			choice = dialog.select("%s: Chọn Addon cần Backup" % ADDONTITLE, tempaddonnames)
+			if choice == -1: break
+			elif choice == 0: break
+			else: 
+				choice2 = (choice-1)
+				if choice2 in selected:
+					selected.remove(choice2)
+					tempaddonnames[choice] = addonnames[choice2]
+				else:
+					selected.append(choice2)
+					tempaddonnames[choice] = "[B][COLOR %s]%s[/COLOR][/B]" % (COLOR1, addonnames[choice2])
+	if selected == None: return
+	if len(selected) > 0:
+		wiz.addonUpdates('set')
+		for addon in selected:
+			backupchoseAddon(addonids[addon], addonnames[addon], True)
+
+		xbmc.sleep(500)
+
+def backupchoseAddon(addon, name, over=False):
+	if not over == False:
+		yes = 1
+	else: 
+		return
+	if yes == 1:
+			folder = os.path.join(ADDON_DATA, addon)
+			backup   = xbmc.translatePath(BACKUPLOCATION)
+			mybuilds = xbmc.translatePath(MYBUILDS)
 		
+			name = '%s.zip' % addon; tempzipname = ''
+			zipname = os.path.join(mybuilds, name)
+			try:
+				zipf = zipfile.ZipFile(xbmc.translatePath(zipname), mode='w')
+			except:
+				try:
+					tempzipname = os.path.join(PACKAGES, '%s.zip' % name)
+					zipf = zipfile.ZipFile(tempzipname, mode='w')
+				except:
+					log("Unable to create %s.zip" % name, xbmc.LOGERROR)
+					if dialog.yesno(ADDONTITLE, "[COLOR %s]Không thể lưu file backup vào thư mục hiện tại, bạn có muốn đổi đường dẫn khác không?[/COLOR]" % COLOR2, yeslabel="[B][COLOR green]Đổi thư mục[/COLOR][/B]", nolabel="[B][COLOR red]Hủy[/COLOR][/B]"):
+						openS()
+						return
+					else:
+						return
+			for_progress  = 0
+			ITEM          = []
+			DP.create("[COLOR %s]%s[/COLOR][COLOR %s]: Creating Zip[/COLOR]" % (COLOR1, ADDONTITLE,COLOR2), "[COLOR %s]Đang tạo file zip" % COLOR2, "", "Chờ chút nhé...[/COLOR]")
+			for base, dirs, files in os.walk(folder):
+				dirs[:] = [d for d in dirs]
+				files[:] = [f for f in files]
+				for file in files:
+					ITEM.append(file)
+			N_ITEM = len(ITEM)
+			for base, dirs, files in os.walk(folder):
+				dirs[:] = [d for d in dirs]
+				files[:] = [f for f in files]
+				for file in files:
+					try:
+						for_progress += 1
+						progress = wiz.percentage(for_progress, N_ITEM) 
+						DP.update(int(progress), '[COLOR %s]Đang tạo file zip: [COLOR%s]%s[/COLOR] / [COLOR%s]%s[/COLOR]' % (COLOR2, COLOR1, for_progress, COLOR1, N_ITEM), '[COLOR %s]%s[/COLOR]' % (COLOR1, file), '')
+						fn = os.path.join(base, file)
+						if file in LOGFILES: log("[Back Up] Type = '%s': Ignore %s" % (addon, file), xbmc.LOGNOTICE); continue
+						try:
+							zipf.write(fn, fn[len(folder):], zipfile.ZIP_DEFLATED)
+						except Exception, e:
+							wiz.log("[Back Up] Type = '%s': Unable to backup %s" % (type, file), xbmc.LOGNOTICE)
+							wiz.log("Backup Error: %s" % str(e), xbmc.LOGNOTICE)
+					except Exception, e:
+						wiz.log("[Back Up] Type = '%s': Unable to backup %s" % (type, file), xbmc.LOGNOTICE)
+						wiz.log("Backup Error: %s" % str(e), xbmc.LOGNOTICE)
+			zipf.close()
+			if not tempzipname == '':
+				success = xbmcvfs.rename(tempzipname, zipname)
+				if success == 0:
+					xbmcvfs.copy(tempzipname, zipname)
+					xbmcvfs.delete(tempzipname)
+			DP.close()
+			dialog.ok(ADDONTITLE, "[COLOR %s]%s[/COLOR] [COLOR %s]sao lưu thành công:[/COLOR]" % (COLOR1, addon, COLOR2), "[COLOR %s]%s[/COLOR]" % (COLOR1, zipname))
+	if over == False:
+		wiz.LogNotify("[COLOR %s]%s[/COLOR]" % (COLOR1, ADDONTITLE), "[COLOR %s]%s Không có file nào được Backup[/COLOR]" % (COLOR2, name))
+
+def restorechoseAddon():
+	backup   = xbmc.translatePath(BACKUPLOCATION)
+	mybuilds = xbmc.translatePath(MYBUILDS)
+	file = dialog.browse(1, '[COLOR %s]Chọn file muốn Khôi phục[/COLOR]' % COLOR2, 'files', '.zip', False, False, mybuilds)
+	if file == "" or not file.endswith('.zip'):
+		wiz.LogNotify("[COLOR %s]%s[/COLOR]" % (COLOR1, ADDONTITLE), "[COLOR yellow]Khôi phục Data:[/COLOR] Đã bị hủy")
+		return
+	DP.create(ADDONTITLE,'[COLOR %s]Đang giải nén file' % COLOR2,'', 'Chờ chút nhé[/COLOR]')
+	foldername = os.path.split(file[:-4])[1]
+	fn = foldername[1]
+	ADDONEXIST = os.path.join(ADDOND, foldername)
+	if not os.path.exists(ADDONEXIST):
+		os.makedirs(ADDONEXIST)
+		loc = ADDONEXIST
+		wiz.log("Restoring to %s" % loc, xbmc.LOGNOTICE)
+	else: loc = ADDONEXIST
+	try:
+		zipfile.ZipFile(file,  'r')
+	except:
+		DP.update(0, '[COLOR %s]Không đọc được file Zip.' % COLOR2, 'Đang copy vào thư mục Packages')
+		pack = os.path.join('special://home', 'addons', 'packages', fn)
+		xbmcvfs.copy(file, pack)
+		file = xbmc.translatePath(pack)
+		DP.update(0, '', 'Copy file vào Packages: Hoàn thành')
+		zipfile.ZipFile(file, 'r')
+	percent, errors, error = extract.all(file,loc,DP)
+	DP.close()
+	if not file.find('packages') == -1:
+		try: os.remove(file)
+		except: pass
+	dialog.ok(ADDONTITLE, "Đã khôi phục xong data.")
+	
 def RESTORE_ZIP_FILE(name,url):
         
     if 'addon_data' in url:
@@ -295,7 +443,7 @@ def systemInfo():
 
 # def restoredata():
     # #analytics.sendPageView("HieuIT Media Center","restoredata","Data Addon")
-    # setView('videos', 'MAIN')
+    # setView('files', 'MAIN')
     # addItem('Data Addon Gdrive 0.8.66 - Dành cho Kodi 16/SPMC', 'url', 122,os.path.join(mediaPath, "gdrive.png"))
     # addItem('Data  Addon Google Drive', 'url', 13,os.path.join(mediaPath, "ggdrive.png"))
 
@@ -387,7 +535,7 @@ def dataurl():
 				wiz.setS('customlink',queryText)
 	
 def Tweak():
-    setView('videos', 'MAIN')
+    setView('files', 'MAIN')
     analytics.sendPageView("HieuIT Media Center","Tweak","Tang Toc Cache")
     systemInfo()
     if os.path.exists(ADVANCED):
@@ -415,7 +563,7 @@ def removexmlfile(name):
         wiz.refresh()
 
 def UPDATE():
-    setView('videos', 'MAIN')
+    setView('files', 'MAIN')
     analytics.sendPageView("HieuIT Media Center","Update","Update Addon")
     link = OPEN_URL(UPDATEFILE).replace('\n','').replace('\r','')
     match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
@@ -427,7 +575,7 @@ def UPDATE():
 def utilities():
     analytics.sendPageView("HieuIT Media Center","menucache","Xoa cache")
     #analytics.sendPageView("RawMaintenenance","maintenance","maint")
-    setView('videos', 'MAIN')
+    setView('files', 'MAIN')
     addItem('Thiết lập xem Youtube 4K/1080p', 'url', 26,os.path.join(mediaPath, "youtube4k.png"))
     addItem('[COLOR yellow][B]Speedtest[/B][/COLOR] - Kiểm Tra Tốc Độ Mạng','url', 23,os.path.join(mediaPath, "speedtest.png"))
     addItem('Clear Cache - Xóa Cache','url', 5,os.path.join(mediaPath, "deletecache.png"))
@@ -658,9 +806,7 @@ def datafile():
 			datagame()
 			dialog.ok(ADDONTITLE, "Đã khôi phục xong [COLOR green]%s[/COLOR]" % (name), "Nhấn OK để thoát KODI")
 			wiz.clearS('build')
-			wiz.killxbmc(True)
-		
-		
+			wiz.killxbmc(True)	
 
 def restorefile():
 	file = dialog.browse(1, '[COLOR %s]Chọn file muốn Khôi phục[/COLOR]' % COLOR2, 'files', '.zip', False, False)
@@ -778,7 +924,7 @@ def addItem(name,url,mode,iconimage):
 	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name).decode("utf-8")+"&iconimage="+urllib.quote_plus(iconimage)
 	ok=True
 	liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-	liz.setInfo( type="Video", infoLabels={ "Title": name } )
+	liz.setInfo( type="files", infoLabels={ "Title": name } )
 	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
 	return ok
 
@@ -1167,7 +1313,11 @@ elif mode==18:
 		wiz.backUpOptions('build')
 
 elif mode==19:
-        RESTORE_ZIP_FILE(name,url)		
+        RESTORE_ZIP_FILE(name,url)
+
+elif mode==191: 
+        #wiz.backUpOptions('guifix')
+        choseAddon()		
 		
 elif mode==20:
         RESTORE_BACKUP_XML(name,url,description)
@@ -1180,8 +1330,10 @@ elif mode==21:
 elif mode==211:
         #RESTORE()
 		wiz.restoreLocal('addondata')
-		
-elif mode==191      : wiz.backUpOptions('guifix')
+
+elif mode==212:
+        #RESTORE()
+		restorechoseAddon()
 		
 elif mode==22:
         UPDATE()

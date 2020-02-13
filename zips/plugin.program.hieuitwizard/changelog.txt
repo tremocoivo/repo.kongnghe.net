@@ -1,3 +1,7 @@
+[COLOR yellow][B]v2.3.1[/B][/COLOR]
+- Sửa lại bố cục theo nhóm chức năng.
+- Thêm chức năng lựa chọn backup data addon.
+
 [COLOR yellow][B]v2.3.0[/B][/COLOR]
 - Thêm playlist phim miễn phí
 - Sửa lỗi hiển thị icon
