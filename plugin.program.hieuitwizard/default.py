@@ -117,8 +117,8 @@ def MAIN():
     global analytics
     analytics.sendPageView("HieuIT Media Center","MAIN","main")
     #xbmc.executebuiltin("Container.SetViewMode(50)")
-    addItem('[COLOR red][B]HIEUIT[/B][/COLOR] [COLOR yellow][B]MOVIES PLAYLIST[/B][/COLOR] [B]- VIP FSHARE[/B]','url', 12,os.path.join(mediaPath, "vip.png"))
-    addItem('[COLOR red][B]HIEUIT[/B][/COLOR] [COLOR yellow][B]MOVIES PLAYLIST[/B][/COLOR] [B]- ** FREE **[/B]','url', 121,os.path.join(mediaPath, "free.png"))
+    addDir1('[COLOR red][B]HIEUIT[/B][/COLOR] [COLOR yellow][B]MOVIES PLAYLIST[/B][/COLOR] [B]- VIP FSHARE[/B]','url', 12,os.path.join(mediaPath, "vip.png"),FANART, 'Playlist yêu cầu phải có VIP Fshare để xem')
+    addDir1('[COLOR red][B]HIEUIT[/B][/COLOR] [COLOR yellow][B]MOVIES PLAYLIST[/B][/COLOR] [B]- ** FREE **[/B]','url', 121,os.path.join(mediaPath, "free.png"),FANART, 'Playlist miễn phí không yêu cầu acc VIP')
     addItem('-----------------------------------------------------','url', 9999,os.path.join(mediaPath, "hieuit.wizard.png"))
     addDir1('[COLOR red][B]INSTALL KODI:[/B][/COLOR] Cài Đặt Kodi Full Addon','url', 14,os.path.join(mediaPath, "hieuit.wizard.png"),FANART, '1-Click Cài Đặt Kodi Với Các Addon Thông Dụng')
     #addDir1('[COLOR red][B]INSTALL KODI:[/B][/COLOR] Cài Đặt Kodi Full Addon','url', 14,os.path.join(mediaPath, "hieuit.wizard.png"))
