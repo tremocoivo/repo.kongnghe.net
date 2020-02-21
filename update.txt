@@ -1,6 +1,6 @@
 name="Restore Youtube API - Sửa lỗi Addon Youtube"
 url="https://dl.dropboxusercontent.com/s/ssrmhakval5unp3/fix_youtube_api.zip"
-img="https://i.imgur.com/LuiPwSN.jpg"
+img="https://i.imgur.com/wQ5UKKm.png"
 fanart="https://i.imgur.com/LuiPwSN.jpg"
 description="Sử dụng Youtube API của HieuIT để thay thế cho API lỗi không thể xem được video của addon Youtube."
 
