@@ -801,7 +801,7 @@ def addonDatabase(addon=None, state=1):
 ###BACK UP/RESTORE #######
 ##########################
 def backUpOptions(type, name=""):
-	exclude_dirs  = [ADDON_ID, 'cache', 'system', 'Thumbnails', 'temp', '.smb', '.cache']
+	exclude_dirs  = [ADDON_ID, 'cache', 'system', 'peripheral_data' , 'Thumbnails', 'temp', '.smb', '.cache']
 	exclude_files = ['Textures13.db', '.DS_Store', 'Thumbs.db', '.gitignore']
 	bad_files     = [os.path.join(DATABASE, 'cache.db'),
 					 os.path.join(DATABASE, 'DEATHScache.db'), 
