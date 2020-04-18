@@ -1,3 +1,7 @@
+[COLOR yellow][B]v2.4.0[/B][/COLOR]
+- Thêm menu CoreELEC/LibreELEC Tools
+- CoreELEC: thêm menu Reboot to Android dành cho các skin custom: Eminence, Auro, Embuary....
+
 [COLOR yellow][B]v2.3.3[/B][/COLOR]
 - Tinh chỉnh vài lỗi nhỏ.
 

@@ -127,6 +127,7 @@ def MAIN():
     addItem('-----------------------------------------------------','url', 9999,os.path.join(mediaPath, "hieuit.wizard.png"))
     addDir1('[COLOR yellow][B]TWEAK[/B][/COLOR] - Thiết Lập File [COLOR red][B]AdvancedSetting.xml[/B][/COLOR]','url', 3,os.path.join(mediaPath, "tweak.png"),FANART,'Tăng memcache khi xem phim không bị giật lag')
     addDir1('[COLOR yellow][B]Utilities Tool[/B][/COLOR] - Công Cụ Tiện Ích','url', 4,os.path.join(mediaPath, "utilities.png"),FANART,'Các công cụ cần thiết trong quá trình sử dụng Kodi')
+    addDir1('[COLOR yellow][B]CoreELEC - LibreELEC[/B][/COLOR] [COLOR cyan][B]Tools[/B][/COLOR]','url', 30,os.path.join(mediaPath, "ce.png"),FANART,'Các tùy chỉnh dành riêng cho HĐH CoreELEC/LibreELEC')
     addDir1('[COLOR yellow][B]UPDATE[/B][/COLOR] - Sửa Lỗi Addon','url', 22,os.path.join(mediaPath, "update.png"),FANART,'Bản cập nhật sửa lỗi các addon khi dùng bản Build của HieuIT Wizard')
     addItem('[COLOR yellow][B]ChangeLog[/B][/COLOR] - Có gì mới?','url', 29,os.path.join(mediaPath, "movieslibrary.png"))	
     addDir1('[B][COLOR yellow]Like[/COLOR] and [COLOR pink]Donate[/COLOR][/B]: Ủng Hộ Tác Giả','url', 9,os.path.join(mediaPath, "donate.png"),FANART,'Lets share to be shared')
@@ -561,6 +562,11 @@ def removexmlfile(name):
         #notification(ADDONTITLE, 'advancedsettings.xml removed', '4000', iconart)
         wiz.LogNotify("[COLOR %s]%s[/COLOR]" % (COLOR1, ADDONTITLE), '[COLOR %s]advancedsettings.xml removed[/COLOR]' % COLOR2)
         wiz.refresh()
+
+def COREELEC():
+	setView('files', 'MAIN')
+	analytics.sendPageView("HieuIT Media Center","COREELEC","CE Tools")
+	addItem('Cài Đặt: Reboot To Android', 'url', 3001,os.path.join(mediaPath, "reboot2android.png"))
 
 def UPDATE():
     setView('files', 'MAIN')
@@ -1132,6 +1138,36 @@ def restoregdrive():
         dialog.ok("Done!", "Khôi phục xong, nhấn OK và thưởng thức ^^")
         xbmc.executebuiltin('RunAddon(plugin.video.gdrive)')
 
+def reboot2android():
+	global analytics
+	analytics.sendEvent("HieuIT Wizard", "reboot2android")
+	myplatform = platform()
+	if myplatform == 'linux':
+		yes = dialog.yesno(ADDONTITLE, 'Chỉ áp dụng với Skin hỗ trợ tạo Shortcut Menu: Eminence, Aura, Embuary...', 'Bạn có muốn làm ngay không?', nolabel='[B][COLOR red]Không[/COLOR][/B]',yeslabel='[B][COLOR green]OK, làm ngay[/COLOR][/B]')
+		if yes == 0:
+			pass
+		else:
+			wizard("reboot2android",'https://dl.dropboxusercontent.com/s/xizh5roskkajpge/reboot2android.zip',description)
+			wiz.clearS('build')
+			path = os.path.join(xbmc.translatePath('special://home/userdata/addon_data'),'script.skinshortcuts', 'powermenu.DATA.xml')
+			if not os.path.exists(path):
+				dialog.ok("Có lỗi xảy ra", "Không tìm thấy file powermenu.DATA.xml")
+				return
+			f   = open(path, mode='r')
+			str = f.read()
+			f.close()
+			if not '<action>RebootToAndroid</action>' in str:
+				str = str.replace('<visible>System.CanReboot</visible>','<visible>System.CanReboot</visible></shortcut><shortcut><defaultID /><label>Reboot to Android </label><label2>Custom item</label2><icon>DefaultShortcut.png</icon><thumb /><action>RebootToAndroid</action>')
+				f = open(path, mode='w')
+				f.write(str)
+				f.close()
+				wiz.refresh()
+				dialog.ok("Done!", "Đã xong! Nhấn nút Power xem đã xuất hiện menu Reboot To Android chưa nào.")
+			else:
+				return
+	else:
+		dialog.ok(ADDONTITLE, "Platform bạn đang dùng không hỗ trợ chức năng này.")
+
 def speedMenu():
     global analytics
     analytics.sendEvent("HieuIT Wizard", "Speedtest")
@@ -1371,7 +1407,13 @@ elif mode ==281:
 elif mode ==29:
 		f = open(CHANGELOG,mode='r'); msg = f.read(); f.close()
 		wiz.TextBox(ADDONTITLE, msg)
+		
+elif mode ==30:
+		COREELEC()
 
+elif mode ==3001:
+		reboot2android()
+		
 elif mode==997:
         #dialog.ok(ADDONTITLE, 'Thay đổi Data URL trong tab [COLOR yellow]Custom Link[/COLOR]', 'Nhấn [B]OK[/B] để bắt đầu')
         #wiz.openS('Build Link')
