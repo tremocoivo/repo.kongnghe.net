@@ -4,6 +4,14 @@ img="https://i.imgur.com/2N3N0Jvh.png"
 fanart="https://i.imgur.com/2N3N0Jvh.png"
 description="Bản build dành cho Kodi 18.1 trở lên với giao diện mặc định siêu nhẹ dành cho người thích sự đơn giản."
 
+name="KODI 18.6 Skin Aura-Leia"
+url="https://dl.dropboxusercontent.com/s/sc7sui5moim5sy0/KODI18-Aura.zip"
+img="https://i.imgur.com/2N3N0Jvh.png"
+fanart="https://i.imgur.com/2N3N0Jvh.png"
+description="Bản build dành cho Kodi 18.1 trở lên, yêu cầu cấu hình cao để trải nghiệm mượt mà nhất."
+
+https://www.dropbox.com/s/sc7sui5moim5sy0/KODI18-Aura.zip?dl=0
+
 name="KODI 18.5 Skin Confluence"
 url="https://dl.dropboxusercontent.com/s/j47qkolmlzttdfx/KODI18-Confluence_Skin.zip"
 img="https://i.imgur.com/DxB7hcWh.png"
