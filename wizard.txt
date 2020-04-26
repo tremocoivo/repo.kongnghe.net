@@ -6,8 +6,8 @@ description="Bản build dành cho Kodi 18.1 trở lên với giao diện mặc 
 
 name="KODI 18.6 Skin Aura-Leia"
 url="https://dl.dropboxusercontent.com/s/sc7sui5moim5sy0/KODI18-Aura.zip"
-img="https://i.imgur.com/2N3N0Jvh.png"
-fanart="https://i.imgur.com/2N3N0Jvh.png"
+img="https://i.imgur.com/1enR2Wr.png"
+fanart="https://i.imgur.com/1enR2Wr.png"
 description="Bản build dành cho Kodi 18.1 trở lên, yêu cầu cấu hình cao để trải nghiệm mượt mà nhất."
 
 https://www.dropbox.com/s/sc7sui5moim5sy0/KODI18-Aura.zip?dl=0
