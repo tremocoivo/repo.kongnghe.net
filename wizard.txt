@@ -1,4 +1,4 @@
-﻿name="KODI 18.5 Skin Estuary"
+﻿name="KODI 18.6 Skin Estuary"
 url="https://dl.dropboxusercontent.com/s/dew67duv5m42u8k/KODI18_DefaultSkin.zip"
 img="https://i.imgur.com/2N3N0Jvh.png"
 fanart="https://i.imgur.com/2N3N0Jvh.png"
@@ -12,19 +12,19 @@ description="Bản build dành cho Kodi 18.1 trở lên, yêu cầu cấu hình 
 
 https://www.dropbox.com/s/sc7sui5moim5sy0/KODI18-Aura.zip?dl=0
 
-name="KODI 18.5 Skin Confluence"
+name="KODI 18.6 Skin Confluence"
 url="https://dl.dropboxusercontent.com/s/j47qkolmlzttdfx/KODI18-Confluence_Skin.zip"
 img="https://i.imgur.com/DxB7hcWh.png"
 fanart="https://i.imgur.com/DxB7hcWh.png"
 description="Bản build dành cho Kodi 18.1 trở lên với giao diện Confluence đơn giản lướt nhanh"
 
-name="KODI 18.5 Skin Eminence"
+name="KODI 18.6 Skin Eminence"
 url="https://dl.dropboxusercontent.com/s/tt70bd1n4knj89w/KODI18-Eminence.zip"
 img="https://i.imgur.com/hEBA0C3h.png"
 fanart="https://i.imgur.com/hEBA0C3h.png"
 description="Bản build dành cho Kodi 18.1 trở lên với giao diện Emience tuyệt đẹp nhiều tiện ích hỗ trợ duyệt phim nhanh."
 
-name="KODI 18.5 Skin Embuary"
+name="KODI 18.6 Skin Embuary"
 url="https://dl.dropboxusercontent.com/s/ldl72a8t95gb843/KODI18-Embuary.zip"
 img="https://i.imgur.com/7puIesyh.png"
 fanart="https://i.imgur.com/7puIesyh.png"
