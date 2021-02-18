@@ -1,10 +1,4 @@
-﻿name="Data Addon Gdrive 0.8.66 - Dành cho Kodi 16/SPMC"
-url="https://dl.dropboxusercontent.com/s/82w2elvg2t2kood/data_gdrive.zip"
-img="https://i.imgur.com/HBGflaE.jpg"
-fanart="https://i.imgur.com/HBGflaE.jpg"
-description="Data chứa account Google Drive dành cho Addon Gdrive: hỗ trợ cho SPMC và Kodi version thấp hơn 17"
-
-name="Data Addon Google Drive by HieuIT"
+﻿name="Data Addon Google Drive by HieuIT & MeoMeo"
 url="https://dl.dropboxusercontent.com/s/nofqcb6rd9l7v6i/data_googledrive.zip"
 img="https://i.imgur.com/HBGflaE.jpg"
 fanart="https://i.imgur.com/HBGflaE.jpg"
