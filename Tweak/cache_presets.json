@@ -13,7 +13,7 @@
         {
             "name": "Low-RAM Device Preset",
             "url": "https://raw.githubusercontent.com/a4k-openproject/repository.openwizard/master/presets/low_ram_preset.xml",
-            "description": "This preset can be used on devices with less than 2GB of RAM, like Amazon Fire Sticks."
+            "description": "Dành cho thiết bị có Ram 2GB trở lại. This preset can be used on devices with less than 2GB of RAM, like Amazon Fire Sticks."
         },
         {
             "name": "High-End Device Preset",
