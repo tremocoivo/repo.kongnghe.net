@@ -1,6 +1,6 @@
 name="Data Addon Google Drive by HieuIT & MeoMeo"
 version="1.0"
-url="https://dl.dropboxusercontent.com/s/dew67duv5m42u8k/KODI18_DefaultSkin.zip"
+url="https://dl.dropboxusercontent.com/s/nofqcb6rd9l7v6i/data_googledrive.zip"
 minor="http://"
 gui="http://"
 kodi="19"
