@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.hieuitmc" name="[COLOR red][B]HieuITMC[/B][/COLOR] [COLOR yellow][B]Matrix[/B][/COLOR]" version="3.0.0" provider-name="HieuIT">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0" />
+        <import addon="script.module.requests" />
+        <import addon="script.module.six" />
+        <import addon="script.kodi.android.update" optional="true" version="1.1.7" />
+    </requires>
+    
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>executable</provides>
+    </extension>
+    
+    <extension point="xbmc.service" library="startup.py" start="startup" />
+    
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">HieuITMC Matrix</summary>
+    <description lang="en">
+	Quick setup all Addon Skin Source
+	Include Addon: VietmediaF, Google Drive, Bimozie, Netflix...
+	</description>
+    <platform>all</platform>
+        <assets>
+            <icon>icon.png</icon>
+            <fanart>fanart.png</fanart>
+        </assets>
+    </extension>
+</addon>

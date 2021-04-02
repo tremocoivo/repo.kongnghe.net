@@ -1,0 +1,12 @@
+{
+    "presets": [
+        {
+            "name": "Cache & Network Presets",
+            "section": true,
+            "url": "https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/Tweak/cache_presets.json",
+            "icon": "",
+            "fanart": "",
+            "description": "File AdvancedSetting thiết lập sẵn."
+        }
+    ]
+}
