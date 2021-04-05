@@ -128,7 +128,8 @@ class Router:
                 MaintenanceMenu().logging_menu()
             elif name is None:
                 MaintenanceMenu().get_listing()
-                
+            
+            self._finish(handle)    
 
         elif mode == 'enableaddons':  # Maintenance - > Addon Tools -> Enable/Disable Addons
             menu.enable_addons()
