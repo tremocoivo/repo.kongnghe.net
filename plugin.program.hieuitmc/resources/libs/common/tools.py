@@ -28,6 +28,7 @@ import shutil
 import string
 import sys
 
+
 if sys.version_info[0] > 2:
     # Python 3
     pass
@@ -82,9 +83,13 @@ def write_to_file(file, content, mode='w'):
     f.write(content)
     f.close()
 
-def inputurl():
-	#urltemp = wiz.getS('buildlink')
-    keyboardHandle = xbmc.Keyboard(CONFIG.get_setting('buildlink'),'[COLOR yellow]Nhập link chứa list Build của bạn: (hỗ trợ bit.ly, gg.gg)[/COLOR]\n[I](Xem cách tạo list tại https://hieuit.net/hieuitwizard)[/I]')
+def inputurl(name):
+    if name=='buildlink':
+        keyboardHandle = xbmc.Keyboard(CONFIG.get_setting('buildlink'),'[COLOR yellow]Nhập link chứa list Build của bạn: (hỗ trợ bit.ly, gg.gg)[/COLOR]\n[I](Xem cách tạo list tại https://hieuit.net/hieuitwizard)[/I]')
+
+    elif name=='datalink': 
+        keyboardHandle = xbmc.Keyboard(CONFIG.get_setting('datalink'),'[COLOR yellow]Nhập link chứa list Datafile của bạn: (hỗ trợ bit.ly, gg.gg)[/COLOR]\n[I](Xem cách tạo list tại https://hieuit.net/hieuitwizard)[/I]')
+
     keyboardHandle.doModal()
     if (keyboardHandle.isConfirmed()):
         queryText = keyboardHandle.getText()
@@ -96,8 +101,10 @@ def inputurl():
                 dialog = xbmcgui.Dialog()
                 dialog.ok(CONFIG.ADDONTITLE,'Sai URL\nVui lòng nhập lại')
                 inputurl()
-            else:	
-                CONFIG.set_setting('buildlink',queryText)
+            else:
+                # link = name
+                CONFIG.set_setting(name,queryText)
+                # CONFIG.set_setting('{0}'.format(link),queryText)
 
 def remove_folder(path):
     from resources.libs.common import logging

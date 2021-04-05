@@ -51,7 +51,7 @@ def cleanup_backup():
 
     if len(folder) == 0:
         logging.log_notify(CONFIG.ADDONTITLE,
-                           "[COLOR {0}]Backup Location: Empty[/COLOR]".format(CONFIG.COLOR2))
+                           "[COLOR {0}]Backup Location: Trống[/COLOR]".format(CONFIG.COLOR2))
         return
     for item in sorted(folder, key=os.path.getmtime):
         filelist.append(item)
@@ -60,15 +60,15 @@ def cleanup_backup():
             list.append('/{0}/'.format(base))
         elif os.path.isfile(item):
             list.append(base)
-    list = ['--- Remove All Items ---'] + list
-    selected = dialog.select("{0}: Select the items to remove from the 'My_Builds' folder.".format(CONFIG.ADDONTITLE),
+    list = ['--- [COLOR yellow][B]Xóa toàn bộ[/B][/COLOR] ---'] + list
+    selected = dialog.select("{0}: Chọn file cần xóa.".format(CONFIG.ADDONTITLE),
                              list)
 
     if selected == -1:
         logging.log_notify(CONFIG.ADDONTITLE,
-                           "[COLOR {0}]Clean Up Cancelled![/COLOR]".format(CONFIG.COLOR2))
+                           "[COLOR {0}]Đã hủy xóa file![/COLOR]".format(CONFIG.COLOR2))
     elif selected == 0:
-        if dialog.yesno(CONFIG.ADDONTITLE, "[COLOR {0}]Would you like to clean up all items in your 'My_Builds' folder?[/COLOR]".format(CONFIG.COLOR2) + '\n' + "[COLOR {0}]{1}[/COLOR]".format(CONFIG.COLOR1, CONFIG.MYBUILDS),
+        if dialog.yesno(CONFIG.ADDONTITLE, "[COLOR {0}]Bạn có muốn xóa toàn bộ file trong thư mục 'My_Builds'?[/COLOR]".format(CONFIG.COLOR2) + '\n' + "[COLOR {0}]{1}[/COLOR]".format(CONFIG.COLOR1, CONFIG.MYBUILDS),
                         yeslabel="[B][COLOR springgreen]Clean Up[/COLOR][/B]",
                         nolabel="[B][COLOR red]No Cancel[/COLOR][/B]"):
             clearedfiles, clearedfolders = tools.clean_house(CONFIG.MYBUILDS)
@@ -77,12 +77,12 @@ def cleanup_backup():
                                    CONFIG.COLOR2, CONFIG.COLOR1, clearedfiles, CONFIG.COLOR1, clearedfolders))
         else:
             logging.log_notify(CONFIG.ADDONTITLE,
-                               "[COLOR {0}]Clean Up Cancelled![/COLOR]".format(CONFIG.COLOR2))
+                               "[COLOR {0}]Đã hủy xóa file![/COLOR]".format(CONFIG.COLOR2))
     else:
         path = filelist[selected - 1]
         passed = False
 
-        if dialog.yesno(CONFIG.ADDONTITLE, "[COLOR {0}]Would you like to remove [COLOR {1}]{2}[/COLOR] from the 'My_Builds' folder?[/COLOR]".format(CONFIG.COLOR2, CONFIG.COLOR1, list[selected]) + '\n' + "[COLOR {0}]{1}[/COLOR]".format(CONFIG.COLOR1, path),
+        if dialog.yesno(CONFIG.ADDONTITLE, "[COLOR {0}]Bạn có muốn xóa [COLOR {1}]{2}[/COLOR] trong thư mục 'My_Builds'?[/COLOR]".format(CONFIG.COLOR2, CONFIG.COLOR1, list[selected]) + '\n' + "[COLOR {0}]{1}[/COLOR]".format(CONFIG.COLOR1, path),
                         yeslabel="[B][COLOR springgreen]Clean Up[/COLOR][/B]",
                         nolabel="[B][COLOR red]No Cancel[/COLOR][/B]"):
             if os.path.isfile(path):
@@ -106,7 +106,7 @@ def cleanup_backup():
                                    "[COLOR {0}]Error Removing {1}![/COLOR]".format(CONFIG.COLOR2, list[selected]))
         else:
             logging.log_notify(CONFIG.ADDONTITLE,
-                               "[COLOR {0}]Clean Up Cancelled![/COLOR]".format(CONFIG.COLOR2))
+                               "[COLOR {0}]Đã hủy xóa file![/COLOR]".format(CONFIG.COLOR2))
 
 
 class Backup:

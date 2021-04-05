@@ -53,7 +53,7 @@ class Config:
         self.EXCLUDES = uservar.EXCLUDES
         self.BUILDFILE = self.get_setting('buildlink') if not self.get_setting('buildlink')=='' else uservar.BUILDFILE
         self.DATAFILE = uservar.DATAFILE
-        self.CUSTOMLINK = self.get_setting('customlink')
+        self.CUSTOMLINK = self.get_setting('datalink')
         self.UPDATECHECK = uservar.UPDATECHECK
         self.APKFILE = uservar.APKFILE
         self.YOUTUBETITLE = uservar.YOUTUBETITLE

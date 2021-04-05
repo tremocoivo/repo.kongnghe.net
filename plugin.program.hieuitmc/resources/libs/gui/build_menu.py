@@ -107,13 +107,13 @@ class BuildMenu:
                 # self.view_build(match[0][0])
                 # return
         if not CONFIG.get_setting('buildlink')=='':
-            directory.add_file('Custom Build URL: [COLOR yellow]%s[/COLOR]' %(CONFIG.BUILDFILE),{'mode': 'inputurl'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
+            directory.add_file('Custom Build URL: [COLOR yellow]%s[/COLOR]' %(CONFIG.BUILDFILE),{'mode': ''}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
             directory.add_file('[COLOR yellow][B]Reset:[/B][/COLOR] Xóa link trả về mặc định',{'mode': 'clearurl'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
             directory.add_file('Bạn đang dùng Kodi: {0} {1}'.format(CONFIG.KODIV, tools.platform().title()), icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
             directory.add_file('===== [COLOR red][B]CHỌN BẢN CUSTOM BUILD MUỐN SỬ DỤNG[/B][/COLOR] =====', icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
             self._list_all(match)
         else:
-            directory.add_file('[COLOR yellow][B]Custom Build URL:[/B][/COLOR] Nhập list của bạn',{'mode': 'inputurl'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
+            directory.add_dir('[COLOR yellow][B]Custom Build URL:[/B][/COLOR] Nhập list của bạn',{'mode': 'inputurl', 'name': 'buildlink'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
             directory.add_file('Bạn đang dùng Kodi: {0} {1}'.format(CONFIG.KODIV, tools.platform().title()), icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
         # directory.add_dir('Save Data Menu', {'mode': 'savedata'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME3)
             directory.add_file('===== [COLOR red][B]CHỌN BẢN BUILD MUỐN SỬ DỤNG[/B][/COLOR] =====', icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
@@ -325,10 +325,10 @@ class BuildMenu:
         if not CONFIG.CUSTOMLINK == '':
             response = tools.open_url(CONFIG.CUSTOMLINK)
             link = tools.clean_text(response.text)
-            match = re.compile('name="(.+?)".+?ersion="(.+?)".+?rl="(.+?)".+?ui="(.+?)".+?odi="(.+?)".+?heme="(.+?)".+?con="(.+?)".+?anart="(.+?)".+?dult="(.+?)".+?escription="(.+?)"').findall(link)
+            match = re.compile('name="(.+?)".+?rl="(.+?)".+?con="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
             directory.add_file('===== [COLOR red][B]LIST DATA CÁ NHÂN[/B][/COLOR] =====', icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
-            directory.add_file('Custom Data URL: [COLOR yellow]%s[/COLOR]' %(CONFIG.CUSTOMLINK),{'mode': 'inputurl'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
-            directory.add_file('[COLOR yellow][B]Reset:[/B][/COLOR] Xóa link trả về mặc định',{'mode': 'clearurl'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
+            directory.add_file('Custom Data URL: [COLOR yellow]%s[/COLOR]' %(CONFIG.CUSTOMLINK),{'mode': ''}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
+            directory.add_file('[COLOR yellow][B]Reset:[/B][/COLOR] Xóa link trả về mặc định',{'mode': 'cleardataurl'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
             self._list_all(match)
             # link = OPEN_URL(CUSTOMLINK).replace('\n','').replace('\r','')
             # match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
@@ -343,5 +343,5 @@ class BuildMenu:
             # for name,url,iconimage,fanart,description in match:
                 # addDir(name,url,25,iconimage,fanart,description)
         else:
-            directory.add_file('[COLOR yellow][B]Restore From URL[/B][/COLOR] - Nhập URL list data cần khôi phục',{'mode': 'inputurl'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
+            directory.add_dir('[COLOR yellow][B]Restore From URL[/B][/COLOR] - Nhập URL list data cần khôi phục',{'mode': 'inputurl','name': 'datalink'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
             # addItem('[COLOR yellow][B]Restore From URL[/B][/COLOR] - Nhập URL list data cần khôi phục','url', 271, os.path.join(mediaPath,"dir.png"))

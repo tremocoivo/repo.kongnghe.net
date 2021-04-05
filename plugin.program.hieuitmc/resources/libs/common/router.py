@@ -92,11 +92,19 @@ class Router:
         #INPUT LINK
         elif mode == 'inputurl':  # Input custom URL from users
             from resources.libs.common import tools
-            tools.inputurl()
-            xbmc.executebuiltin('Container.Refresh()')
+            if name == 'buildlink':
+                tools.inputurl('buildlink')
+            elif name == 'datalink':
+                tools.inputurl('datalink')
+
         elif mode == 'clearurl':  # Input custom URL from users
             from resources.libs.common import tools
             CONFIG.clear_setting('buildlink')
+            xbmc.executebuiltin('Container.Refresh()')
+
+        elif mode == 'cleardataurl':  # Input custom URL from users
+            from resources.libs.common import tools
+            CONFIG.clear_setting('datalink')
             xbmc.executebuiltin('Container.Refresh()')
             
         elif mode == 'maint':  # Maintenance + Maintenance -> any "Tools" section
@@ -121,7 +129,6 @@ class Router:
             elif name is None:
                 MaintenanceMenu().get_listing()
                 
-            self._finish(handle)
 
         elif mode == 'enableaddons':  # Maintenance - > Addon Tools -> Enable/Disable Addons
             menu.enable_addons()

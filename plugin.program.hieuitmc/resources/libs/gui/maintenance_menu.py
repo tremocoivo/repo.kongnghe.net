@@ -215,8 +215,8 @@ class MaintenanceMenu:
             else: MainMenu().get_listing()
             # xbmc.executebuiltin('Container.Refresh()')
         else:
-           directory.add_file('Back Up Location: [COLOR {0}]{1}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.MYBUILDS), {'mode': 'settings', 'name': 'Maintenance'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
-           directory.add_file('Clean Up Back Up Folder', {'mode': 'clearbackup'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
+           directory.add_file('[COLOR {0}][B]Backup Location:[/B][/COLOR] {1}'.format(CONFIG.COLOR1, backuppath), {'mode': 'settings', 'name': 'Maintenance'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
+           directory.add_file('[COLOR {0}][B]Clean Backup:[/B][/COLOR] Dọn dẹp thư mục Backup'.format(CONFIG.COLOR1), {'mode': 'clearbackup'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
            directory.add_separator()
            directory.add_dir('[COLOR green][B]BACKUP:[/B][/COLOR] Sao lưu Kodi', {'mode': 'maint', 'name': 'backup'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
            directory.add_dir('[COLOR yellow][B]RESTORE:[/B][/COLOR] Khôi phục Kodi', {'mode': 'maint', 'name': 'restore'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)

@@ -47,7 +47,7 @@
     </category>
 	<category label="Custom Link">
         <setting id="buildlink" type="text"    label="Custom Build URL:"      default=""/>
-		<setting id="customlink" type="text"    label="Custom Data URL:"      default=""/>
+		<setting id="datalink" type="text"    label="Custom Data URL:"      default=""/>
 <!-- 	</category>
     <category label="Maintenance"> -->
 <!--         <setting type="lsep" label="Upload Log: "/> -->
