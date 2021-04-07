@@ -64,7 +64,7 @@ class Config:
         # Themeing Menu Items
         self.ICONBUILDS = uservar.ICONBUILDS if not uservar.ICONBUILDS.endswith('://') else self.ADDON_ICON
         self.ICONMAINT = uservar.ICONMAINT if not uservar.ICONMAINT.endswith('://') else self.ADDON_ICON
-        self.ICONMAKECUSTORM = uservar.ICONMAKECUSTORM if not uservar.ICONMAKECUSTORM.endswith('://') else self.ADDON_ICON
+        self.ICONMAKECUSTOM = uservar.ICONMAKECUSTOM if not uservar.ICONMAKECUSTOM.endswith('://') else self.ADDON_ICON
         self.ICONRESTOREDATA = uservar.ICONRESTOREDATA if not uservar.ICONRESTOREDATA.endswith('://') else self.ADDON_ICON
         self.ICONADDVANCE = uservar.ICONADDVANCE if not uservar.ICONADDVANCE.endswith('://') else self.ADDON_ICON
         self.ICONDIR = uservar.ICONDIR if not uservar.ICONDIR.endswith('://') else self.ADDON_ICON
