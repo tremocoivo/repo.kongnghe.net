@@ -33,7 +33,7 @@ YOUTUBEFILE = 'http://grumpeh.aion.feralhosting.com/wizard/wizardtexts/KGwizardy
 # Text File for addon installer.  Leave as 'http://' to ignore
 ADDONFILE = 'http://'
 # Text File for advanced settings.  Leave as 'http://' to ignore
-ADVANCEDFILE = 'http://'
+ADVANCEDFILE = 'https://raw.githubusercontent.com/tremocoivo/repo.kongnghe.net/master/memcache.txt'
 #########################################################
 
 #########################################################
@@ -46,7 +46,7 @@ ADVANCEDFILE = 'http://'
 #           ICONSETTINGS  = 'https://www.yourhost.com/repo/wizard/settings.png'
 # Leave as http:// for default icon
 ICONBUILDS = os.path.join(ART, 'hieuit.wizard.png')
-ICONMAINT = os.path.join(ART, 'utilities.png')
+ICONMAINT = os.path.join(ART, 'hieuit.wizard.png')
 ICONSPEED = os.path.join(ART, 'speedtest.png')
 ICONAPK = os.path.join(ART, 'apkinstaller.png')
 ICONADDONS = os.path.join(ART, 'addoninstaller.png')
@@ -57,6 +57,15 @@ ICONREAL = os.path.join(ART, 'keepdebrid.png')
 ICONLOGIN = os.path.join(ART, 'keeplogin.png')
 ICONCONTACT = os.path.join(ART, 'information.png')
 ICONSETTINGS = os.path.join(ART, 'settings.png')
+ICONMAKECUSTOM = os.path.join(ART, 'customkodi.png')
+ICONRESTOREDATA = os.path.join(ART, 'restoredata.png')
+ICONADDVANCE = os.path.join(ART, 'tweak.png')
+ICONDIR = os.path.join(ART, 'dir.png')
+ICONDELPACK = os.path.join(ART, 'packages.png')
+ICONBACKUP = os.path.join(ART, 'backup.png')
+ICONRESTORE = os.path.join(ART, 'restore.png')
+ICONRCLEAR = os.path.join(ART, 'clearcache.png')
+ICONULTILITIES = os.path.join(ART, 'utilities.png')
 # Hide the section separators 'Yes' or 'No'
 HIDESPACERS = 'No'
 # Character used in separator
