@@ -338,7 +338,7 @@ class Router:
             from resources.libs import advanced
 
             self.route = advanced.AdvancedMenu()
-            advanced_settings_actions = ['quick_configure', 'view_current', 'remove_current', 'write_advanced', 'set_setting', 'show_section']
+            advanced_settings_actions = ['quick_configure', 'view_current', 'remove_current', 'write_advanced', 'set_setting', 'show_section', 'auto_memcache']
 
             category = self.params['category'] if 'category' in self.params else None
             tag = self.params['tag'] if 'tag' in self.params else None
@@ -362,7 +362,9 @@ class Router:
             elif action == advanced_settings_actions[5]:  # Open a Section
                 self.route.show_section(tags)
                 self._finish(handle)
-                
+            elif action == advanced_settings_actions[6]:  # Auto set memcache
+                self.route.auto_memcache()             
+             
         # ADDON INSTALLER
         elif mode == addon_installer_mode:
             from resources.libs.gui import addon_menu

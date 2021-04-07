@@ -35,7 +35,7 @@ def view_current():
 
 def remove_current():
     dialog = xbmcgui.Dialog()
-    ok = dialog.yesno(CONFIG.ADDONTITLE, "[COLOR {0}]Are you sure you want to remove the current advancedsettings.xml?[/COLOR]".format(CONFIG.COLOR2),
+    ok = dialog.yesno(CONFIG.ADDONTITLE, "[COLOR {0}]Bạn có đồng ý xòa file Advancedsettings.xml?[/COLOR]".format(CONFIG.COLOR2),
                                            yeslabel="[B][COLOR springgreen]Yes[/COLOR][/B]",
                                            nolabel="[B][COLOR red]No[/COLOR][/B]")
 
@@ -88,80 +88,109 @@ class AdvancedMenu:
         self.tags = {}
 
     def show_menu(self, url=None):
-        directory.add_dir('Quick Configure advancedsettings.xml',
-                               {'mode': 'advanced_settings', 'action': 'quick_configure'}, icon=CONFIG.ICONMAINT,
+        infoLabel = ['System.Memory(free)', 'System.Memory(used)', 'System.Memory(total)']
+        data = []
+        x = 0
+        for info in infoLabel:
+            temp = tools.get_info_label(info)
+            y = 0
+            while temp == "Busy" and y < 10:
+                temp = tools.get_info_label(info)
+                y += 1
+                logging.log("{0} sleep {1}".format(info, str(y)))
+                xbmc.sleep(200)
+            data.append(temp)
+            x += 1
+        # ram_used = tools.convert_size(int(float(data[1][:-2])) * 1024 * 1024)
+        ram_free = tools.convert_size(int(float(data[0][:-2])) * 1024 * 1024)
+        # ram_total = tools.convert_size(int(float(data[2][:-2])) * 1024 * 1024)
+        directory.add_file('[COLOR {0}]Ram còn trống:[/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR1, CONFIG.COLOR2, ram_free), icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME2)
+        directory.add_dir('Thay đổi thông số file Advancedsettings.xml',
+                               {'mode': 'advanced_settings', 'action': 'show_section', 'tags': 'cache|network'}, icon=CONFIG.ICONMAINT,
                                themeit=CONFIG.THEME3)
 
         if os.path.exists(CONFIG.ADVANCED):
-            directory.add_file('View Current advancedsettings.xml',
+            directory.add_file('Xem file Advancedsettings.xml',
                                {'mode': 'advanced_settings', 'action': 'view_current'}, icon=CONFIG.ICONMAINT,
                                themeit=CONFIG.THEME3)
-            directory.add_file('Remove Current advancedsettings.xml',
+            directory.add_file('Xóa file Advancedsettings.xml',
                                {'mode': 'advanced_settings', 'action': 'remove_current'}, icon=CONFIG.ICONMAINT,
                                themeit=CONFIG.THEME3)
-        
-        response = tools.open_url(CONFIG.ADVANCEDFILE)
-        url_response = tools.open_url(url)
-        local_file = os.path.join(CONFIG.ADDON_PATH, 'resources', 'text', 'advanced.json')
+        directory.add_separator(icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
+        directory.add_file('[COLOR yellow][B]Auto Set:[/B][/COLOR] Thiết lập Memcache theo dung lượng Ram',
+                               {'mode': 'advanced_settings', 'action': 'auto_memcache'},description='Thiết lập thông số Memcache dựa vào dung lượng Ram trống trên thiết bị.', icon=CONFIG.ICONMAINT,
+                               themeit=CONFIG.THEME3)
+        # response = tools.open_url(CONFIG.ADVANCEDFILE)
+        # url_response = tools.open_url(url)
+        # local_file = os.path.join(CONFIG.ADDON_PATH, 'resources', 'text', 'advanced.json')
 
-        if url_response:
-            TEMPADVANCEDFILE = url_response.text
-        elif response:
-            TEMPADVANCEDFILE = response.text
-        elif os.path.exists(local_file):
-            TEMPADVANCEDFILE = tools.read_from_file(local_file)
-        else:
-            TEMPADVANCEDFILE = None
-            logging.log("[Advanced Settings] No Presets Available")
+        # if url_response:
+            # TEMPADVANCEDFILE = url_response.text
+        # elif response:
+            # TEMPADVANCEDFILE = response.text
+        # elif os.path.exists(local_file):
+            # TEMPADVANCEDFILE = tools.read_from_file(local_file)
+        # else:
+            # TEMPADVANCEDFILE = None
+            # logging.log("[Advanced Settings] No Presets Available")
         
-        if TEMPADVANCEDFILE:
-            import json
+        # if TEMPADVANCEDFILE:
+            # import json
 
-            directory.add_separator(icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
-            
-            try:
-                advanced_json = json.loads(TEMPADVANCEDFILE)
-            except:
-                advanced_json = None
-                logging.log("[Advanced Settings] ERROR: Invalid Format for {0}.".format(TEMPADVANCEDFILE))
+            # directory.add_separator(icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
+            # try:
+                # advanced_json = json.loads(TEMPADVANCEDFILE)
+            # except:
+                # advanced_json = None
+                # logging.log("[Advanced Settings] ERROR: Invalid Format for {0}.".format(TEMPADVANCEDFILE))
                 
-            if advanced_json:
-                presets = advanced_json['presets']
-                if presets and len(presets) > 0:
-                    for preset in presets:
-                        name = preset.get('name', '')
-                        section = preset.get('section', False)
-                        preseturl = preset.get('url', '')
-                        icon = preset.get('icon', CONFIG.ADDON_ICON)
-                        fanart = preset.get('fanart', CONFIG.ADDON_FANART)
-                        description = preset.get('description', '')
+            # if advanced_json:
+                # presets = advanced_json['presets']
+                # if presets and len(presets) > 0:
+                    # for preset in presets:
+                        # name = preset.get('name', '')
+                        # section = preset.get('section', False)
+                        # preseturl = preset.get('url', '')
+                        # icon = preset.get('icon', CONFIG.ADDON_ICON)
+                        # fanart = preset.get('fanart', CONFIG.ADDON_FANART)
+                        # description = preset.get('description', '')
 
-                        if not name:
-                            logging.log('[Advanced Settings] Missing tag \'name\'', level=xbmc.LOGDEBUG)
-                            continue
-                        if not preseturl:
-                            logging.log('[Advanced Settings] Missing tag \'url\'', level=xbmc.LOGDEBUG)
-                            continue
+                        # if not name:
+                            # logging.log('[Advanced Settings] Missing tag \'name\'', level=xbmc.LOGDEBUG)
+                            # continue
+                        # if not preseturl:
+                            # logging.log('[Advanced Settings] Missing tag \'url\'', level=xbmc.LOGDEBUG)
+                            # continue
                         
-                        if section:
-                            directory.add_dir(name, {'mode': 'advanced_settings', 'url': preseturl},
-                                              description=description, icon=icon, fanart=fanart, themeit=CONFIG.THEME3)
-                        else:
-                            directory.add_file(name,
-                                               {'mode': 'advanced_settings', 'action': 'write_advanced', 'name': name,
-                                                'url': preseturl},
-                                               description=description, icon=icon, fanart=fanart, themeit=CONFIG.THEME2)
-        else:
-            logging.log("[Advanced Settings] URL not working: {0}".format(CONFIG.ADVANCEDFILE))
+                        # if section:
+                            # directory.add_dir(name, {'mode': 'advanced_settings', 'url': preseturl},
+                                              # description=description, icon=icon, fanart=fanart, themeit=CONFIG.THEME3)
 
+                        # else:
+                            # directory.add_file(name,
+                                               # {'mode': 'advanced_settings', 'action': 'write_advanced', 'name': name,
+                                                # 'url': preseturl},
+                                               # description=description, icon=icon, fanart=fanart, themeit=CONFIG.THEME2)
+        # else:
+            # logging.log("[Advanced Settings] URL not working: {0}".format(CONFIG.ADVANCEDFILE))
+        
+    def auto_memcache(self):            
+        dialog = xbmcgui.Dialog()
+        choice = self.dialog.yesno(CONFIG.ADDONTITLE,
+                                           "[COLOR {0}]Bạn có muốn thiết lập file [COLOR {1}]AdvancedSetting.xml[/COLOR] ngay không?[/COLOR]".format(
+                                               CONFIG.COLOR2, CONFIG.COLOR1),
+                                           yeslabel="[B][COLOR springgreen]Yes! Config[/COLOR][/B]",
+                                           nolabel="[B][COLOR red]Cancel[/COLOR][/B]")       
+        if choice == 1:                                        
+            name = 'Auto Memcache Setting'
+            self.write_advanced(name, CONFIG.ADVANCEDFILE)
+        else: return
+        
     def quick_configure(self):
         directory.add_file('Changes will not be reflected until Kodi is restarted.', icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
         directory.add_file('Click here to restart Kodi.', {'mode': 'forceclose'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
         directory.add_file('More categories coming soon :)', icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
         directory.add_separator(middle='CATEGORIES')
-        # directory.add_dir('Troubleshooting', {'mode': 'advanced_settings', 'action': 'show_section', 'tags': 'loglevel|jsonrpc'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
-        # directory.add_dir('Playback', {'mode': 'advanced_settings', 'action': 'show_section', 'tags': 'skiploopfilter|video|audio|edl|pvr|epg|forcedswaptime'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
-        # directory.add_dir('Video Library', {'mode': 'advanced_settings', 'action': 'show_section', 'tags': 'videoextensions|discstubextensions|languagecodes|moviestacking|folderstacking|cleandatetime|cleanstrings|tvshowmatching|tvmultipartmatching'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
         directory.add_dir('Network and Cache', {'mode': 'advanced_settings', 'action': 'show_section', 'tags': 'cache|network'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
 
     def show_section(self, tags):
@@ -237,7 +266,7 @@ class AdvancedMenu:
             recommended = int(float(free_memory[:-2]) / 3) * 1024 * 1024
             recommended_converted = tools.convert_size(int(float(free_memory[:-2]) / 3) * 1024 * 1024)
         
-            value = tools.get_keyboard(default='{0}'.format(recommended), heading='Memory Size in Bytes\n(Recommended: {0} = {1})'.format(recommended_converted, recommended))
+            value = tools.get_keyboard(default='{0}'.format(recommended), heading='Dung lượng Memcache tính theo Bytes\n(Đề xuất: {0} = {1})'.format(recommended_converted, recommended))
         elif tag == 'readfactor':
             value = tools.get_keyboard(default='{0}'.format(current), heading='Fill Rate of Cache\n(High numbers will cause heavy bandwidth use!)')
             
@@ -260,20 +289,25 @@ class AdvancedMenu:
         if response:
             if os.path.exists(CONFIG.ADVANCED):
                 choice = self.dialog.yesno(CONFIG.ADDONTITLE,
-                                           "[COLOR {0}]Would you like to overwrite your current Advanced Settings with [COLOR {1}]{2}[/COLOR]?[/COLOR]".format(
-                                               CONFIG.COLOR2, CONFIG.COLOR1, name),
+                                           "[COLOR {0}]Bạn có muốn ghi đè file [COLOR {1}]AdvancedSettings.xml[/COLOR] hiện có?[/COLOR]".format(
+                                               CONFIG.COLOR2, CONFIG.COLOR1),
                                            yeslabel="[B][COLOR springgreen]Overwrite[/COLOR][/B]",
                                            nolabel="[B][COLOR red]Cancel[/COLOR][/B]")
             else:
                 choice = self.dialog.yesno(CONFIG.ADDONTITLE,
-                                           "[COLOR {0}]Would you like to download and install [COLOR {1}]{2}[/COLOR]?[/COLOR]".format(
-                                               CONFIG.COLOR2, CONFIG.COLOR1, name),
+                                           "[COLOR {0}]Bạn đã đồng ý ghi đè file [COLOR {1}]AdvancedSettings.xml[/COLOR] \nNhấn [COLOR springgreen]Install[/COLOR] để xác nhận." .format(
+                                               CONFIG.COLOR2, CONFIG.COLOR1),
                                            yeslabel="[B][COLOR springgreen]Install[/COLOR][/B]",
                                            nolabel="[B][COLOR red]Cancel[/COLOR][/B]")
 
             if choice == 1:
                 tools.write_to_file(CONFIG.ADVANCED, response.text)
-                tools.kill_kodi(msg='[COLOR {0}]The new advancedsettings.xml preset has been successfully written, but changes won\'t take effect until you close Kodi.[/COLOR]'.format(
+                self.dialog.ok(CONFIG.ADDONTITLE, 'Memcache sẽ được lấy tự động dựa vào dung lượng ram trống hiện có.')
+                category = 'cache'
+                tag = 'memorysize'
+                value = None
+                self.set_setting(category, tag, value) 
+                tools.kill_kodi(msg='[COLOR {0}]File AdvancedSettings.xml đã được thiết lập, bạn cần Restart Kodi để có hiệu lực.[/COLOR]'.format(
                                    CONFIG.COLOR2))
             else:
                 logging.log("[Advanced Settings] install canceled")

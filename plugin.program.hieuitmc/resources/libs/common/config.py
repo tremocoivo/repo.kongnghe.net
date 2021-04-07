@@ -64,7 +64,15 @@ class Config:
         # Themeing Menu Items
         self.ICONBUILDS = uservar.ICONBUILDS if not uservar.ICONBUILDS.endswith('://') else self.ADDON_ICON
         self.ICONMAINT = uservar.ICONMAINT if not uservar.ICONMAINT.endswith('://') else self.ADDON_ICON
+        self.ICONMAKECUSTORM = uservar.ICONMAKECUSTORM if not uservar.ICONMAKECUSTORM.endswith('://') else self.ADDON_ICON
+        self.ICONRESTOREDATA = uservar.ICONRESTOREDATA if not uservar.ICONRESTOREDATA.endswith('://') else self.ADDON_ICON
+        self.ICONADDVANCE = uservar.ICONADDVANCE if not uservar.ICONADDVANCE.endswith('://') else self.ADDON_ICON
+        self.ICONDIR = uservar.ICONDIR if not uservar.ICONDIR.endswith('://') else self.ADDON_ICON
+        self.ICONDELPACK = uservar.ICONDELPACK if not uservar.ICONDELPACK.endswith('://') else self.ADDON_ICON
+        self.ICONBACKUP = uservar.ICONBACKUP if not uservar.ICONBACKUP.endswith('://') else self.ADDON_ICON
+        self.ICONRESTORE = uservar.ICONRESTORE if not uservar.ICONRESTORE.endswith('://') else self.ADDON_ICON
         self.ICONSPEED = uservar.ICONSPEED if not uservar.ICONSPEED.endswith('://') else self.ADDON_ICON
+        self.ICONRCLEAR = uservar.ICONRCLEAR if not uservar.ICONRCLEAR.endswith('://') else self.ADDON_ICON
         self.ICONAPK = uservar.ICONAPK if not uservar.ICONAPK.endswith('://') else self.ADDON_ICON
         self.ICONADDONS = uservar.ICONADDONS if not uservar.ICONADDONS.endswith('://') else self.ADDON_ICON
         self.ICONYOUTUBE = uservar.ICONYOUTUBE if not uservar.ICONYOUTUBE.endswith('://') else self.ADDON_ICON
@@ -72,6 +80,7 @@ class Config:
         self.ICONTRAKT = uservar.ICONTRAKT if not uservar.ICONTRAKT.endswith('://') else self.ADDON_ICON
         self.ICONDEBRID = uservar.ICONREAL if not uservar.ICONREAL.endswith('://') else self.ADDON_ICON
         self.ICONLOGIN = uservar.ICONLOGIN if not uservar.ICONLOGIN.endswith('://') else self.ADDON_ICON
+        self.ICONULTILITIES = uservar.ICONULTILITIES if not uservar.ICONULTILITIES.endswith('://') else self.ADDON_ICON
         self.ICONCONTACT = uservar.ICONCONTACT if not uservar.ICONCONTACT.endswith('://') else self.ADDON_ICON
         self.ICONSETTINGS = uservar.ICONSETTINGS if not uservar.ICONSETTINGS.endswith('://') else self.ADDON_ICON
         self.HIDESPACERS = uservar.HIDESPACERS

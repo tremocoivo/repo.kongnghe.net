@@ -33,11 +33,11 @@ class MaintenanceMenu:
 
     def get_listing(self):
         directory.add_file('[COLOR yellow][B]Speedtest[/B][/COLOR] - Kiểm Tra Tốc Độ Mạng', {'mode': 'runspeedtest'}, icon=CONFIG.ICONSPEED, themeit=CONFIG.THEME3)
-        directory.add_file('Thiết lập xem Youtube 4K/1080p', {'mode': 'runspeedtest'}, icon=CONFIG.ICONSPEED, themeit=CONFIG.THEME3)
-        directory.add_dir('[B]Cleaning Tools[/B]', {'mode': 'maint', 'name': 'clean'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
-        directory.add_file('[COLOR red][B]Refresh KODI[/B][/COLOR] - Khôi phục Kodi về mặc định (giữ nguyên Repository)', {'mode': 'freshstart'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
+        directory.add_file('Thiết lập xem Youtube 4K/1080p', {'mode': 'runspeedtest'}, icon=CONFIG.ICONYOUTUBE, themeit=CONFIG.THEME3)
+        directory.add_dir('[COLOR red][B]Cleaning Tools[/B][/COLOR] - Dọn dẹp hệ thống', {'mode': 'maint', 'name': 'clean'}, icon=CONFIG.ICONRCLEAR, themeit=CONFIG.THEME1)
         # directory.add_dir('[B]Addon Tools[/B]', {'mode': 'maint', 'name': 'addon'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
-        directory.add_dir('[B]Logging Tools[/B]', {'mode': 'maint', 'name': 'logging'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
+        directory.add_dir('[COLOR yellow][B]Logging Tools[/B][/COLOR] - Xem báo cáo lỗi KODI', {'mode': 'maint', 'name': 'logging'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
+        directory.add_file('[COLOR red][B]Refresh KODI[/B][/COLOR] - Khôi phục Kodi về mặc định (giữ nguyên Repository)', {'mode': 'freshstart'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
         # directory.add_dir('[B]Misc Maintenance[/B]', {'mode': 'maint', 'name': 'misc'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
         # directory.add_dir('[B]Back up/Restore[/B]', {'mode': 'maint', 'name': 'backup'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
         # directory.add_dir('[B]System Tweaks/Fixes[/B]', {'mode': 'maint', 'name': 'tweaks'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
@@ -215,11 +215,11 @@ class MaintenanceMenu:
             else: MainMenu().get_listing()
             # xbmc.executebuiltin('Container.Refresh()')
         else:
-           directory.add_file('[COLOR {0}][B]Backup Location:[/B][/COLOR] {1}'.format(CONFIG.COLOR1, backuppath), {'mode': 'settings', 'name': 'Maintenance'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
-           directory.add_file('[COLOR {0}][B]Clean Backup:[/B][/COLOR] Dọn dẹp thư mục Backup'.format(CONFIG.COLOR1), {'mode': 'clearbackup'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
+           directory.add_file('[COLOR {0}][B]Backup Location:[/B][/COLOR] {1}'.format(CONFIG.COLOR1, backuppath), {'mode': 'settings', 'name': 'Maintenance'}, icon=CONFIG.ICONDIR, themeit=CONFIG.THEME3)
+           directory.add_file('[COLOR {0}][B]Clean Backup:[/B][/COLOR] Dọn dẹp thư mục Backup'.format(CONFIG.COLOR1), {'mode': 'clearbackup'}, icon=CONFIG.ICONDELPACK, themeit=CONFIG.THEME3)
            directory.add_separator()
-           directory.add_dir('[COLOR green][B]BACKUP:[/B][/COLOR] Sao lưu Kodi', {'mode': 'maint', 'name': 'backup'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
-           directory.add_dir('[COLOR yellow][B]RESTORE:[/B][/COLOR] Khôi phục Kodi', {'mode': 'maint', 'name': 'restore'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
+           directory.add_dir('[COLOR green][B]BACKUP:[/B][/COLOR] Sao lưu Kodi', {'mode': 'maint', 'name': 'backup'}, icon=CONFIG.ICONBACKUP, themeit=CONFIG.THEME1)
+           directory.add_dir('[COLOR yellow][B]RESTORE:[/B][/COLOR] Khôi phục Kodi', {'mode': 'maint', 'name': 'restore'}, icon=CONFIG.ICONRESTORE, themeit=CONFIG.THEME1)
 
     def backup_menu(self):
         directory.add_file('[Back Up]: Build', {'mode': 'backup', 'action': 'build'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)

@@ -76,12 +76,12 @@ class MainMenu:
         # if tools.open_url(CONFIG.YOUTUBEFILE, check=True) and not CONFIG.YOUTUBETITLE == '':
             # directory.add_dir(CONFIG.YOUTUBETITLE, {'mode': 'youtube'}, icon=CONFIG.ICONYOUTUBE, themeit=CONFIG.THEME1)
         # directory.add_dir('[B][COLOR green]BACKUP[/COLOR]/[COLOR yellow]RESTORE[/COLOR]:[/B] Sao Lưu/Khôi Phục Bản Kodi Cá Nhân', {'mode': 'savedata'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
-        directory.add_dir('[B][COLOR green]BACKUP[/COLOR]/[COLOR yellow]RESTORE[/COLOR]:[/B] Sao Lưu/Khôi Phục Bản Kodi Cá Nhân', {'mode': 'maint', 'name': 'backuprestore'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
-        directory.add_dir('[COLOR cyan][B]Restore Addon Data:[/B][/COLOR] Cho Máy Không Dùng Source [COLOR red][B]HieuITMC[/B][/COLOR] [COLOR yellow][B]Matrix[/B][/COLOR] ', {'mode': 'datafile'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME1)
+        directory.add_dir('[B][COLOR green]BACKUP[/COLOR]/[COLOR yellow]RESTORE[/COLOR]:[/B] Sao Lưu/Khôi Phục Bản Kodi Cá Nhân', {'mode': 'maint', 'name': 'backuprestore'}, icon=CONFIG.ICONMAKECUSTORM, themeit=CONFIG.THEME1)
+        directory.add_dir('[COLOR cyan][B]Restore Addon Data:[/B][/COLOR] Cho Máy Không Dùng Source [COLOR red][B]HieuITMC[/B][/COLOR] [COLOR yellow][B]Matrix[/B][/COLOR] ', {'mode': 'datafile'}, icon=CONFIG.ICONRESTOREDATA, themeit=CONFIG.THEME1)
         directory.add_separator()
-        directory.add_dir('[COLOR yellow][B]TWEAK[/B][/COLOR] - Thiết Lập File [COLOR red][B]AdvancedSetting.xml[/B][/COLOR]', {'mode': 'advanced_settings'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME3)
+        directory.add_dir('[COLOR yellow][B]TWEAK[/B][/COLOR] - Thiết Lập File [COLOR red][B]AdvancedSetting.xml[/B][/COLOR]', {'mode': 'advanced_settings'}, icon=CONFIG.ICONADDVANCE, themeit=CONFIG.THEME3)
         # directory.add_dir('[B]System Tweaks/Fixes[/B]', {'mode': 'maint', 'name': 'tweaks'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
-        directory.add_dir('[COLOR yellow][B]Utilities Tool[/B][/COLOR] - Công Cụ Tiện Ích', {'mode': 'maint'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
+        directory.add_dir('[COLOR yellow][B]Utilities Tool[/B][/COLOR] - Công Cụ Tiện Ích', {'mode': 'maint'}, icon=CONFIG.ICONULTILITIES, themeit=CONFIG.THEME1)
         # if CONFIG.HIDECONTACT == 'No':
             # directory.add_file('Contact', {'mode': 'contact'}, icon=CONFIG.ICONCONTACT, themeit=CONFIG.THEME1)
         # directory.add_file('Upload Log File', {'mode': 'uploadlog'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
