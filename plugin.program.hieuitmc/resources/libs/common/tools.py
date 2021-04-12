@@ -100,7 +100,7 @@ def inputurl(name):
             if not working == True:
                 dialog = xbmcgui.Dialog()
                 dialog.ok(CONFIG.ADDONTITLE,'Sai URL\nVui lòng nhập lại')
-                inputurl()
+                inputurl(name)
             else:
                 # link = name
                 CONFIG.set_setting(name,queryText)

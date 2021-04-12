@@ -87,6 +87,10 @@ class Router:
             elif action == 'theme':  # Builds -> "Your Build" -> "Your Theme"
                 Wizard().theme(name, url)
             elif action == 'datafile': # Restore data file Addon
+                CONFIG.set_setting('choicelink', 'true')
+                Wizard().datafile(name)
+            elif action == 'customfile': # Restore custom data file Addon
+                CONFIG.set_setting('choicelink', 'false')
                 Wizard().datafile(name)
         
         #INPUT LINK
@@ -94,8 +98,10 @@ class Router:
             from resources.libs.common import tools
             if name == 'buildlink':
                 tools.inputurl('buildlink')
+                xbmc.executebuiltin('Container.Refresh()')
             elif name == 'datalink':
                 tools.inputurl('datalink')
+                xbmc.executebuiltin('Container.Refresh()')
 
         elif mode == 'clearurl':  # Input custom URL from users
             from resources.libs.common import tools

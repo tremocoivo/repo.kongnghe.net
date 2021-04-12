@@ -82,6 +82,8 @@ class MainMenu:
         directory.add_dir('[COLOR yellow][B]TWEAK[/B][/COLOR] - Thiết Lập File [COLOR red][B]AdvancedSetting.xml[/B][/COLOR]', {'mode': 'advanced_settings'}, icon=CONFIG.ICONADDVANCE, themeit=CONFIG.THEME3)
         # directory.add_dir('[B]System Tweaks/Fixes[/B]', {'mode': 'maint', 'name': 'tweaks'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)
         directory.add_dir('[COLOR yellow][B]Utilities Tool[/B][/COLOR] - Công Cụ Tiện Ích', {'mode': 'maint'}, icon=CONFIG.ICONULTILITIES, themeit=CONFIG.THEME1)
+        directory.add_dir('[COLOR yellow][B]CoreELEC - LibreELEC[/B][/COLOR] [COLOR cyan][B]Tools[/B][/COLOR]', {'mode': 'maint'}, icon=CONFIG.ICONCE, themeit=CONFIG.THEME1)
+        
         # if CONFIG.HIDECONTACT == 'No':
             # directory.add_file('Contact', {'mode': 'contact'}, icon=CONFIG.ICONCONTACT, themeit=CONFIG.THEME1)
         # directory.add_file('Upload Log File', {'mode': 'uploadlog'}, icon=CONFIG.ICONMAINT, themeit=CONFIG.THEME1)

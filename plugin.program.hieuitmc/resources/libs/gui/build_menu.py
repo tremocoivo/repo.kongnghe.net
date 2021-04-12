@@ -48,6 +48,14 @@ class BuildMenu:
                 # directory.add_dir('[{0}] {1} (v{2})'.format(float(kodi), name, version), {'mode': 'viewbuild', 'name': name}, description=description, fanart=fanart, icon=icon, menu=menu, themeit=CONFIG.THEME2)
                 directory.add_file('{0}'.format(name), {'mode': 'install', 'action': 'datafile', 'name': name}, description=description, fanart=fanart, icon=icon, themeit=CONFIG.THEME1)
 
+    def _list_data(self, match):
+        for name, url, icon, fanart, description in match:
+                directory.add_file('{0}'.format(name), {'mode': 'install', 'action': 'customfile', 'name': name}, description=description, fanart=fanart, icon=icon, themeit=CONFIG.THEME1)
+
+    def _list_build(self, match):
+        for name, url, icon, fanart, description in match:
+                directory.add_file('{0}'.format(name), {'mode': 'install', 'action': 'build', 'name': name}, description=description, fanart=fanart, icon=icon, themeit=CONFIG.THEME1)
+
     def theme_count(self, name, count=True):
         from resources.libs import check
         from resources.libs.common import tools
@@ -111,7 +119,7 @@ class BuildMenu:
             directory.add_file('[COLOR yellow][B]Reset:[/B][/COLOR] Xóa link trả về mặc định',{'mode': 'clearurl'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
             directory.add_file('Bạn đang dùng Kodi: {0} {1}'.format(CONFIG.KODIV, tools.platform().title()), icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
             directory.add_file('===== [COLOR red][B]CHỌN BẢN CUSTOM BUILD MUỐN SỬ DỤNG[/B][/COLOR] =====', icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
-            self._list_all(match)
+            self._list_build(match)
         else:
             directory.add_dir('[COLOR yellow][B]Custom Build URL:[/B][/COLOR] Nhập list của bạn',{'mode': 'inputurl', 'name': 'buildlink'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
             directory.add_file('Bạn đang dùng Kodi: {0} {1}'.format(CONFIG.KODIV, tools.platform().title()), icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
@@ -318,9 +326,6 @@ class BuildMenu:
         link = tools.clean_text(response.text)
         match = re.compile('name="(.+?)".+?rl="(.+?)".+?con="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
         self._list_all(match)
-        # for name,url,iconimage,fanart,description in match:
-            # addDir(name,url,25,iconimage,fanart,description)
-        # addItem('[COLOR yellow][B]Restore From File[/B][/COLOR] - Chọn file data cần khôi phục','url', 101, os.path.join(mediaPath,"dir.png"))
         directory.add_file('[COLOR yellow][B]Restore From File[/B][/COLOR] - Chọn file data cần khôi phục',{'mode': 'inputurl'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
         if not CONFIG.CUSTOMLINK == '':
             response = tools.open_url(CONFIG.CUSTOMLINK)
@@ -329,19 +334,7 @@ class BuildMenu:
             directory.add_file('===== [COLOR red][B]LIST DATA CÁ NHÂN[/B][/COLOR] =====', icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
             directory.add_file('Custom Data URL: [COLOR yellow]%s[/COLOR]' %(CONFIG.CUSTOMLINK),{'mode': ''}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
             directory.add_file('[COLOR yellow][B]Reset:[/B][/COLOR] Xóa link trả về mặc định',{'mode': 'cleardataurl'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
-            self._list_all(match)
-            # link = OPEN_URL(CUSTOMLINK).replace('\n','').replace('\r','')
-            # match = re.compile('name="(.+?)".+?rl="(.+?)".+?mg="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
-            # self._list_all(match)
-            # directory.add_file('===== [COLOR red][B]LIST DATA CÁ NHÂN[/B][/COLOR] =====', icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
-            # directory.add_file('===== [COLOR red][B]CHỌN BẢN CUSTOM BUILD MUỐN SỬ DỤNG[/B][/COLOR] =====', icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
-            # directory.add_file('===== [COLOR red][B]CHỌN BẢN CUSTOM BUILD MUỐN SỬ DỤNG[/B][/COLOR] =====', icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
-            # addItem('===== [COLOR red][B]LIST DATA CÁ NHÂN[/B][/COLOR] =====', 'url', 9999, '')
-            # addItem('Custom Data URL: [COLOR yellow]%s[/COLOR]' %(CUSTOMLINK),'url',997,'')
-            # addItem('[COLOR yellow][B]Reset:[/B][/COLOR] Xóa link trả về mặc định','url',281,'')		 
-         
-            # for name,url,iconimage,fanart,description in match:
-                # addDir(name,url,25,iconimage,fanart,description)
+            self._list_data(match)
+
         else:
             directory.add_dir('[COLOR yellow][B]Restore From URL[/B][/COLOR] - Nhập URL list data cần khôi phục',{'mode': 'inputurl','name': 'datalink'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
-            # addItem('[COLOR yellow][B]Restore From URL[/B][/COLOR] - Nhập URL list data cần khôi phục','url', 271, os.path.join(mediaPath,"dir.png"))

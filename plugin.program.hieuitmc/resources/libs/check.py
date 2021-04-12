@@ -96,9 +96,10 @@ def check_build(name, ret):
 
 def check_data(name, ret):
     from resources.libs.common import tools
-
-    response = tools.open_url(CONFIG.DATAFILE)
-
+    if CONFIG.get_setting('choicelink') == 'true':
+        response = tools.open_url(CONFIG.DATAFILE)
+    elif CONFIG.get_setting('choicelink') == 'false':
+        response = tools.open_url(CONFIG.CUSTOMLINK)
     if not response:
         return False
 

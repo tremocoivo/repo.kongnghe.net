@@ -51,6 +51,91 @@ class Wizard:
                            yeslabel='[B][COLOR springgreen]Yes[/COLOR][/B]'):
             install.wipe()
 
+    def install(self, name):
+                CONFIG.clear_setting('build')
+
+                if CONFIG.get_setting('choicelink') == 'true':
+                    buildzip = check.check_data(name,'url')
+                elif CONFIG.get_setting('choicelink') == 'false':
+                    buildzip = check.check_data(name,'url')
+                zipname = name.replace('\\', '').replace('/', '').replace(':', '').replace('*', '').replace('?', '').replace('"', '').replace('<', '').replace('>', '').replace('|', '')
+
+                self.dialogProgress.create(CONFIG.ADDONTITLE, '[COLOR {0}][B]Downloading:[/B][/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, name) + '\n' + 'Please Wait')
+
+                lib = os.path.join(CONFIG.MYBUILDS, '{0}.zip'.format(zipname))
+                
+                try:
+                    os.remove(lib)
+                except:
+                    pass
+
+                Downloader().download(buildzip, lib)
+                xbmc.sleep(500)
+                
+                if os.path.getsize(lib) == 0:
+                    try:
+                        os.remove(lib)
+                    except:
+                        pass
+                        
+                    return
+                    
+                # install.wipe()
+                    
+                # skin.look_and_feel_data('save')
+                
+                title = '[COLOR {0}][B]Installing:[/B][/COLOR] [COLOR {1}]{2} v{3}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, name, check.check_build(name, 'version'))
+                self.dialogProgress.update(0, title + '\n' + 'Please Wait')
+                percent, errors, error = extract.all(lib, CONFIG.HOME, title=title)
+                
+                # skin.skin_to_default('Build Install')
+
+                if int(float(percent)) > 0:
+                    # db.fix_metas()
+                    # CONFIG.set_setting('buildname', name)
+                    # CONFIG.set_setting('buildversion', check.check_build(name, 'version'))
+                    # CONFIG.set_setting('buildtheme', '')
+                    # CONFIG.set_setting('latestversion', check.check_build(name, 'version'))
+                    # CONFIG.set_setting('nextbuildcheck', tools.get_date(days=CONFIG.UPDATECHECK, formatted=True))
+                    # CONFIG.set_setting('installed', 'true')
+                    # CONFIG.set_setting('extract', percent)
+                    # CONFIG.set_setting('errors', errors)
+                    logging.log('INSTALLED {0}: [ERRORS:{1}]'.format(percent, errors))
+
+                    try:
+                        os.remove(lib)
+                    except:
+                        pass
+
+                    if int(float(errors)) > 0:
+                        yes_pressed = self.dialog.yesno(CONFIG.ADDONTITLE,
+                                           '[COLOR {0}][COLOR {1}]{2} v{3}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1,
+                                                                                           name, check.check_build(name, 'version')),
+                                           'Completed: [COLOR {0}]{1}{2}[/COLOR] [Errors:[COLOR {3}]{4}[/COLOR]]'.format(
+                                               CONFIG.COLOR1, percent, '%', CONFIG.COLOR1, errors),
+                                           'Would you like to view the errors?[/COLOR]',
+                                           nolabel='[B][COLOR red]No Thanks[/COLOR][/B]',
+                                           yeslabel='[B][COLOR springgreen]View Errors[/COLOR][/B]')
+                        if yes_pressed:
+                            from resources.libs.gui import window
+                            window.show_text_box("Viewing Build Install Errors", error)
+                    self.dialogProgress.close()
+
+                    # from resources.libs.gui.build_menu import BuildMenu
+                    # themecount = BuildMenu().theme_count(name)
+
+                    # if themecount > 0:
+                        # self.theme(name, 'theme')
+
+                    # db.addon_database(CONFIG.ADDON_ID, 1)
+                    # #db.force_check_updates(over=True)
+
+                    self.dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]Khôi phục xong, nhấn OK và thưởng thức ^^[/COLOR]".format(CONFIG.COLOR2))
+                    # tools.kill_kodi(over=True)
+                else:
+                    from resources.libs.gui import window
+                    window.show_text_box("Viewing Build Install Errors", error)
+
     def build(self, name, over=False):
         # if action == 'normal':
             # if CONFIG.KEEPTRAKT == 'true':
@@ -166,106 +251,27 @@ class Wizard:
                                '[COLOR {0}]Build Install: Cancelled![/COLOR]'.format(CONFIG.COLOR2))
 
     def datafile(self, name, over=False):
-        # temp_kodiv = int(CONFIG.KODIV)
-        # buildv = int(float(check.check_build(name,'kodi')))
+        from resources.libs.common import tools
 
-        # if not temp_kodiv == buildv:
-        warning = True
-        # else:
-            # warning = False
+        datafile = check.check_data(name,'url')
 
-        if warning:
-            yes_pressed = self.dialog.yesno("{0} - [COLOR red]WARNING!![/COLOR]".format(CONFIG.ADDONTITLE), '[COLOR {0}]Bạn yên tâm! Khi Restore Data thì account cũ đang dùng sẽ không bị ghi đè.'.format(CONFIG.COLOR2) + '\n' +  'Nhấn YES để bắt đầu Restore: [COLOR {0}]{1}[/COLOR][/COLOR]'.format(CONFIG.COLOR1, name), nolabel='[B][COLOR red]No, Cancel[/COLOR][/B]', yeslabel='[B][COLOR springgreen]Yes, Install[/COLOR][/B]')
-        else:
-            if over:
-                yes_pressed = 1
+        if 'googledrive' in datafile:
+
+            yes_pressed = self.dialog.yesno("{0} - [COLOR red]WARNING!![/COLOR]".format(CONFIG.ADDONTITLE), '[COLOR {0}]Bạn yên tâm! Khi Restore Data thì account cũ đang dùng sẽ không bị ghi đè. '.format(CONFIG.COLOR2) + 'Nhấn YES để bắt đầu Restore: [COLOR {0}]{1}[/COLOR][/COLOR]'.format(CONFIG.COLOR1, name), nolabel='[B][COLOR red]No, Cancel[/COLOR][/B]', yeslabel='[B][COLOR springgreen]Yes, Install[/COLOR][/B]')
+
+            if yes_pressed:
+                self.install(name)
+                xbmc.executebuiltin('RunAddon(plugin.googledrive)')	
             else:
-                yes_pressed = self.dialog.yesno(CONFIG.ADDONTITLE, '[COLOR {0}]Nhấn YES để bắt đầu Restore: '.format(CONFIG.COLOR2) + '[COLOR {0}]{1}[/COLOR][/COLOR]'.format(CONFIG.COLOR1, name), nolabel='[B][COLOR red]No, Cancel[/COLOR][/B]', yeslabel='[B][COLOR springgreen]Yes, Install[/COLOR][/B]')
-        if yes_pressed:
-            CONFIG.clear_setting('build')
-            buildzip = check.check_data(name,'url')
-            # buildzip = CONFIG.DATAFILE
-            zipname = name.replace('\\', '').replace('/', '').replace(':', '').replace('*', '').replace('?', '').replace('"', '').replace('<', '').replace('>', '').replace('|', '')
-
-            # self.dialogProgress.create(CONFIG.ADDONTITLE, '[COLOR {0}][B]Downloading:[/B][/COLOR] [COLOR {1}]{2} v{3}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, name, check.check_build(name, 'version')) + '\n' + 'Please Wait')
-            self.dialogProgress.create(CONFIG.ADDONTITLE, '[COLOR {0}][B]Downloading:[/B][/COLOR] [COLOR {1}]{2}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, name) + '\n' + 'Please Wait')
-
-            lib = os.path.join(CONFIG.MYBUILDS, '{0}.zip'.format(zipname))
-            
-            try:
-                os.remove(lib)
-            except:
-                pass
-
-            Downloader().download(buildzip, lib)
-            xbmc.sleep(500)
-            
-            if os.path.getsize(lib) == 0:
-                try:
-                    os.remove(lib)
-                except:
-                    pass
-                    
-                return
-                
-            # install.wipe()
-                
-            # skin.look_and_feel_data('save')
-            
-            title = '[COLOR {0}][B]Installing:[/B][/COLOR] [COLOR {1}]{2} v{3}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1, name, check.check_build(name, 'version'))
-            self.dialogProgress.update(0, title + '\n' + 'Please Wait')
-            percent, errors, error = extract.all(lib, CONFIG.HOME, title=title)
-            
-            # skin.skin_to_default('Build Install')
-
-            if int(float(percent)) > 0:
-                # db.fix_metas()
-                # CONFIG.set_setting('buildname', name)
-                # CONFIG.set_setting('buildversion', check.check_build(name, 'version'))
-                # CONFIG.set_setting('buildtheme', '')
-                # CONFIG.set_setting('latestversion', check.check_build(name, 'version'))
-                # CONFIG.set_setting('nextbuildcheck', tools.get_date(days=CONFIG.UPDATECHECK, formatted=True))
-                # CONFIG.set_setting('installed', 'true')
-                # CONFIG.set_setting('extract', percent)
-                # CONFIG.set_setting('errors', errors)
-                logging.log('INSTALLED {0}: [ERRORS:{1}]'.format(percent, errors))
-
-                try:
-                    os.remove(lib)
-                except:
-                    pass
-
-                if int(float(errors)) > 0:
-                    yes_pressed = self.dialog.yesno(CONFIG.ADDONTITLE,
-                                       '[COLOR {0}][COLOR {1}]{2} v{3}[/COLOR]'.format(CONFIG.COLOR2, CONFIG.COLOR1,
-                                                                                       name, check.check_build(name, 'version')),
-                                       'Completed: [COLOR {0}]{1}{2}[/COLOR] [Errors:[COLOR {3}]{4}[/COLOR]]'.format(
-                                           CONFIG.COLOR1, percent, '%', CONFIG.COLOR1, errors),
-                                       'Would you like to view the errors?[/COLOR]',
-                                       nolabel='[B][COLOR red]No Thanks[/COLOR][/B]',
-                                       yeslabel='[B][COLOR springgreen]View Errors[/COLOR][/B]')
-                    if yes_pressed:
-                        from resources.libs.gui import window
-                        window.show_text_box("Viewing Build Install Errors", error)
-                self.dialogProgress.close()
-
-                # from resources.libs.gui.build_menu import BuildMenu
-                # themecount = BuildMenu().theme_count(name)
-
-                # if themecount > 0:
-                    # self.theme(name, 'theme')
-
-                # db.addon_database(CONFIG.ADDON_ID, 1)
-                # #db.force_check_updates(over=True)
-
-                self.dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]Khôi phục xong, nhấn OK và thưởng thức ^^[/COLOR]".format(CONFIG.COLOR2))
-                # tools.kill_kodi(over=True)
-            else:
-                from resources.libs.gui import window
-                window.show_text_box("Viewing Build Install Errors", error)
-        else:
-            logging.log_notify(CONFIG.ADDONTITLE,
-                               '[COLOR {0}]Build Install: Cancelled![/COLOR]'.format(CONFIG.COLOR2))
+                logging.log_notify(CONFIG.ADDONTITLE,
+                                   '[COLOR {0}]Build Install: Cancelled![/COLOR]'.format(CONFIG.COLOR2))
+        else: 
+            yes_pressed = self.dialog.yesno(CONFIG.ADDONTITLE, '[COLOR {0}]Nhấn YES để bắt đầu Restore: '.format(CONFIG.COLOR2) + '[COLOR {0}]{1}[/COLOR][/COLOR]'.format(CONFIG.COLOR1, name), nolabel='[B][COLOR red]No, Cancel[/COLOR][/B]', yeslabel='[B][COLOR springgreen]Yes, Install[/COLOR][/B]')
+            if yes_pressed:
+                self.install(name)
+            else: 
+                logging.log_notify(CONFIG.ADDONTITLE,
+                                   '[COLOR {0}]Build Install: Cancelled![/COLOR]'.format(CONFIG.COLOR2))      
 
     def gui(self, name, over=False):
         if name == CONFIG.get_setting('buildname'):
