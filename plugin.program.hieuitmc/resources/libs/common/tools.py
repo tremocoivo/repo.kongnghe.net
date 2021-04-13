@@ -442,12 +442,12 @@ def kill_kodi(msg=None, over=None):
         dialog = xbmcgui.Dialog()
         
         if not msg:
-            msg = '[COLOR {0}]You are about to close Kodi. Would you like to continue?[/COLOR]'.format(CONFIG.COLOR2)
+            msg = '[COLOR {0}]Chuẩn bị thoát KODI. Bạn có muốn tiếp tục?[/COLOR]'.format(CONFIG.COLOR2)
         
         choice = dialog.yesno('Force Close Kodi',
                                   msg,
-                                  nolabel='[B][COLOR red] No Cancel[/COLOR][/B]',
-                                  yeslabel='[B][COLOR springgreen]Force Close Kodi[/COLOR][/B]')
+                                  nolabel='[B][COLOR red]Không![/COLOR][/B]',
+                                  yeslabel='[B][COLOR springgreen]Thoát Ngay![/COLOR][/B]')
     if choice == 1:
         from resources.libs.common import logging
         logging.log("Force Closing Kodi: Platform[{0}]".format(str(platform())))

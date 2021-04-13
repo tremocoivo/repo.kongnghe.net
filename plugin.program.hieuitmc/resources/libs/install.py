@@ -170,40 +170,38 @@ def fresh_start(install=None, over=False):
 
     dialog = xbmcgui.Dialog()
     
-    if CONFIG.KEEPTRAKT == 'true':
-        from resources.libs import traktit
+    # if CONFIG.KEEPTRAKT == 'true':
+        # from resources.libs import traktit
 
-        traktit.auto_update('all')
-        CONFIG.set_setting('traktnextsave', str(tools.get_date(days=3, formatted=True)))
-    if CONFIG.KEEPDEBRID == 'true':
-        from resources.libs import debridit
+        # traktit.auto_update('all')
+        # CONFIG.set_setting('traktnextsave', str(tools.get_date(days=3, formatted=True)))
+    # if CONFIG.KEEPDEBRID == 'true':
+        # from resources.libs import debridit
 
-        debridit.auto_update('all')
-        CONFIG.set_setting('debridnextsave', str(tools.get_date(days=3, formatted=True)))
-    if CONFIG.KEEPLOGIN == 'true':
-        from resources.libs import loginit
+        # debridit.auto_update('all')
+        # CONFIG.set_setting('debridnextsave', str(tools.get_date(days=3, formatted=True)))
+    # if CONFIG.KEEPLOGIN == 'true':
+        # from resources.libs import loginit
 
-        loginit.auto_update('all')
-        CONFIG.set_setting('loginnextsave', str(tools.get_date(days=3, formatted=True)))
+        # loginit.auto_update('all')
+        # CONFIG.set_setting('loginnextsave', str(tools.get_date(days=3, formatted=True)))
 
     if over:
         yes_pressed = 1
 
     elif install == 'restore':
         yes_pressed = dialog.yesno(CONFIG.ADDONTITLE,
-                                       "[COLOR {0}]Do you wish to restore your".format(CONFIG.COLOR2),
-                                       "Kodi configuration to default settings",
-                                       "Before installing the local backup?[/COLOR]",
-                                       nolabel='[B][COLOR red]No, Cancel[/COLOR][/B]',
-                                       yeslabel='[B][COLOR springgreen]Continue[/COLOR][/B]')
+                                       "Bạn có muốn khôi phục Kodi về mặc định.",
+                                       "Trước khi cài đặt bản Build cá nhân?[/COLOR]",
+                                       nolabel='[B][COLOR red]Không![/COLOR][/B]',
+                                       yeslabel='[B][COLOR springgreen]Tiếp Tục![/COLOR][/B]')
     elif install:
-        yes_pressed = dialog.yesno(CONFIG.ADDONTITLE, "[COLOR {0}]Do you wish to restore your".format(CONFIG.COLOR2),
-                                       "Kodi configuration to default settings",
-                                       "Before installing [COLOR {0}]{1}[/COLOR]?".format(CONFIG.COLOR1, install),
-                                       nolabel='[B][COLOR red]No, Cancel[/COLOR][/B]',
-                                       yeslabel='[B][COLOR springgreen]Continue[/COLOR][/B]')
+        yes_pressed = dialog.yesno(CONFIG.ADDONTITLE, "Bạn có muốn khôi phục Kodi về mặc định.",
+                                       "Trước khi cài đặt [COLOR {0}]{1}[/COLOR]?".format(CONFIG.COLOR1, install),
+                                       nolabel='[B][COLOR red]Không![/COLOR][/B]',
+                                       yeslabel='[B][COLOR springgreen]Tiếp Tục[/COLOR][/B]')
     else:
-        yes_pressed = dialog.yesno(CONFIG.ADDONTITLE, "[COLOR {0}]Do you wish to restore your".format(CONFIG.COLOR2) +' \n' + "Kodi configuration to default settings?[/COLOR]", nolabel='[B][COLOR red]No, Cancel[/COLOR][/B]', yeslabel='[B][COLOR springgreen]Continue[/COLOR][/B]')
+        yes_pressed = dialog.yesno(CONFIG.ADDONTITLE, "Bạn có muốn khôi phục Kodi về mặc định.", nolabel='[B][COLOR red]Không![/COLOR][/B]', yeslabel='[B][COLOR springgreen]Tiếp Tục![/COLOR][/B]')
     if yes_pressed:
         wipe()
         
@@ -216,7 +214,7 @@ def fresh_start(install=None, over=False):
 
             Wizard().build('normal', install, over=True)
         else:
-            dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]To save changes you now need to force close Kodi, Press OK to force close Kodi[/COLOR]".format(CONFIG.COLOR2))
+            dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]Để thay đổi có hiệu lực cần thoát hẳn KODI.\nNhấn OK để thoát Kodi[/COLOR]".format(CONFIG.COLOR2))
             from resources.libs import update
             update.addon_updates('reset')
             tools.kill_kodi(over=True)

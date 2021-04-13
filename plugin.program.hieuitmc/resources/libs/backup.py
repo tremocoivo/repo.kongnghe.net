@@ -208,9 +208,9 @@ class Backup:
 
     def backup_build(self, name=""):
         if self.dialog.yesno(CONFIG.ADDONTITLE,
-                             "[COLOR {0}]Are you sure you wish to backup the current build?[/COLOR]".format(CONFIG.COLOR2), nolabel="[B][COLOR red]Cancel Backup[/COLOR][/B]", yeslabel="[B][COLOR springgreen]Backup Build[/COLOR][/B]"):
+                             "[COLOR {0}]Bạn có chắc muốn lưu lại bản build hiện tại?[/COLOR]".format(CONFIG.COLOR2), nolabel="[B][COLOR red]Không![/COLOR][/B]", yeslabel="[B][COLOR springgreen]OK, Làm ngay![/COLOR][/B]"):
             if name == "":
-                name = tools.get_keyboard("", "Please enter a name for the build zip")
+                name = tools.get_keyboard("", "Đặt tên cho file zip (Vd: kodi19.zip)")
                 if not name:
                     return False
                 name = name.replace('\\', '').replace('/', '').replace(':', '').replace('*', '').replace('?',
@@ -223,8 +223,8 @@ class Backup:
             ITEM = []
             exclude_dirs = CONFIG.EXCLUDE_DIRS
 
-            if not self.dialog.yesno(CONFIG.ADDONTITLE, "[COLOR {0}]Do you want to include your addon_data folder?".format(CONFIG.COLOR2) + '\n' + "This contains [COLOR {0}]ALL[/COLOR] add-on settings including passwords but may also contain important information such as skin shortcuts. We recommend [COLOR {0}]MANUALLY[/COLOR] removing the addon_data folders that aren\'t required.".format(CONFIG.COLOR1, CONFIG.COLOR1) + '\n' + "[COLOR {0}]{1}[/COLOR] addon_data is ignored[/COLOR]".format(CONFIG.COLOR1, CONFIG.ADDON_ID), yeslabel='[B][COLOR springgreen]Include data[/COLOR][/B]',nolabel='[B][COLOR red]Don\'t Include[/COLOR][/B]'):
-                exclude_dirs.append('addon_data')
+            # if not self.dialog.yesno(CONFIG.ADDONTITLE, "[COLOR {0}]Do you want to include your addon_data folder?".format(CONFIG.COLOR2) + '\n' + "This contains [COLOR {0}]ALL[/COLOR] add-on settings including passwords but may also contain important information such as skin shortcuts. We recommend [COLOR {0}]MANUALLY[/COLOR] removing the addon_data folders that aren\'t required.".format(CONFIG.COLOR1, CONFIG.COLOR1) + '\n' + "[COLOR {0}]{1}[/COLOR] addon_data is ignored[/COLOR]".format(CONFIG.COLOR1, CONFIG.ADDON_ID), yeslabel='[B][COLOR springgreen]Include data[/COLOR][/B]',nolabel='[B][COLOR red]Don\'t Include[/COLOR][/B]'):
+                # exclude_dirs.append('addon_data')
 
             tools.convert_special(CONFIG.HOME, True)
             extractsize = 0
@@ -237,14 +237,14 @@ class Backup:
                 except:
                     logging.log("Unable to create {0}.zip".format(name), level=xbmc.LOGERROR)
                     if self.dialog.yesno(CONFIG.ADDONTITLE,
-                                         "[COLOR {0}]We are unable to write to the current backup directory, would you like to change the location?[/COLOR]".format(CONFIG.COLOR2),
-                                         yeslabel="[B][COLOR springgreen]Change Directory[/COLOR][/B]",
-                                         nolabel="[B][COLOR red]Cancel[/COLOR][/B]"):
+                                         "[COLOR {0}]Không thể lưu file trong thư mục đã chọn, bạn có muốn đổi đường dẫn khác?[/COLOR]".format(CONFIG.COLOR2),
+                                         yeslabel="[B][COLOR springgreen]Đổi ngay![/COLOR][/B]",
+                                         nolabel="[B][COLOR red]Không![/COLOR][/B]"):
                         CONFIG.open_settings()
                         return
                     else:
                         return
-            self.progress_dialog.create(CONFIG.ADDONTITLE + "[COLOR {0}]: Creating Zip[/COLOR]".format(CONFIG.COLOR2) + '\n' + "[COLOR {0}]Creating backup zip".format(CONFIG.COLOR2) + '\n' + "Please Wait...[/COLOR]")
+            self.progress_dialog.create(CONFIG.ADDONTITLE + ": Đang nén file...")
 
             for base, dirs, files in os.walk(CONFIG.HOME):
                 dirs[:] = [d for d in dirs if d not in exclude_dirs]
@@ -398,7 +398,7 @@ class Backup:
             xbmc.sleep(500)
             self.progress_dialog.close()
 
-            backup('gui', name)
+            # backup('gui', name)
 
             if not tempzipname == '':
                 success = xbmcvfs.rename(tempzipname, zipname)

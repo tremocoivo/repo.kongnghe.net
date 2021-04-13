@@ -131,7 +131,8 @@ class Config:
                                'metadata.common.musicbrainz.org',
                                'metadata.themoviedb.org',
                                'metadata.tvdb.com',
-                               'service.xbmc.versioncheck']
+                               'service.xbmc.versioncheck',
+                               ]
         self.USER_AGENT = ('Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36'
                            ' (KHTML, like Gecko) Chrome/35.0.1916.153 Safari'
                            '/537.36 SE 2.X MetaSr 1.0')
@@ -143,12 +144,12 @@ class Config:
                               'saltshd.lite.db-wal', 'queue.db',
                               'commoncache.db', 'access.log', 'trakt.db',
                               'video_cache.db', '.gitignore', '.DS_Store',
-                              'Textures13.db', 'Thumbs.db']
-        self.EXCLUDE_DIRS = [ 'cache', 'system', 'packages',
+                              'Textures13.db', 'Thumbs.db', '.dmp']
+        self.EXCLUDE_DIRS = [ 'system', 'packages',
                              'Thumbnails', 'peripheral_data', 'temp',
                              'My_Builds', 'library', 'cdm', 'archive_cache']
         self.XMLS = ['advancedsettings.xml', 'sources.xml', 'favourites.xml',
-                     'profiles.xml', 'playercorefactory.xml', 'guisettings.xml']
+                     'profiles.xml', 'playercorefactory.xml', 'guisettings.xml', 'overrides.xml']
         self.MODURL = 'http://tribeca.tvaddons.ag/tools/maintenance/modules/'
         self.MODURL2 = 'http://mirrors.kodi.tv/addons/jarvis/'
         self.DEPENDENCIES = ['script.module.bottle', 'script.module.certifi',
@@ -176,6 +177,7 @@ class Config:
 
         # Constructed paths
         self.ADDONS = os.path.join(self.HOME, 'addons')
+        # self.COMMONMODULE = os.path.join(self.HOME, 'addons','script.module.clouddrive.common', 'clouddrive','common')
         self.KODIADDONS = os.path.join(self.XBMC, 'addons')
         self.PLUGIN = os.path.join(self.ADDONS, self.ADDON_ID)
         self.PACKAGES = os.path.join(self.ADDONS, 'packages')

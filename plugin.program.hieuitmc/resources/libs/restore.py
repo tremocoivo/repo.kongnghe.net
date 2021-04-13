@@ -23,11 +23,18 @@ import xbmcvfs
 
 import os
 
-import six
+# import six
 
-if six.PY3:
+# if six.PY3:
+    # import zipfile
+# elif six.PY2:
+    # from resources.libs import zipfile
+    
+try:  # Python 3
+    from urllib.parse import quote_plus
     import zipfile
-elif six.PY2:
+except ImportError:  # Python 2
+    from urllib import quote_plus
     from resources.libs import zipfile
 
 from resources.libs.common import logging
@@ -91,9 +98,9 @@ class Restore:
     def _prompt_for_wipe(self):
         # Should we wipe first?
         wipe = self.dialog.yesno(CONFIG.ADDONTITLE,
-                                 "[COLOR {0}]Do you wish to restore your".format(CONFIG.COLOR2) + '\n' + "Kodi configuration to default settings" + '\n' + "Before installing the {0} backup?[/COLOR]".format('local' if not self.external else 'external'),
-                                 nolabel='[B][COLOR red]No[/COLOR][/B]',
-                                 yeslabel='[B][COLOR springgreen]Yes[/COLOR][/B]')
+                                 "Bạn có muốn cài mới hoàn toàn [B][COLOR springgreen][Fresh Install][/COLOR][/B]\nHay cài đè lên bản KODI hiện có [B][COLOR red][Override Install][/COLOR][/B]",
+                                 nolabel='[B][COLOR red]Override Install[/COLOR][/B]',
+                                 yeslabel='[B][COLOR springgreen]Fresh Install[/COLOR][/B]')
 
         if wipe:
             from resources.libs import install
@@ -141,7 +148,7 @@ class Restore:
         #db.force_check_updates(over=True)
 
         tools.kill_kodi(
-            msg='[COLOR {0}]To save changes, Kodi needs to be force closed. Would you like to continue?[/COLOR]'.format(
+            msg='[COLOR {0}]Để thay đổi có hiệu lực bàn cần phải khởi động lại KODI.\nBạn có muốn tiếp tục?[/COLOR]'.format(
                 CONFIG.COLOR2))
 
     def _view_errors(self, percent, errors, error, file):
@@ -159,7 +166,7 @@ class Restore:
         skin.look_and_feel_data('restore')
         external = 'External' if self.external else 'Local'
 
-        file = self.dialog.browseSingle(1, '[COLOR {0}]Select the backup file you want to restore[/COLOR]'.format(
+        file = self.dialog.browseSingle(1, '[COLOR {0}]Chọn file backup muốn khôi phục[/COLOR]'.format(
             CONFIG.COLOR2), '' if self.external else 'files', mask='.zip', useThumbs=True,
                                         defaultt=None if self.external else CONFIG.MYBUILDS)
 

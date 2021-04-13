@@ -326,7 +326,7 @@ class BuildMenu:
         link = tools.clean_text(response.text)
         match = re.compile('name="(.+?)".+?rl="(.+?)".+?con="(.+?)".+?anart="(.+?)".+?escription="(.+?)"').findall(link)
         self._list_all(match)
-        directory.add_file('[COLOR yellow][B]Restore From File[/B][/COLOR] - Chọn file data cần khôi phục',{'mode': 'inputurl'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
+        # directory.add_file('[COLOR yellow][B]Restore From File[/B][/COLOR] - Chọn file data cần khôi phục',{'mode': 'inputurl'}, icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
         if not CONFIG.CUSTOMLINK == '':
             response = tools.open_url(CONFIG.CUSTOMLINK)
             link = tools.clean_text(response.text)
