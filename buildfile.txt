@@ -1,4 +1,4 @@
-name="KODI 19 - Skin Estuary Mặc Định"
+name="KODI 19 - Skin Estuary"
 version="1.0"
 url="https://dl.dropboxusercontent.com/s/tbfe2qpi00h22nc/KODI19-Default.zip"
 minor="http://"
