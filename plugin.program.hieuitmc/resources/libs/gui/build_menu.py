@@ -126,7 +126,7 @@ class BuildMenu:
         # directory.add_dir('Save Data Menu', {'mode': 'savedata'}, icon=CONFIG.ICONSAVE, themeit=CONFIG.THEME3)
             directory.add_file('===== [COLOR red][B]CHỌN BẢN BUILD MUỐN SỬ DỤNG[/B][/COLOR] =====', icon=CONFIG.ICONBUILDS, themeit=CONFIG.THEME3)
         # directory.add_separator()
-            self._list_all(match)
+            self._list_build(match)
         # if len(match) >= 1:
             # if CONFIG.SEPARATE == 'true':
                 # self._list_all(match)

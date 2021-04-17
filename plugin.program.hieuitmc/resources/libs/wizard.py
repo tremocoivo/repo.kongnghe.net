@@ -43,12 +43,13 @@ class Wizard:
 
     def _prompt_for_wipe(self):
         # Should we wipe first?
-        if self.dialog.yesno(CONFIG.ADDONTITLE,
-                           "[COLOR {0}]Do you wish to restore your".format(CONFIG.COLOR2),
-                           "Kodi configuration to default settings",
-                           "Before installing the build backup?[/COLOR]",
-                           nolabel='[B][COLOR red]No[/COLOR][/B]',
-                           yeslabel='[B][COLOR springgreen]Yes[/COLOR][/B]'):
+        wipe = self.dialog.yesno(CONFIG.ADDONTITLE,
+                                 "Bạn có muốn cài mới hoàn toàn [B][COLOR springgreen][Fresh Install][/COLOR][/B]\nHay cài đè lên bản KODI hiện có [B][COLOR red][Override Install][/COLOR][/B]",
+                                 nolabel='[B][COLOR red]Override Install[/COLOR][/B]',
+                                 yeslabel='[B][COLOR springgreen]Fresh Install[/COLOR][/B]')
+
+        if wipe:
+            from resources.libs import install
             install.wipe()
 
     def install(self, name):
@@ -79,6 +80,7 @@ class Wizard:
                         pass
                         
                     return
+                
                     
                 # install.wipe()
                     
@@ -165,7 +167,7 @@ class Wizard:
             if over:
                 yes_pressed = 1
             else:
-                yes_pressed = self.dialog.yesno(CONFIG.ADDONTITLE, '[COLOR {0}]Would you like to Download and Install: '.format(CONFIG.COLOR2) + '[COLOR {0}]{1} v{2}[/COLOR]?[/COLOR]'.format(CONFIG.COLOR1, name, check.check_build(name,'version')), nolabel='[B][COLOR red]No, Cancel[/COLOR][/B]', yeslabel='[B][COLOR springgreen]Yes, Install[/COLOR][/B]')
+                yes_pressed = self.dialog.yesno(CONFIG.ADDONTITLE, '[COLOR {0}]Bạn có muốn cài đặt bản Build: '.format(CONFIG.COLOR2) + '[COLOR {0}]{1}[/COLOR]?[/COLOR]'.format(CONFIG.COLOR1, name), nolabel='[B][COLOR red]Không![/COLOR][/B]', yeslabel='[B][COLOR springgreen]Có, Cài Ngay![/COLOR][/B]')
         if yes_pressed:
             CONFIG.clear_setting('build')
             buildzip = check.check_build(name, 'url')
@@ -190,8 +192,9 @@ class Wizard:
                     pass
                     
                 return
-                
-            install.wipe()
+            
+            self._prompt_for_wipe()
+            # install.wipe()
                 
             skin.look_and_feel_data('save')
             
@@ -241,7 +244,7 @@ class Wizard:
                 db.addon_database(CONFIG.ADDON_ID, 1)
                 #db.force_check_updates(over=True)
 
-                self.dialog.ok(CONFIG.ADDONTITLE, "[COLOR {0}]To save changes you now need to force close Kodi, Press OK to force close Kodi[/COLOR]".format(CONFIG.COLOR2))
+                self.dialog.ok(CONFIG.ADDONTITLE, "Khởi động lại KODI để bắt đầu dùng bản Build mới.\nNhấn OK để thoát!")
                 tools.kill_kodi(over=True)
             else:
                 from resources.libs.gui import window
