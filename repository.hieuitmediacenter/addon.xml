@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="repository.hieuitmediacenter"
 		name="[COLOR red][B]HieuIT[/B][/COLOR] [COLOR yellow][B]Repository[/B][/COLOR]"
-		version="1.0.7"
+		version="1.0.8"
 		provider-name="HieuIT">
   <extension point="xbmc.addon.repository"
 		name="HieuITMC Add-on Repository">
@@ -33,10 +33,25 @@
                 <checksum>https://raw.github.com/billythekids/kodi.repository/master/addons.xml.md5</checksum>
                 <datadir zip="true">https://github.com/billythekids/kodi.repository/raw/master/zips/</datadir>
             </dir>
+        <dir>
+            <info compressed="false">https://raw.githubusercontent.com/jsergio123/zips/master/addons.xml</info>
+            <checksum>https://raw.githubusercontent.com/jsergio123/zips/master/addons.xml.md5</checksum>
+            <datadir zip="true">https://raw.githubusercontent.com/jsergio123/zips/master/zips/</datadir>
+        </dir>
 		<dir>
 			<info>https://github.com/CastagnaIT/repository.castagnait/raw/master/addons.xml</info>
 			<checksum>https://github.com/CastagnaIT/repository.castagnait/raw/master/addons.xml.md5</checksum>
 			<datadir zip="true">https://github.com/CastagnaIT/repository.castagnait/raw/master/zip</datadir>
+		</dir>
+		<dir>
+			<info>https://github.com/CastagnaIT/repository.castagnait/raw/matrix/addons.xml</info>
+			<checksum>https://github.com/CastagnaIT/repository.castagnait/raw/matrix/addons.xml.md5</checksum>
+			<datadir zip="true">https://github.com/CastagnaIT/repository.castagnait/raw/matrix/zip</datadir>
+		</dir>
+		<dir>
+			<info>https://raw.githubusercontent.com/cguZZman/repository.plugins/master/addons-info-matrix.xml</info>
+			<checksum>https://raw.githubusercontent.com/cguZZman/repository.plugins/master/addons-info-matrix.xml.md5</checksum>
+			<datadir zip="true">https://raw.githubusercontent.com/cguZZman/repository.plugins/master/matrix/</datadir>
 		</dir>
 	</extension>
 	<extension point="xbmc.addon.metadata">
