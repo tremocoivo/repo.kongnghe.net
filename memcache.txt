@@ -4,4 +4,7 @@
         <memorysize>314572800</memorysize>
         <readfactor>15</readfactor>
     </cache>
+	<network>
+		<disablehttp2>true</disablehttp2>
+	</network>
 </advancedsettings>
