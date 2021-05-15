@@ -1,10 +1,4 @@
-﻿name="Data Addon Google Drive by HieuIT & MeoMeo"
-url="https://dl.dropboxusercontent.com/s/nofqcb6rd9l7v6i/data_googledrive.zip"
-img="https://i.imgur.com/HBGflaE.jpg"
-fanart="https://i.imgur.com/HBGflaE.jpg"
-description="Data account Google Drive gồm nhiều server cho người dùng lựa chọn, hạn chế được tình trạng limited access"
-
-name="Data Game NES"
+﻿name="Data Game NES"
 url="https://dl.dropboxusercontent.com/s/sw5bb99o0qvrooq/Game-NES.zip"
 img="https://i.imgur.com/nj3SGz2.jpg"
 fanart="https://i.imgur.com/nj3SGz2.jpg"
