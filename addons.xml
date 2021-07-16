@@ -41,7 +41,7 @@ v2.3.14 (2019-02-10)
   </extension>
 </addon>
 
-<addon id="plugin.program.hieuitmc" name="[COLOR red][B]HieuITMC[/B][/COLOR] [COLOR yellow][B]Matrix[/B][/COLOR]" version="3.1.1" provider-name="HieuIT">
+<addon id="plugin.program.hieuitmc" name="[COLOR red][B]HieuITMC[/B][/COLOR] [COLOR yellow][B]Matrix[/B][/COLOR]" version="3.1.2" provider-name="HieuIT">
     <requires>
         <import addon="xbmc.python" version="3.0.0" />
         <import addon="script.module.requests" />
