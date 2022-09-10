@@ -4,7 +4,7 @@
 		<setting id="thanks" type="text" label="Tác giả [COLOR red]'không giữ bản quyền'[/COLOR] addon."></setting>
 		<setting id="thanks2" type="text" label="Chỉ có nguồn phim được mình cập nhật thường xuyên"></setting>
 		<setting id="thanks3" type="text" label="Nếu bạn yêu thích có thể ủng hộ để mình có thêm động lực"></setting>
-		<setting type="vpbank" label="[B]VPBank:[/B] [COLOR yellow]127227535[/COLOR] - CTK: Lê Trung Hiếu" />
+		<setting type="vpbank" label="[B]MBBank|VPBank:[/B] [COLOR yellow]0905830085[/COLOR] - CTK: Lê Trung Hiếu" />
 		<setting type="viettelpay" label="[B]ViettelPay:[/B] [COLOR yellow]0984.930.085[/COLOR]" />
 		<setting type="paypal" label="Paypal: hieutrungle85dn@gmail.com" />
 		<setting id="momo" type="text" label="Momo: [COLOR yellow]0984.930.085[/COLOR]"/>
