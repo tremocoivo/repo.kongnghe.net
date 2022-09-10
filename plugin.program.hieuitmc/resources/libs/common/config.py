@@ -147,7 +147,7 @@ class Config:
                               'Textures13.db', 'Thumbs.db', '.dmp']
         self.EXCLUDE_DIRS = [ 'system', 'packages',
                              'Thumbnails', 'peripheral_data', 'temp',
-                             'My_Builds', 'library', 'cdm', 'archive_cache']
+                             'My_Builds', 'cdm', 'archive_cache']
         self.XMLS = ['advancedsettings.xml', 'sources.xml', 'favourites.xml',
                      'profiles.xml', 'playercorefactory.xml', 'guisettings.xml', 'overrides.xml']
         self.MODURL = 'http://tribeca.tvaddons.ag/tools/maintenance/modules/'

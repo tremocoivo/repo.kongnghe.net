@@ -101,17 +101,17 @@ def all_with_progress(_in, _out, dp, ignore, title):
         line3 = '[COLOR {0}]{1}[/COLOR]'.format(CONFIG.COLOR1, item.filename)
         
         if item.filename == 'userdata/sources.xml' and CONFIG.KEEPSOURCES == 'true':
-            skip = True
-        elif item.filename == 'userdata/favourites.xml' and CONFIG.KEEPFAVS == 'true':
-            skip = True
-        elif item.filename == 'userdata/profiles.xml' and CONFIG.KEEPPROFILES == 'true':
-            skip = True
-        elif item.filename == 'userdata/guisettings.xml' and CONFIG.KEEPGUISETTINGS == 'true':
-            skip = True
-        elif item.filename == 'userdata/playercorefactory.xml' and CONFIG.KEEPPLAYERCORE == 'true':
-            skip = True
-        elif item.filename == 'userdata/advancedsettings.xml' and CONFIG.KEEPADVANCED == 'true':
-            skip = True
+            skip = False
+        # elif item.filename == 'userdata/favourites.xml' and CONFIG.KEEPFAVS == 'true':
+            # skip = True
+        # elif item.filename == 'userdata/profiles.xml' and CONFIG.KEEPPROFILES == 'true':
+            # skip = True
+        # elif item.filename == 'userdata/guisettings.xml' and CONFIG.KEEPGUISETTINGS == 'true':
+            # skip = True
+        # elif item.filename == 'userdata/playercorefactory.xml' and CONFIG.KEEPPLAYERCORE == 'true':
+            # skip = True
+        # elif item.filename == 'userdata/advancedsettings.xml' and CONFIG.KEEPADVANCED == 'true':
+            # skip = True
         elif file[0] == 'addons' and file[1] in excludes:
             skip = True
         elif file[0] == 'userdata' and file[1] == 'addon_data' and file[2] in excludes:
